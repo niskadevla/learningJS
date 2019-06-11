@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Learning от 4.1 до 4.3</title>
+</head>
+<body>
+  <h1>4.1. Введение в методы и свойства</h1>
+  <h3>Task 4.1.1: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var str = "Learning";
+    document.write("Answer: < br />");
+    document.write(str.toUpperCase);
+    document.write("< br />");
+    document.write(str.toUpperCase());
+  </pre>
+  <script type="text/javascript">
+    var str = "Learning";
+    document.write("Answer: <br />");
+    document.write(str.toUpperCase);
+    document.write("<br />");
+    document.write(str.toUpperCase());
+    document.write("<br />");
+    document.write(12..toFixed());
+  </script>
+
+
+
+  <!--
+  *   Числа
+  -->
+
+  <h1>4.2. Числа</h1>
+  <h3>Task 4.2.1: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var val = "Infinity";
+    var val_1 = "+38045";
+    document.write("Answer: < br />");
+    document.write(isFinite(val));
+    document.write("< br />");
+    if (isFinite(val_1)) {
+      document.write(val_1);
+    }
+    document.write("< br />");
+    document.write(+"1 2");
+    document.write("< br />");
+  </pre>
+  <script type="text/javascript">
+    var val = "Infinity";
+    var val_1 = "+38045";
+    document.write("Answer: <br />");
+    document.write("isFinite(val) // ");
+    document.write(isFinite(val));
+    document.write("<br />");
+    if (isFinite(val_1)) {
+      document.write(val_1);
+    }
+    document.write("<br />");
+    document.write(' +"1 2" // ');
+    document.write(+"1 2");
+    document.write("<br />");
+
+
+  </script>
+
+  <h3>Task 4.2.2: Мягкое преобразование: parseInt и parseFloat</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    /**
+    * Функция isNumeric частично взята из jQuery, переделана и
+    * неявляется функцией JavaScriptВ JavaScript нет разницы между двойными и одинарными кавычками.
+    */
+
+    var val = 0;
+
+    if (isNumeric(val)) {
+      document.write("Access allowed");
+    } else {
+      document.write("< span style='color: red'> Access denied </ span>");
+    }
+
+    function isNumeric( obj ) {
+    	var type = typeof( obj );
+      // Для проверки какой тип (можно удалить console.log)
+      console.log(type);
+      console.log(obj);
+      console.log(parseFloat( obj ));
+      console.log(obj - parseFloat( obj ));
+    	return ( type === "number" || type === "string" ) &&
+    		!isNaN( obj - parseFloat( obj ) );
+    }
+
+    /* **** -END- **** */
+
+    document.write("< br />");
+
+    /**
+    * Функция isNumeric_2 взята из learn.javascript.ru и
+    * неявляется функцией JavaScript
+    * Она лучше чем в jQuery
+    */
+
+    val = "+2 5";
+
+    if (isNumeric_2(val)) {
+      document.write("Access allowed");
+    } else {
+      document.write("< span style='color: red'> Access denied </ span>");
+    }
+
+    function isNumeric_2(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+  </pre>
+  <script type="text/javascript">
+    //  document.write("isNumeric('25') // " + isNumeric('25'));
+    document.write( "parseInt('12px') // " + parseInt('12px') );
+    document.write("<br />");
+    document.write( "parseFloat('12px') // " + parseFloat('12px') );
+    document.write("<br />");
+    document.write( "parseFloat('12.5') // " + parseFloat('12.5px') );
+    document.write("<br />");
+    document.write( "parseInt('#fff', 16) // " + parseInt('#fff', 16) );
+    document.write("<br />");
+    document.write( "parseInt('fff', 16) // " + parseInt('fff', 16) );
+    document.write("<br />");
+    document.write( "parseFloat('a33') // " + parseFloat('a33') );
+    document.write("<br />");
+    document.write( "parseFloat('33a') // " + parseFloat('33a') );
+    document.write("<br />");
+    document.write( "parseFloat('+353') // " + parseFloat('+353') );
+    document.write("<br />");
+    document.write("<hr />");
+
+    /**
+    * Функция isNumeric частично взята из jQuery, переделана и
+    * неявляется функцией JavaScript
+    */
+
+    var val = 0;
+
+    if (isNumeric(val)) {
+      document.write("Access allowed");
+    } else {
+      document.write("<span style='color: red'> Access denied </span>");
+    }
+
+    function isNumeric( obj ) {
+    	var type = typeof( obj );
+      // Для проверки какой тип (можно удалить console.log)
+      console.log(type);
+      console.log(obj);
+      console.log(parseFloat( obj ));
+      console.log(obj - parseFloat( obj ));
+    	return ( type === "number" || type === "string" ) &&
+    		!isNaN( obj - parseFloat( obj ) );
+    }
+
+    /* **** -END- **** */
+
+    document.write("<br />");
+
+    /**
+    * Функция isNumeric_2 взята из learn.javascript.ru и
+    * неявляется функцией JavaScript
+    * Она лучше чем в jQuery
+    */
+
+    val = "+2 5";
+
+    if (isNumeric_2(val)) {
+      document.write("Access allowed");
+    } else {
+      document.write("<span style='color: red'> Access denied </span>");
+    }
+
+    function isNumeric_2(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+  </script>
+
+
+  <h3>Task 4.2.3: toString(система счисления)</h3>
+  <pre>
+    color: rgb(199, 101, 70) преобразовать в #c76546
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var rgb1 = 199, rgb2 = 101, rgb3 = 70;
+    document.write("#" + rgb1.toString(16) + rgb2.toString(16) + rgb3.toString(16));
+  </pre>
+  <script type="text/javascript">
+    var rgb1 = 199, rgb2 = 101, rgb3 = 70;
+    document.write("#" + rgb1.toString(16) + rgb2.toString(16) + rgb3.toString(16));
+    document.write("<br />");
+    document.write( "20e-1['toString'](2) = " + 20e-1['toString'](2) ); // 2.toString(2) // 10
+  </script>
+
+
+  <h3>Task 4.2.4: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    document.write("0.1 + 0.2 == " + (0.1 + 0.2) );
+    document.write("<br />");
+    var num = 2.455;
+    document.write("var num = 2.455; <br /> Math.round(num * 100)/100 == " +
+    Math.round(num * 100)/100);
+    document.write("<br />");
+    num = 2.15;
+    document.write("num = 2.15; num.toFixed(1) == " + num.toFixed(1));
+    document.write("<br />");
+    document.write("0.1 == " + 0.1.toFixed(20) );
+    document.write("<br />");
+    document.write( "0.1 === 0.10000000000000000555 // "  + (0.1 === 0.10000000000000000555) );
+    document.write("<br />");
+
+    var res = 0.1 + 0.2;
+    // Здесь +res.toFixed(10) стоит + вначале для того, чтобы отсечь все ноли
+    document.write( "0.1 + 0.2 == " + +res.toFixed(10) );
+    document.write("<br />");
+    document.write( "(0.1 * 10 + 0.2 * 10) / 10 == " + (0.1 * 10 + 0.2 * 10) / 10 );
+
+    document.write("<br />");
+    document.write("9999999999999999 == " + 9999999999999999);
+    document.write("<br />");
+
+
+    // Math.pow = null;
+    // document.write( Math.pow(2, 3) ); // не выведется, т.к. убил функцию
+    document.write("<br />");
+    document.write( "1.35.toFixed(20) // " + 1.35.toFixed(20) );
+    document.write("<br />");
+    document.write( "1.35.toFixed(1) // " + 1.35.toFixed(1) );
+    document.write("<br />");
+
+  </script>
+
+
+
+  <h3>Task 4.2.5: </h3>
+  <pre>
+    Интерфейс суммы
+    Создайте страницу, которая предлагает ввести два числа и выводит их сумму.
+    Запустить демо
+
+    P.S. Есть «подводный камень» при работе с типами.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    var a = prompt("a?", "");
+    var b = prompt("b?", "");
+    document.write( +a + +b );
+
+    <b>Not my solution: </b>
+    var a = +prompt("Введите первое число", "");
+    var b = +prompt("Введите второе число", "");
+
+    alert( a + b );
+  </pre>
+  <script type="text/javascript">
+    var a = prompt("a?", "");
+    var b = prompt("b?", "");
+    document.write( +a + +b );
+
+  </script>
+
+
+
+  <h3>Task 4.2.6: </h3>
+  <pre>
+    Сложение цен
+
+
+    Представьте себе электронный магазин. Цены даны с точностью до копейки(цента, евроцента и т.п.).
+
+    Вы пишете интерфейс для него. Основная работа происходит на сервере, но и на клиенте все должно быть хорошо.
+    Сложение цен на купленные товары и умножение их на количество является обычной операцией.
+
+    Получится глупо, если при заказе двух товаров с ценами 0.10$ и 0.20$ человек получит общую стоимость 0.30000000000000004$:
+
+    alert( 0.1 + 0.2 + '$' );
+
+    Что можно сделать, чтобы избежать проблем с ошибками округления?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    var price1 = 0.01;
+    var price2 = 6.025;
+    var sum = (price1*100 + price2*100)/100;
+    document.write( sum + '$');
+
+    <b>Not my solution: </b>
+    var price1 = 0.01;
+    var price2 = 6.025;
+    var sum2 = +(price1 + price2).toFixed(2);
+    document.write("< br>");
+    document.write( sum2 + '$' );
+
+  </pre>
+  <script type="text/javascript">
+    var price1 = 0.01;
+    var price2 = 6.025;
+    var sum = (price1*100 + price2*100)/100;
+    document.write( sum + '$');
+
+    var price1 = 0.01;
+    var price2 = 6.025;
+    var sum2 = +(price1 + price2).toFixed(2);
+    document.write("<br>");
+    document.write( sum2 + '$' );
+  </script>
+
+
+
+  <h3>Task 4.2.7: </h3>
+  <pre>
+    Бесконечный цикл по ошибке
+
+    Этот цикл – бесконечный. Почему?
+
+    var i = 0;
+    while (i != 10) {
+      i += 0.2;
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    var i = 0;
+    while (i < 9.9) {
+      i += 0.2;
+    }
+    document.write(i);
+
+    <b>Not my solution:</b>
+    Потому что i никогда не станет равным 10.
+
+    Запустите, чтобы увидеть реальные значения i:
+
+    var i = 0;
+    while (i < 11) {
+      i += 0.2;
+      if (i > 9.8 && i < 10.2) alert( i );
+    }
+
+    Ни одно из них в точности не равно 10.
+  </pre>
+  <script type="text/javascript">
+    var i = 0;
+    while (i < 9.9) {
+      i += 0.2;
+    }
+    document.write(i);
+  </script>
+
+
+
+  <h3>Task 4.2.8: Формула Бине</h3>
+  <pre>
+    Последовательность чисел Фибоначчи имеет формулу Fn = Fn-1 + Fn-2. То есть, следующее число получается как сумма двух предыдущих.
+
+    Первые два числа равны 1, затем 2(1+1), затем 3(1+2), 5(2+3) и так далее: 1, 1, 2, 3, 5, 8, 13, 21....
+
+    Код для их вычисления (из задачи Числа Фибоначчи):
+
+    function fib(n) {
+      var a = 1,
+        b = 0,
+        x;
+      for (i = 0; i < n; i++) {
+        x = a + b;
+        a = b
+        b = x;
+      }
+      return b;
+    }
+
+    Существует формула Бине, согласно которой Fn равно ближайшему целому для ϕn/√5, где ϕ=(1+√5)/2 – золотое сечение.
+
+    Напишите функцию fibBinet(n), которая будет вычислять Fn, используя эту формулу. Проверьте её для значения F77 (должно получиться fibBinet(77) = 5527939700884757).
+
+    Одинаковы ли результаты, полученные при помощи кода fib(n) выше и по формуле Бине? Если нет, то почему и какой из них верный?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    function fib(n) {
+      var a = 1,
+        b = 0,
+        x;
+      for (i = 0; i < n; i++) {
+        x = a + b;
+        a = b;
+        b = x;
+      }
+      return b;
+    }
+
+    function fibBine(n) {
+      return Math.round( Math.pow( ( (1 + Math.sqrt(5) ) / 2), n ) / Math.sqrt(5) );
+    }
+
+    var n = 77;
+    document.write("< br>");
+    document.write( fib(n) );
+    document.write("< br>");
+    document.write(fibBine(n));
+    document.write("< br>");
+    document.write("< br>");
+    document.write( fib(7) );
+    document.write("< br>");
+    document.write(fibBine(7));
+
+    <b>Not my solution:</b>
+    function fibBinet(n) {
+    var phi = (1 + Math.sqrt(5)) / 2;
+    // используем Math.round для округления до ближайшего целого
+    return Math.round(Math.pow(phi, n) / Math.sqrt(5));
+  }
+
+  function fib(n) {
+    var a = 1,
+      b = 0,
+      x;
+    for (i = 0; i < n; i++) {
+      x = a + b;
+      a = b
+      b = x;
+    }
+    return b;
+  }
+
+  alert( fibBinet(2) ); // 1, равно fib(2)
+  alert( fibBinet(8) ); // 21, равно fib(8)
+  alert( fibBinet(77) ); // 5527939700884755
+  alert( fib(77) ); // 5527939700884757, не совпадает!
+
+  </pre>
+  <script type="text/javascript">
+    function fib(n) {
+      var a = 1,
+        b = 0,
+        x;
+      for (i = 0; i < n; i++) {
+        x = a + b;
+        a = b;
+        b = x;
+      }
+      return b;
+    }
+
+    function fibBine(n) {
+      return Math.round( Math.pow( ( (1 + Math.sqrt(5) ) / 2), n ) / Math.sqrt(5) );
+    }
+
+    var n = 77;
+    document.write("<br>");
+    document.write( fib(n) );
+    document.write("<br>");
+    document.write(fibBine(n));
+    document.write("<br>");
+    document.write("<br>");
+    document.write( fib(7) );
+    document.write("<br>");
+    document.write(fibBine(7));
+  </script>
+
+
+
+  <h3>Task 4.2.9: </h3>
+  <pre>
+    Случайное из интервала (0, max)
+    Напишите код для генерации случайного значения в диапазоне от 0 до max, не включая max.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    function random_0_max(max) {
+      return Math.random()*max;
+    }
+
+    for (var i = 0; i < 10; i++) {
+      document.write(" | ");
+      document.write( random_0_max(10) );
+    }
+
+    <b>Not my solution:</b>
+    var max = 10;
+
+    alert( Math.random() * max );
+
+  </pre>
+  <script type="text/javascript">
+    function random_0_max(max) {
+      return Math.random()*max;
+    }
+
+    for (var i = 0; i < 10; i++) {
+      document.write(" | ");
+      document.write( random_0_max(10) );
+    }
+
+  </script>
+
+
+
+  <h3>Task 4.2.10: </h3>
+  <pre>
+    Случайное из интервала (min, max)
+    Напишите код для генерации случайного числа от min до max, не включая max.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    function random_min_max(min, max) {
+      return ( Math.random()*(max - min) + min );
+    }
+
+    for (var i = 0; i < 10; i++) {
+      document.write(" | ");
+      document.write( random_min_max(-10, 10) );
+    }
+
+    <b>Not my solution:</b>
+    var min = 5,
+    max = 10;
+
+    alert( min + Math.random() * (max - min) );
+
+    // генерации случайного числа от min до max, включая max.
+    var rand = min + Math.floor(Math.random() * (max + 1 - min));
+
+  </pre>
+  <script type="text/javascript">
+    function random_min_max(min, max) {
+      return ( Math.random()*(max - min) + min );
+    }
+
+    for (var i = 0; i < 10; i++) {
+      document.write(" | ");
+      document.write( random_min_max(-10, 10) );
+    }
+
+  </script>
+
+
+  <h3>Task 4.2.11: Случайное целое от min до max </h3>
+  <pre>
+
+    Напишите функцию randomInteger(min, max) для генерации случайного целого числа между min и max, включая min,max как возможные значения.
+
+    Любое число из интервала min..max должно иметь одинаковую вероятность.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+      function randomInteger(min, max) {
+        var rand = Math.random()*(max - min) + min;
+        return Math.round(rand);
+      }
+
+      for (var i = 0; i < 50; i++) {
+        document.write(" | ");
+        document.write( randomInteger(1, 3) );
+      }
+
+      document.write("< br>");
+
+      function randomInteger2(min, max) {
+        var rand = Math.random()*(max - min + 1) + min;
+        return Math.floor(rand);
+      }
+
+      for (var i = 0; i < 50; i++) {
+        document.write(" | ");
+        document.write( randomInteger2(1, 3) );
+      }
+
+
+    <b>Not my solution:</b>
+    <b>Очевидное неверное решение (round)</b>
+    function randomInteger(min, max) {
+      var rand = min + Math.random() * (max - min)
+      rand = Math.round(rand);
+      return rand;
+    }
+
+    alert( randomInteger(1, 3) );
+
+
+    <b>Верное решение с round</b>
+    function randomInteger(min, max) {
+      var rand = min - 0.5 + Math.random() * (max - min + 1)
+      rand = Math.round(rand);
+      return rand;
+    }
+
+    alert( randomInteger(5, 10) );
+
+
+    <b>Решение с floor</b>
+      function randomInteger(min, max) {
+        var rand = min + Math.random() * (max + 1 - min);
+        rand = Math.floor(rand);
+        return rand;
+      }
+
+      alert( randomInteger(5, 10) );
+
+  </pre>
+  <script type="text/javascript">
+    function randomInteger(min, max) {
+      var rand = Math.random()*(max - min) + min;
+      return Math.round(rand);
+    }
+
+    for (var i = 0; i < 50; i++) {
+      document.write(" | ");
+      document.write( randomInteger(1, 3) );
+    }
+
+    document.write("<br>");
+
+    function randomInteger2(min, max) {
+      var rand = Math.random()*(max - min + 1) + min;
+      return Math.floor(rand);
+    }
+
+    for (var i = 0; i < 50; i++) {
+      document.write(" | ");
+      document.write( randomInteger2(1, 3) );
+    }
+
+  </script>
+
+
+
+  <!--***********
+  *   Строки
+  ************** -->
+
+  <h1>4.3. Строки</h1>
+  <h3>Task 4.3.1: Нахождения позиции встроке подстроки</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var str = "Для поиска подстроки есть метод indexOf(подстрока[, начальная_позиция]).
+    Он возвращает позицию, на которой находится подстрока или -1, если ничего не найдено. Например: "; // Ищем в этой строке
+    var target = "пер"; // Цель поиска
+
+    var pos = 0;
+    while (true) {
+      var foundPos = str.indexOf(target , pos);
+      if (foundPos == -1) break;
+
+      document.write( "Нашли на этой позиции: " + foundPos + "<br>");
+      pos = foundPos + 1; //  продолжить поиск со следующей
+    }
+  </pre>
+  <script type="text/javascript">
+    var str = "Для поиска подстроки есть метод indexOf(подстрока[, начальная_позиция]). Он возвращает позицию, на которой находится подстрока или -1, если ничего не найдено. Например:"; // Ищем в этой строке
+    var target = "по"; // Цель поиска
+
+    var pos = 0;
+    while (true) {
+      var foundPos = str.indexOf(target , pos);
+      if (foundPos == -1) break;
+
+      document.write( "Нашли на этой позиции: " + foundPos + "<br>");
+      pos = foundPos + 1; //  продолжить поиск со следующей
+    }
+
+  </script>
+
+
+  <h3>Task 4.3.2: Взятие подстроки: substring, substr, slice</h3>
+  <pre>
+    substring(start [, end])
+    substr(start [, length])
+    slice(start [, end])
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var str = "Для поиска подстроки есть метод indexOf(подстрока[, начальная_позиция]).
+    Он возвращает позицию, на которой находится подстрока или -1, если ничего
+    не найдено. Например:"; // Ищем в этой строке
+
+    document.write( str.substring(4, 9) ); // "поиск", символы с позиции 4 по 7 не включая 7.
+    document.write("<br>");
+    document.write( str.substring(4) ); // с позиции 4 до конца.
+    document.write("<br>");
+    document.write( str.substr(4, 9) ); // "поиска по" с 4-й позиции 9 символов
+    document.write("<br>");
+    document.write( str.substr(4) ); // с позиции 4 до конца.
+    document.write("<br>");
+    document.write( str.slice(4, 9) ) //  "поиск", символы с позиции 4 по 7 не включая 7.
+    document.write("<br>");
+    document.write( str.slice(-2) ); // р: от 2 позиции с конца
+    document.write("<br>");
+    document.write( str.slice(0, -2) ); //  от 0 позиции до 2 позиции с конца
+  </pre>
+  <script type="text/javascript">
+    var str = "Для поиска подстроки есть метод indexOf(подстрока[, начальная_позиция]). Он возвращает позицию, на которой находится подстрока или -1, если ничего не найдено. Например:"; // Ищем в этой строке
+
+    document.write( str.substring(4, 9) ); // "поиск", символы с позиции 4 по 7 не включая 7.
+    document.write("<br>");
+    document.write( str.substring(4) ); // с позиции 4 до конца.
+    document.write("<br>");
+    document.write( str.substr(4, 9) ); // "поиска по" с 4-й позиции 9 символов
+    document.write("<br>");
+    document.write( str.substr(4) ); // с позиции 4 до конца.
+    document.write("<br>");
+    document.write( str.slice(4, 9) ) //  "поиск", символы с позиции 4 по 7 не включая 7.
+    document.write("<br>");
+    document.write( str.slice(-2) ); // р: от 2 позиции с конца
+    document.write("<br>");
+    document.write( str.slice(0, -2) ); //  от 0 позиции до 2 позиции с конца
+
+  </script>
+
+
+
+  <h3>Task 4.3.3: Кодировка Юникод</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    str = parseInt("A673", 16); // 42608
+    document.write( " Char: " + str + " == " + "<span style='font-size: 3em; color: red;'>" + String.fromCharCode(str) + "</span>" );
+
+    var str2 = "A,.grt56",
+        pos = 0;
+    document.write("<br>");
+    document.write( "A == " + str2.charCodeAt(pos) );
+    document.write("<br>");
+  </script>
+
+
+  <hr />
+  <!--
+  * Задачки
+   -->
+
+  <h3>Task 4.3.4: Сделать первый символ заглавным</h3>
+  <pre>
+    Напишите функцию ucFirst(str), которая возвращает строку str с заглавным первым символом, например:
+
+    ucFirst("вася") == "Вася";
+    ucFirst("") == ""; // нет ошибок при пустой строке
+
+    P.S. В JavaScript нет встроенного метода для этого. Создайте функцию, используя toUpperCase() и charAt().
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    function ucFirst(str) {
+      var firstLetter = str.charAt(0).toUpperCase();
+      var newStr = firstLetter + str.substr(1);
+
+      return newStr;
+    }
+
+    document.write( ucFirst("вася") );
+    document.write( ucFirst("") );
+
+    <b>Not my solution</b>
+    function ucFirst(str) {
+    // только пустая строка в логическом контексте даст false
+      if (!str) return str;
+
+        return str[0].toUpperCase() + str.slice(1);
+    }
+
+    alert( ucFirst("вася") );
+  </pre>
+  <script type="text/javascript">
+    function ucFirst(str) {
+      var firstLetter = str.charAt(0).toUpperCase();
+      var newStr = firstLetter + str.substr(1);
+
+      return newStr;
+    }
+
+    document.write( ucFirst("вася") );
+    document.write( ucFirst("") );
+  </script>
+
+
+
+  <h3>Task 4.3.5: Проверьте спам</h3>
+  <pre>
+    Напишите функцию checkSpam(str), которая возвращает true, если строка str содержит „viagra“ или „XXX“, а иначе false.
+
+    Функция должна быть нечувствительна к регистру:
+
+    checkSpam('buy ViAgRA now') == true
+    checkSpam('free xxxxx') == true
+    checkSpam("innocent rabbit") == false
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution: </b>
+    function checkSpam(str) {
+      var newStr = str.toLowerCase();
+
+      var wordSpam_1 = "viagra",
+          wordSpam_2 = "xxx";
+      if ( ~newStr.indexOf(wordSpam_1) || ~newStr.indexOf(wordSpam_2) ) {
+        document.write("Здесь порно");
+        return true;
+      }
+
+      document.write("Здесь все ок");
+      return false;
+    }
+
+    checkSpam('buy ViAgRA now');
+    document.write("<br />");
+    checkSpam('free xxxxx');
+    document.write("<br />");
+    checkSpam("innocent rabbit");
+
+    <b>Not my solution: </b>
+    function checkSpam(str) {
+  var lowerStr = str.toLowerCase();
+
+  return !!(~lowerStr.indexOf('viagra') || ~lowerStr.indexOf('xxx'));
+}
+
+alert( checkSpam('buy ViAgRA now') );
+alert( checkSpam('free xxxxx') );
+alert( checkSpam("innocent rabbit") );
+  </pre>
+  <script type="text/javascript">
+    function checkSpam(str) {
+      var newStr = str.toLowerCase();
+
+      var wordSpam_1 = "viagra",
+          wordSpam_2 = "xxx";  // "if ~newStr.indexOf" читается как "если найдено"
+      if ( ~newStr.indexOf(wordSpam_1) || ~newStr.indexOf(wordSpam_2) ) {
+        document.write("Здесь порно");
+        return true;
+      }
+
+      document.write("Здесь все ок");
+      return false;
+    }
+
+    checkSpam('buy ViAgRA now');
+    document.write("<br />");
+    checkSpam('free xxxxx');
+    document.write("<br />");
+    checkSpam("innocent rabbit");
+  </script>
+
+
+
+  <h3>Task 4.3.6: Усечение строки</h3>
+  <pre>
+    Создайте функцию truncate(str, maxlength), которая проверяет длину строки str, и
+    если она превосходит maxlength – заменяет конец str на "...", так чтобы ее длина стала равна maxlength.
+
+    Результатом функции должна быть (при необходимости) усечённая строка.
+
+    Например:
+
+    truncate("Вот, что мне хотелось бы сказать на эту тему:", 20) = "Вот, что мне хоте..."
+
+    truncate("Всем привет!", 20) = "Всем привет!"
+
+    Эта функция имеет применение в жизни. Она используется, чтобы усекать слишком длинные темы сообщений.
+
+    P.S. В кодировке Unicode существует специальный символ «троеточие»: … (HTML: & hellip;),
+    но в этой задаче подразумеваются именно три точки подряд.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function truncate_1(str, maxlength) {
+
+      var Newstr;
+      if (str.length > maxlength) {
+        Newstr = str.substring(0, maxlength - 3) + "...";
+      }
+
+      return Newstr;
+    }
+
+      // Более короткий вариант
+    function truncate_2(str, maxlength) {
+      return str = (str.length > maxlength) ? (str.substring(0, maxlength - 3) + "...") : str;
+    }
+
+    document.write( truncate_1("Вот, что мне хотелось бы сказать на эту тему:", 20) );
+    document.write("< br>");
+    document.write( truncate_2("Вот, что мне хотелось бы сказать на эту тему:", 20) );
+
+    <b>Not my solution</b>
+    function truncate(str, maxlength) {
+      if (str.length > maxlength) {
+        return str.slice(0, maxlength - 3) + '...';
+        // итоговая длина равна maxlength
+      }
+
+      return str;
+    }
+
+    alert( truncate("Вот, что мне хотелось бы сказать на эту тему:", 20) );
+    alert( truncate("Всем привет!", 20) );
+
+    Можно было бы написать этот код ещё короче:
+
+    function truncate(str, maxlength) {
+      return (str.length > maxlength) ?
+        str.slice(0, maxlength - 3) + '...' : str;
+    }
+  </pre>
+  <script type="text/javascript">
+    function truncate_1(str, maxlength) {
+
+      var Newstr;
+      if (str.length > maxlength) {
+        Newstr = str.substring(0, maxlength - 3) + "...";
+      }
+
+      return Newstr;
+    }
+
+      // Более короткий вариант
+    function truncate_2(str, maxlength) {
+      return str = (str.length > maxlength) ? (str.substring(0, maxlength - 3) + "...") : str;
+    }
+
+    document.write( truncate_1("Вот, что мне хотелось бы сказать на эту тему:", 20) );
+    document.write("<br>");
+    document.write( truncate_2("Вот, что мне хотелось бы сказать на эту тему:", 20) );
+    document.write("<br>");
+    document.write( truncate_2("Вот, что ", 20) );
+  </script>
+
+
+
+  <h3>Task 4.3.7: Выделить число</h3>
+  <pre>
+    Есть стоимость в виде строки: "$120". То есть, первым идёт знак валюты, а затем – число.
+
+    Создайте функцию extractCurrencyValue(str), которая будет из такой строки выделять число-значение, в данном случае 120.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      function extractCurrencyValue(str) {
+        return +( str = str.slice(1, str.length) );
+      }
+
+        // Более универсальный код (работает с любыми валютами)
+      function extractCurrencyValue_2(str) {
+        var count = 0;
+        while (true) {
+          if ( isNaN(str[count]) ) {
+            count++;
+          } else break;
+        }
+
+        return +( str = str.slice(count, str.length) ); // Можно без str.length, т.к. по умолчанию до конца
+      }
+
+      document.write( extractCurrencyValue("$1200") );
+      document.write("<br>");
+      document.write( extractCurrencyValue_2("Ru2400") );
+      document.write("<br>");
+      document.write( extractCurrencyValue_2("UAH200") )
+
+    <b>Not my solution</b>
+    function extractCurrencyValue(str) {
+      return +str.slice(1);
+    }
+  </pre>
+  <script type="text/javascript">
+    function extractCurrencyValue(str) {
+      return +( str = str.slice(1, str.length) ); // Короче return +str.slice(1);
+    }
+
+      // Более универсальный код (работает с любыми валютами)
+    function extractCurrencyValue_2(str) {
+      var count = 0;
+      while (true) {
+        if ( isNaN(str[count]) ) {
+          count++;
+        } else break;
+      }
+
+      return +( str = str.slice(count, str.length) ); // Можно без str.length, т.к. по умолчанию до конца
+    }
+
+    document.write( extractCurrencyValue("$1200") );
+    document.write("<br>");
+    document.write( extractCurrencyValue_2("Ru2400") );
+    document.write("<br>");
+    document.write( extractCurrencyValue_2("UAH200") );
+  </script>
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+</body>
+</html>

@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Некоторые другие возможности</title>
+</head>
+<body>
+  <!--**********
+  *  Типы данных: [[Class]], instanceof и утки
+  ************-->
+
+  <h1>7.1. Типы данных: [[Class]], instanceof и утки </h1>
+  <h3>Task 7.1.1: Оператор typeof  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function F() {
+      var a;
+      a = 2 + 3;
+      return a;
+    }
+
+    document.write( typeof 1 );         // 'number'
+    document.write("<br>");
+    document.write( typeof true );      // 'boolean'
+    document.write("<br>");
+    document.write( typeof "Текст" );   // 'string'
+    document.write("<br>");
+    document.write( typeof undefined ); // 'undefined'
+    document.write("<br>");
+    document.write( typeof null );      // 'object' (ошибка в языке)
+    document.write("<br>");
+    document.write( typeof NaN );      // 'number' (ошибка в языке)
+    document.write("<br>");
+    document.write( typeof alert );     // 'function'
+    document.write("<br>");
+    document.write( typeof {} );     // 'object'
+    document.write("<br>");
+    document.write( typeof [] );     // 'object'
+    document.write("<br>");
+    document.write( typeof new F );     // 'object'
+    document.write("<br>");
+    document.write( typeof new Date );     // 'object'
+  </script>
+
+
+
+  <h3>Task 7.1.2: Секретное свойство [[Class]] | Array.isArray()  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+
+    var toString = {}.toString;
+
+    var arr = [1, 2];
+    document.write( toString.call(arr) ); // [object Array]
+    document.write("<br>");
+
+    var date = new Date;
+    document.write( toString.call(date) ); // [object Date]
+    document.write("<br>");
+
+    var obj = {name: "Денис"};
+    document.write( toString.call(obj) ); // [object Object]
+    document.write("<br>");
+
+    var str = "Денис";
+    document.write( toString.call(str) ); // [object String]
+    document.write("<br>");
+
+    var num = 123;
+    document.write( toString.call(num) ); // [object Number]
+    document.write("<br>");
+
+    var myObj = new function(){}();
+    document.write( toString.call(myObj) ); // [object Object] // Данным способом нельзя определить объект это встроенный или новый
+    document.write("<br>");
+
+    function getClass(obj) {
+      return {}.toString.call(obj).slice(8, -1);
+    }
+
+    document.write(getClass(new Date)); // Date
+    document.write("<br>");
+    document.write( getClass(myObj) ); // Object
+    document.write("<br>");
+
+    //////////////////
+    document.write( Array.isArray([1,2,"ff"]) ); // true
+    document.write("<br>");
+    document.write( Array.isArray("string") ); // false
+
+
+  </script>
+
+
+  <h3>Task 7.1.3:  Оператор instanceof </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function User() {}
+    function User2() {}
+
+    var user = new User();
+
+    document.write(user instanceof User) //true
+    document.write("<br>");
+    document.write(user instanceof User2) //false
+  </script>
+
+
+  <h3>Task 7.1.4: Утиная типизация </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr_2 = [1, 4, "gh"];
+
+    if (arr_2.splice) {
+      document.write('Это утка! То есть, массив!');
+      document.write("<br>");
+    }
+
+
+    var x = new Date();
+
+    if (x.getTime) {
+      document.write( 'Дата!' );
+      document.write("<br>");
+      document.write( x.getTime() ); // работаем с датой // дата в милесекундах
+    }
+  </script>
+
+
+
+  <h3>Task 7.1.5: Пример полиморфной функции </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function sayHi(who) {
+
+      if (who.forEach) {
+        who.forEach(sayHi);
+      } else {
+        document.write( 'Привет, ' + who + "<br>");
+      }
+    }
+
+    // Вызов с примитивным аргументом
+    sayHi("Вася"); // Привет, Вася
+    document.write("<br>");
+
+    // Вызов с массивом
+    sayHi(["Саша", "Петя"]); // Привет, Саша... Петя
+    document.write("<br>");
+
+    // Вызов с вложенными массивами - тоже работает!
+    sayHi(["Саша", "Петя", ["Маша", "Юля"]]); // Привет Саша..Петя..Маша..Юля
+    document.write("<br>");
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 7.1.6: Полиморфная функция formatDate </h3>
+  <pre>
+    Напишите функцию formatDate(date), которая возвращает дату в формате dd.mm.yy.
+
+    Ее первый аргумент должен содержать дату в одном из видов:
+
+        Как объект Date.
+        Как строку, например yyyy-mm-dd или другую в стандартном формате даты.
+        Как число секунд с 01.01.1970.
+        Как массив [гггг, мм, дд], месяц начинается с нуля
+
+    Для этого вам понадобится определить тип данных аргумента и, при необходимости, преобразовать входные данные в нужный формат.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function formatDate(date) {
+      var dateFormat;
+      var dd, mm, yy;
+
+      if (date.getDate) {
+        dateFormat = date;
+      }
+
+      if ( (typeof date) == 'string' ) {
+        dateFormat = new Date(date);
+      }
+
+      if ( (typeof date) == 'number') {
+        dateFormat = new Date(date * 1000);
+      }
+
+      if ( Array.isArray(date) ) {
+        dateFormat = new Date(date[0], date[1], date[2]);
+      }
+
+      if (dateFormat) {
+        dd = dateFormat.getDate();
+        mm = dateFormat.getMonth() + 1;
+        yy = dateFormat.getFullYear() % 100;
+      }
+
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      if (yy < 10) {
+        yy = '0' + yy;
+      }
+
+      return dd + "." + mm + "." + yy;
+      //return dateFormat;
+    }
+
+
+    document.write( formatDate(new Date(2014, 0, 1)) ); // 01.01.14
+    document.write("< br>");
+    document.write( formatDate('2011-10-02') ); // 02.10.11
+    document.write("< br>");
+    document.write( formatDate(1234567890) ); // 14.02.09
+    document.write("< br>");
+    document.write( formatDate([2014, 0, 1]) ); // 01.01.14
+    document.write("< br>");
+
+    <b>Not my solution</b>
+    function formatDate(date) {
+      if (typeof date == 'number') {
+        // перевести секунды в миллисекунды и преобразовать к Date
+        date = new Date(date * 1000);
+      } else if (typeof date == 'string') {
+        // строка в стандартном формате автоматически будет разобрана в дату
+        date = new Date(date);
+      } else if (Array.isArray(date)) {
+        date = new Date(date[0], date[1], date[2]);
+      }
+      // преобразования для поддержки полиморфизма завершены,
+      // теперь мы работаем с датой (форматируем её)
+
+      return date.toLocaleString("ru", {day: '2-digit', month: '2-digit', year: '2-digit'});
+
+      /*
+      // можно и вручную, если лень добавлять в старый IE поддержку локализации
+      var day = date.getDate();
+      if (day < 10) day = '0' + day;
+
+      var month = date.getMonth() + 1;
+      if (month < 10) month = '0' + month;
+
+      // взять 2 последние цифры года
+      var year = date.getFullYear() % 100;
+      if (year < 10) year = '0' + year;
+
+      var formattedDate = day + '.' + month + '.' + year;
+
+      return formattedDate;
+      */
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function formatDate(date) {
+      var dateFormat;
+      var dd, mm, yy;
+
+      if (date.getDate) {
+        dateFormat = date;
+      }
+
+      if ( (typeof date) == 'string' ) {
+        dateFormat = new Date(date);
+      }
+
+      if ( (typeof date) == 'number') {
+        dateFormat = new Date(date * 1000);
+      }
+
+      if ( Array.isArray(date) ) {
+        dateFormat = new Date(date[0], date[1], date[2]);
+      }
+
+      if (dateFormat) {
+        dd = dateFormat.getDate();
+        mm = dateFormat.getMonth() + 1;
+        yy = dateFormat.getFullYear() % 100;
+      }
+
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      if (yy < 10) {
+        yy = '0' + yy;
+      }
+
+      return dd + "." + mm + "." + yy;
+    }
+
+
+    document.write( formatDate(new Date(2014, 0, 1)) ); // 01.01.14
+    document.write("<br>");
+    document.write( formatDate('2011-10-02') ); // 02.10.11
+    document.write("<br>");
+    document.write( formatDate(1234567890) ); // 14.02.09
+    document.write("<br>");
+    document.write( formatDate([2014, 0, 1]) ); // 01.01.14
+    document.write("<br>");
+
+  </script>
+
+
+
+  <!--**********
+  * Формат JSON, метод toJSON
+  ************-->
+
+  <h1>7.2. Формат JSON, метод toJSON </h1>
+  <h3>Task 7.2.1: Метод JSON.parse  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var numbers = '[1, 2, 3]';
+
+    numbers = JSON.parse(numbers);
+
+    document.write(numbers[2]); // 3
+    document.write("< br />");
+
+    var user = '{ \
+      "name": "Вася", \
+      "age": 35, \
+      "isAdmin": false, \
+      "friends": [0,1,2,3] } \
+      ';
+
+    user = JSON.parse(user);
+
+    document.write(user.name + ' ' + user.friends[2]); // 2
+    document.write("< br />");
+
+    document.write( {}.toString.call(numbers).slice(8, -1) ); // Array
+    document.write("< br />");
+    document.write( {}.toString.call(user).slice(8, -1) ); // Object
+    document.write("< br />");
+
+    var d = new Date("2014-11-30T12:00:00.000Z");
+
+    document.write( d );
+    document.write("< br />");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var numbers = '[1, 2, 3]';
+
+    numbers = JSON.parse(numbers);
+
+    document.write(numbers[2]); // 3
+    document.write("<br />");
+
+    var user = '{ \
+      "name": "Вася", \
+      "age": 35, \
+      "isAdmin": false, \
+      "friends": [0,1,2,3] } \
+      ';
+
+    user = JSON.parse(user);
+
+    document.write(user.name + ' ' + user.friends[2]); // 2
+    document.write("<br />");
+
+    document.write( {}.toString.call(numbers).slice(8, -1) ); // Array
+    document.write("<br />");
+    document.write( {}.toString.call(user).slice(8, -1) ); // Object
+    document.write("<br />");
+
+    var d = new Date("2014-11-30T12:00:00.000Z");
+
+    document.write( d );
+    document.write("<br />");
+  </script>
+
+
+
+  <h3>Task 7.2.2: Умный разбор: JSON.parse(str, reviver)  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    'use strict';
+
+    var schedule = '{ \
+      "events": [ \
+        {"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}, \
+        {"title":"День рождения","date":"2015-04-18T12:00:00.000Z"} \
+      ]\
+    }';
+
+    schedule = JSON.parse(schedule, function(key, value, som) {
+      if (key == 'date') return new Date(value);
+      return value;
+    });
+
+    document.write( schedule.events[1].date.getDate() ); // сработает! // 18 (день в месяце)
+    document.write("< br />");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var schedule = '{ \
+      "events": [ \
+        {"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}, \
+        {"title":"День рождения","date":"2015-04-18T12:00:00.000Z"} \
+      ]\
+    }';
+
+    schedule = JSON.parse(schedule, function(key, value, som) {
+      if (key == 'date') return new Date(value);
+      return value;
+    });
+
+    document.write( schedule.events[1].date.getDate() ); // сработает! // 18 (день в месяце)
+    document.write("<br />");
+  </script>
+
+
+
+  <h3>Task 7.2.3: Сериализация, метод JSON.stringify </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var event = {
+      title: "Конфернеция",
+      date: "сегодня"
+    };
+
+    var str = JSON.stringify(event);
+    document.write(str);  // {"title":"Конфернеция","date":"сегодня"}
+    document.write("<br />");
+
+    event = JSON.parse(str);
+    document.write(event);  // {"title":"Конфернеция","date":"сегодня"}
+    document.write("<br />");
+  </script>
+
+
+
+  <p><b>При сериализации объекта вызывается его метод toJSON.</b></p>
+  <p>Если такого метода нет – перечисляются его свойства, кроме функций.</p>
+
+  <h3>Task 7.2.4: Сериализация, метод JSON.stringify </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var room = {
+      number: 23,
+      funct: function() {
+        document.write(this.number);
+      }
+    };
+
+    var event = {
+      title: "Конфернеция",
+      date: new Date(Date.UTC(2014, 0, 1)),
+      room: room
+    };
+
+    document.write( JSON.stringify(event) );
+    //{"title":"Конфернеция","date":"2014-01-01T00:00:00.000Z","room":{"number":23}}
+    document.write("<br />");
+
+    var room2 = {
+      number: 23,
+      toJSON: function() {
+        return this.number;
+      }
+    };
+
+    document.write( JSON.stringify(room2) ); // 23
+    document.write("<br />");
+
+    //Исключение свойств
+    var user = {
+      name: "Вася",
+      age: 24,
+      window: window
+    };
+
+    //document.write( JSON.stringify(user) ); //TypeError: cyclic object value
+    document.write("<br />");
+
+    document.write( JSON.stringify(user, ["name", "age"]) ); //{"name":"Вася","age":24}
+    document.write("<br />");
+
+
+    //Функция replacer работает рекурсивно!
+    //То есть, если объект содержит вложенные объекты, массивы и т.п.,
+    //то все они пройдут через replacer.
+
+    var str2 = JSON.stringify(user, function(key, value) {
+      if (key == 'window') return undefined;
+      return value;
+    });
+
+    document.write( str2 ); //{"name":"Вася","age":24}
+    document.write("<br />");
+
+    //Красивое форматирование
+    var user3 = {
+      name: "Вася",
+      age: 25,
+      roles: {
+        isAdmin: false,
+        isEditor: true
+      }
+    };
+    var str = JSON.stringify(user3, "", 4);
+    document.write(str);
+        // Если alert вместо document.write
+        /* Результат -- красиво сериализованный объект:
+    {
+        "name": "Вася",
+        "age": 25,
+        "roles": {
+            "isAdmin": false,
+            "isEditor": true
+        }
+    }
+    */
+    document.write("<br />");
+
+    var str4 = JSON.stringify(user3, "", "---");
+    document.write(str4); // нужно alert(str4)
+    document.write("<br />");
+  </script>
+
+
+  <hr>
+
+
+
+  <h3>Task 7.2.5: Превратите объект в JSON </h3>
+  <pre>
+    Превратите объект leader из примера ниже в JSON
+    После этого прочитайте получившуюся строку обратно в объект.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      var leader = {
+        name: "Василий Иванович",
+        age: 35
+      };
+
+      var str = JSON.stringify(leader);
+
+      document.write(str);
+      document.write("< br />");
+
+      var obj = JSON.parse(str);
+
+      for (var key in obj) {
+        document.write( key + ": " + obj[key] + ", ");
+      }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var leader = {
+      name: "Василий Иванович",
+      age: 35
+    };
+
+    var str = JSON.stringify(leader);
+
+    document.write(str);
+    document.write("<br />");
+
+    var obj = JSON.parse(str);
+
+    for (var key in obj) {
+      document.write( key + ": " + obj[key] + ", ");
+    }
+
+  </script>
+
+
+
+  <h3>Task 7.2.6: Превратите объекты со ссылками в JSON </h3>
+  <pre>
+    Превратите объект team из примера ниже в JSON
+    Может ли это сделать прямой вызов JSON.stringify(team)? Если нет, то почему?
+    Какой подход вы бы предложили для чтения и восстановления таких объектов?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Обычный вызов JSON.stringify(team) выдаст ошибку, так как объекты leader и
+    soldier внутри структуры ссылаются друг на друга.
+    Формат JSON не предусматривает средств для хранения ссылок.
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var leader = {
+      name: "Василий Иванович",
+      toJSON: function() {
+        for(var key in this) {
+          // if (typeof this[key] === 'object') {
+          //   return this[key];
+          // }
+          return (key + ': ' + this[key]);
+        }
+      }
+    };
+
+    var soldier = {
+      name: "Петька",
+      toJSON: function() {
+        var s = '';
+        for(var key in this) {
+          // if (typeof this[key] === 'object') {
+          //   return this[key];
+          // }
+          s = s + (key + ': ' + this[key]);
+        }
+        return s;
+      }
+    };
+
+    // эти объекты ссылаются друг на друга!
+    leader.soldier = soldier;
+    soldier.leader = leader;
+
+    var team = [leader, soldier];
+
+    //var strTeam = JSON.stringify(team, ["name"]);
+    var strTeam = JSON.stringify(team);
+    // var strTeam = JSON.stringify(team, function(key, value) {
+    //   if (key == value) {
+    //     return undefined;
+    //   }
+    //   return value;
+    // });
+    document.write(strTeam);
+    document.write("<br />");
+  </script>
+
+
+  <h3>Task 7.2.6: Превратите объекты со ссылками в JSON (не мое решение) </h3>
+  <pre>
+    Превратите объект team из примера ниже в JSON
+    Может ли это сделать прямой вызов JSON.stringify(team)? Если нет, то почему?
+    Какой подход вы бы предложили для чтения и восстановления таких объектов?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var leader2 = {
+      id: 12,
+      name: "Василий Иванович"
+    };
+
+    var soldier2 = {
+      id: 51,
+      name: "Петька"
+    };
+
+    // эти объекты ссылаются друг на друга!
+    leader2.soldier2Id = 51;
+    soldier2.leader2Id = 12;
+
+    var team2 = {
+      12: leader2,
+      51: soldier2
+    };
+
+    var strTeam2 = JSON.stringify(team2);
+    document.write(strTeam2);
+    document.write("<br />");
+
+    //Решение из коментов
+    /*
+    var str = JSON.stringify(team, function(key, value) {
+    	if (key == "soldier") return "soldier";
+    	if (key == "leader") return "leader";
+    	return value;
+    });
+
+    alert(str);
+
+    var obj = JSON.parse(str, function(key, value) {
+    	if (key == "soldier") return window["soldier"];
+    	if (key == "leader") return window["leader"];
+    	return value;
+    });
+
+    alert(obj[0].name);
+    */
+  </script>
+
+
+
+  <!--**********
+  * setTimeout и setInterval
+  ************-->
+
+  <h1>7.3. setTimeout и setInterval </h1>
+  <h3>Task 7.3.1: setTimeout </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write("Глянуть в консоль");
+    document.write("<br>");
+
+    function func(a, b) {
+      console.log("a + b = ", a + b);
+    }
+
+    var timerId1 = setTimeout(func, 1000, 2, 3); // 5
+    document.write("timerId1= ", timerId1); // 2
+    document.write("<br>");
+
+    setTimeout(function() {console.log(3 + 4)}, 500); // 7
+
+    var timerId2 = setTimeout(func, 200, 5, 25);
+    var timerId3 = setTimeout(func, 600, 5, 25);
+
+    document.write("timerId2= ", timerId2); // 4
+    document.write("<br>");
+    document.write("timerId3= ", timerId3); // 5
+    document.write("<br>");
+    clearTimeout(timerId2);
+    document.write(timerId2); //4
+    document.write("<br>");
+  </script>
+
+
+  <h3>Task 7.3.2: setInterval </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // начать повторы с интервалом 2 сек
+    var t1 = setInterval(function() {
+      alert("тик-так");
+    }, 1000);
+
+    // через 5 сек остановить повторы
+    setTimeout(function() {
+      clearInterval(t1);
+      alert('стоп');
+    }, 3000);
+
+  </script>
+  <b>Модальные окна замораживают время в Chrome/Opera/Safari</b>
+
+
+
+  <h3>Task 7.3.3: Рекурсивный setTimeout </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+    /** вместо:
+      var timerId = setInterval(function() {
+        alert( "тик" );
+      }, 2000);
+      */
+
+    var timer1 = setTimeout(function tick() {
+      console.log("Рекурсивный вызов 'тик так '");
+      timer1 = setTimeout(tick, 3000);
+    }, 3000);
+
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 7.3.4: Вывод чисел каждые 100 мс </h3>
+  <pre>
+    Напишите функцию printNumbersInterval(), которая последовательно выводит в консоль числа от 1 до 20,
+    с интервалом между числами 100 мс.
+    То есть, весь вывод должен занимать 2000 мс, в течение которых каждые 100 мс в консоли появляется очередное число.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Аналогичное решение
+    <b>My solution</b>
+      function printNumbersInterval() {
+        var i = 0;
+        var intervalId = setInterval(function(){
+          i++;
+          if (i >= 20) {
+            clearInterval(intervalId);
+          }
+          console.log(i);
+        }, 100);
+      }
+
+      printNumbersInterval();
+    <b>Not my solution</b>
+      function printNumbersInterval() {
+      var i = 1;
+      var timerId = setInterval(function() {
+        console.log(i);
+        if (i == 20) clearInterval(timerId);
+        i++;
+      }, 100);
+    }
+
+    // вызов
+    printNumbersInterval();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function printNumbersInterval() {
+      var i = 0;
+      var intervalId = setInterval(function(){
+        i++;
+        if (i >= 20) {
+          clearInterval(intervalId);
+        }
+        console.log(i);
+      }, 100);
+    }
+
+    //printNumbersInterval();
+  </script>
+
+
+
+  <h3>Task 7.3.5: Вывод чисел каждые 100 мс, через setTimeout </h3>
+  <pre>
+    Сделайте то же самое, что в задаче Вывод чисел каждые 100 мс, но с использованием
+    рекурсивного setTimeout вместо setInterval.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      'use strict';
+
+      function printNumbersInterval2() {
+        var i = 1;
+        var intervalId = setTimeout(function f() {
+          console.log(i);
+
+          var intervalId_2 = setTimeout(f, 100);
+
+          if (i == 20) {
+            clearTimeout(intervalId_2);
+          }
+          i++;
+        }, 100);
+      }
+
+      printNumbersInterval2();
+    <b>Not my solution</b>
+      function printNumbersTimeout20_100() {
+      var i = 1;
+      var timerId = setTimeout(function go() {
+        console.log(i);
+        if (i < 20) setTimeout(go, 100);
+        i++;
+      }, 100);
+      }
+
+      // вызов
+      printNumbersTimeout20_100();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function printNumbersInterval2() {
+      var i = 1;
+      var intervalId = setTimeout(function f() {
+        console.log(i);
+
+        var intervalId_2 = setTimeout(f, 100);
+
+        if (i == 20) {
+          clearTimeout(intervalId_2);
+        }
+        i++;
+      }, 100);
+    }
+
+    printNumbersInterval2();
+  </script>
+
+
+
+  <h3>Task 7.3.6: Для подсветки setInterval или setTimeout? </h3>
+  <pre>
+    Стоит задача: реализовать подсветку синтаксиса в длинном коде при помощи JavaScript,
+    для онлайн-редактора кода. Это требует сложных вычислений, особенно загружает процессор
+    генерация дополнительных элементов страницы, визуально осуществляющих подсветку.
+    Поэтому решаем обрабатывать не весь код сразу, что привело бы к зависанию скрипта, а
+    разбить работу на части: подсвечивать по 20 строк раз в 10 мс.
+      timer = setInterval(function() {
+        if (есть еще что подсветить) highlight();
+        else clearInterval(timer);
+      }, 10);
+
+      setTimeout(function go() {
+        highlight();
+        if (есть еще что подсветить) setTimeout(go, 10);
+      }, 10);
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Второе решение
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+    function highlight() {
+
+    }
+
+    var timer = setInterval(function() {
+      if ('есть еще что подсветить') highlight();
+      else clearInterval(timer);
+    }, 10);
+  </script>
+
+
+  <h3>Task 7.3.7: Что выведет setTimeout? </h3>
+  <pre>
+    В коде ниже запланирован запуск setTimeout, а затем запущена тяжёлая функция hardWork,
+    выполнение которой занимает более долгое время, чем интервал до срабатывания таймера.
+    Когда сработает setTimeout? Выберите нужный вариант:
+        До выполнения hardWork.
+        Во время выполнения hardWork.
+        Сразу же по окончании hardWork.
+        Через 100 мс после окончания hardWork.
+    Что выведет alert в коде ниже?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    setTimeout(function() {
+      alert( i );
+    }, 1000);
+
+    var i;
+
+    function hardWork() {
+      // время выполнения этого кода >100 мс, сам код неважен
+      for (i = 0; i < 1e8; i++) hardWork[i % 3] = i;
+    }
+
+    hardWork();
+
+
+    for (var key in hardWork) {
+      document.write("key =" + key + " => " + hardWork[key] + " | ");
+    }
+
+  </script>
+
+
+
+  <h3>Task 7.3.8: Что выведет после setInterval? </h3>
+  <pre>
+    В коде ниже запускается setInterval каждые 10 мс, и через 50 мс запланирована его отмена.
+    После этого запущена тяжёлая функция f, выполнение которой (мы точно знаем) потребует более 100 мс.
+    Сработает ли setInterval, как и когда?
+    Варианты:
+        Да, несколько раз, в процессе выполнения f.
+        Да, несколько раз, сразу после выполнения f.
+        Да, один раз, сразу после выполнения f.
+        Нет, не сработает.
+        Может быть по-разному, как повезёт.
+    Что выведет alert в строке (*)?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var k;
+    var timer = setInterval(function() { // планируем setInterval каждые 10 мс
+      k++;
+    }, 10);
+
+    setTimeout(function() { // через 50 мс - отмена setInterval
+      clearInterval(timer);
+      alert( k ); // (*)
+    }, 50);
+
+    // и запускаем тяжёлую функцию
+    function f() {
+      // точное время выполнения не играет роли
+      // здесь оно заведомо больше 100 мс
+      for (k = 0; k < 1e8; k++) f[k % 2] = k;
+    }
+
+    f(); //Да, один раз, сразу после выполнения f.
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var k;
+    var timer = setInterval(function() { // планируем setInterval каждые 10 мс
+      k++;
+    }, 10);
+
+    setTimeout(function() { // через 50 мс - отмена setInterval
+      clearInterval(timer);
+      alert( k ); // (*)
+    }, 50);
+
+    // и запускаем тяжёлую функцию
+    function f() {
+      // точное время выполнения не играет роли
+      // здесь оно заведомо больше 100 мс
+      for (k = 0; k < 1e8; k++) f[k % 2] = k;
+    }
+
+    f(); //Да, один раз, сразу после выполнения f.
+  </script>
+
+
+
+
+  <h3>Task 7.3.9: Кто быстрее? </h3>
+  <pre>
+    Есть два бегуна:
+    var runner1 = new Runner();
+    var runner2 = new Runner();
+    У каждого есть метод step(), который делает шаг,
+    увеличивая свойство steps.
+    Конкретный код метода step() не имеет значения,
+    важно лишь что шаг делается не мгновенно, он требует небольшого времени.
+    Если запустить первого бегуна через setInterval, а
+    второго – через вложенный setTimeout – какой сделает больше шагов за 5 секунд?
+        // первый?
+        setInterval(function() {
+          runner1.step();
+        }, 15);
+
+        // или второй?
+        setTimeout(function go() {
+          runner2.step();
+          setTimeout(go, 15);
+        }, 15);
+
+        setTimeout(function() {
+          alert( runner1.steps );
+          alert( runner2.steps );
+        }, 5000);
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function Runner() {
+      this.steps = 0;
+
+      this.step = function() {
+        this.doSomethingHeavy();
+        this.steps++;
+      };
+
+      function fib(n) {
+        return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+      }
+
+      this.doSomethingHeavy = function() {
+        for (var i = 0; i < 25; i++) {
+          this[i] = fib(i);
+        }
+      };
+
+    }
+
+    var runner1 = new Runner();
+    var runner2 = new Runner();
+
+    // запускаем бегунов
+    var time1 = setInterval(function() {
+      runner1.step();
+    }, 15);
+
+    var time2 = setTimeout(function go() {
+      runner2.step();
+      time2 = setTimeout(go, 15);
+    }, 15);
+
+    // кто сделает больше шагов?
+    setTimeout(function() {
+      clearInterval(time1);
+      clearTimeout(time2);
+      alert( runner1.steps ); // 120
+      alert( runner2.steps ); // 119
+    }, 5000);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Runner() {
+      this.steps = 0;
+
+      this.step = function() {
+        this.doSomethingHeavy();
+        this.steps++;
+      };
+
+      function fib(n) {
+        return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+      }
+
+      this.doSomethingHeavy = function() {
+        for (var i = 0; i < 25; i++) {
+          this[i] = fib(i);
+        }
+      };
+
+    }
+
+    var runner1 = new Runner();
+    var runner2 = new Runner();
+
+    // запускаем бегунов
+    var time1 = setInterval(function() {
+      runner1.step();
+    }, 15);
+
+    var time2 = setTimeout(function go() {
+      runner2.step();
+      time2 = setTimeout(go, 15);
+    }, 15);
+
+    // кто сделает больше шагов?
+    setTimeout(function() {
+      clearInterval(time1);
+      clearTimeout(time2);
+      alert( runner1.steps ); // 120
+      alert( runner2.steps ); // 119
+    }, 5000);
+  </script>
+
+
+
+  <h3>Task 7.3.10: Функция-задержка </h3>
+  <pre>
+    Напишите функцию delay(f, ms), которая возвращает обёртку вокруг f,
+    задерживающую вызов на ms миллисекунд.
+    Упрощённо можно сказать, что delay возвращает "задержанный на ms" вариант f.
+    В примере выше у функции только один аргумент, но delay должна быть универсальной:
+    передавать любое количество аргументов и контекст this.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //идентично
+    <b>My solution</b>
+      function fu(x) {
+        alert( x );
+      }
+
+      function delay(fu, ms) {
+        return function fux() {
+          //setTimeout(fu.bind(this, arguments[0]), ms);
+          var th = this;
+          var arg = arguments;
+          setTimeout(function() {fu.apply(th, arg)} , ms);
+        }
+      }
+
+      var fu1000 = delay(fu, 1000);
+      var fu1500 = delay(fu, 1500);
+
+      fu1000("тест"); // выведет "тест" через 1000 миллисекунд
+      fu1500("тест2"); // выведет "тест2" через 1500 миллисекунд
+
+    <b>Not my solution</b>
+      //Как работает обертка
+
+      return function() {
+        var savedThis = this;
+        var savedArgs = arguments;
+
+        setTimeout(function() {
+          f.apply(savedThis, savedArgs);
+        }, ms);
+      };
+  </pre>
+  <div id="text"></div>
+  <script type="text/javascript">
+    'use strict';
+
+    function fu(x) {
+      console.log(x);
+    }
+
+    function delay(fu, ms) {
+      return function fux() {
+        //setTimeout(fu.bind(this, arguments[0]), ms);
+        var th = this;
+        var arg = arguments;
+        setTimeout(function() {fu.apply(th, arg)} , ms);
+      }
+    }
+
+    var fu1000 = delay(fu, 1000);
+    var fu1500 = delay(fu, 1500);
+
+    fu1000("тест"); // выведет "тест" через 1000 миллисекунд
+    fu1500("тест2"); // выведет "тест2" через 1500 миллисекунд
+
+  </script>
+
+
+  <h3>Task 7.3.11: Вызов не чаще чем в N миллисекунд </h3>
+  <pre>
+    Напишите функцию debounce(f, ms), которая возвращает обёртку,
+    которая откладывает вызов f на ms миллисекунд.
+    «Лишние» вызовы перезаписывают предыдущие отложенные задания.
+    Все аргументы и контекст – передаются.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Мое решение рабочее, у автора не пройденный синтаксис
+    <b>My solution</b>
+      function f_2(x) {
+        console.log("f_2= " + x);
+      }
+
+      function debounce(f_2, ms) {
+        var i = -1;
+        var arrTimerId = [];
+
+        return function () {
+          var timerId_1;
+          var thisSave = this;
+          var argSave = arguments;
+
+          i++;
+
+          console.log("timerId_1 = " + timerId_1);
+
+          setTimeout( function()
+            {clearTimeout(arrTimerId[i - 1]);
+            }, ms - 10 );
+
+          timerId_1 = setTimeout(function() {
+            f_2.apply(thisSave, argSave);
+          }, ms);
+
+          arrTimerId.push(timerId_1);
+        }
+      }
+
+      var f_2 = debounce(f_2, 1000);
+
+      f_2(1); // вызов отложен на 1000 мс
+      f_2(2); // предыдущий отложенный вызов игнорируется, текущий (2) откладывается на 1000 мс
+
+      // через 1 секунду будет выполнен вызов f(1)
+
+      setTimeout( function() { f_2(3) }, 1100); // через 1100 мс отложим вызов еще на 1000 мс
+      setTimeout( function() { f_2(4) }, 1200); // игнорируем вызов (3)
+      // через 2200 мс от начала выполнения будет выполнен вызов f(4)
+
+
+      // Второе Решение переделал авторское
+      function f_3(x) {
+        console.log("f_3= " + x);
+      }
+
+      function debounce_2(f_3, ms) {
+        var timer = null;
+
+        return function () {
+          var thisSave = this;
+          var argSave = arguments;
+
+          function f_3x() {
+            f_3.apply(thisSave, argSave);
+            timer = null;
+          }
+
+          if (timer) {
+            clearTimeout(timer);
+          }
+
+          timer = setTimeout(f_3x, ms);
+        }
+      }
+
+      var f_3 = debounce_2(f_3, 1000);
+
+      f_3(1); // вызов отложен на 1000 мс
+      f_3(2); // предыдущий отложенный вызов игнорируется, текущий (2) откладывается на 1000 мс
+
+      // через 1 секунду будет выполнен вызов f(1)
+
+      setTimeout( function() { f_3(3) }, 1100); // через 1100 мс отложим вызов еще на 1000 мс
+      setTimeout( function() { f_3(4) }, 1200); // игнорируем вызов (3)
+      // через 2200 мс от начала выполнения будет выполнен вызов f(4)
+
+    <b>Not my solution</b>
+      function debounce(f, ms) {
+
+      let timer = null;
+
+      return function (...args) {
+        const onComplete = () => {
+          f.apply(this, args);
+          timer = null;
+        }
+
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        timer = setTimeout(onComplete, ms);
+      };
+      }
+
+      function f(x) { alert(x) }
+      var f = debounce(f, 1000);
+
+      f(1); // вызов отложен на 1000 мс
+      f(2); // предыдущий отложенный вызов игнорируется, текущий (2) откладывается на 1000 мс
+
+      // через 1 секунду появится alert(2)
+
+      setTimeout( function() { f(3) }, 1100); // через 1100 мс отложим вызов еще на 1000 мс
+      setTimeout( function() { f(4) }, 1200); // игнорируем вызов (3)
+
+      // через 2200 мс от начала выполнения появится alert(4)
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function f_2(x) {
+      console.log("f_2= " + x);
+    }
+
+    function debounce(f_2, ms) {
+      var i = -1;
+      var arrTimerId = [];
+
+      return function () {
+        var timerId_1;
+        var thisSave = this;
+        var argSave = arguments;
+
+        i++;
+
+        console.log("timerId_1 = " + timerId_1);
+
+        setTimeout( function()
+          {clearTimeout(arrTimerId[i - 1]);
+          }, ms - 10 );
+
+        timerId_1 = setTimeout(function() {
+          f_2.apply(thisSave, argSave);
+        }, ms);
+
+        arrTimerId.push(timerId_1);
+      }
+    }
+
+    var f_2 = debounce(f_2, 1000);
+
+    f_2(1); // вызов отложен на 1000 мс
+    f_2(2); // предыдущий отложенный вызов игнорируется, текущий (2) откладывается на 1000 мс
+
+    // через 1 секунду будет выполнен вызов f(1)
+
+    setTimeout( function() { f_2(3) }, 1100); // через 1100 мс отложим вызов еще на 1000 мс
+    setTimeout( function() { f_2(4) }, 1200); // игнорируем вызов (3)
+    // через 2200 мс от начала выполнения будет выполнен вызов f(4)
+
+
+    // Второе Решение переделал авторское
+    function f_3(x) {
+      console.log("f_3= " + x);
+    }
+
+    function debounce_2(f_3, ms) {
+      var timer = null;
+
+      return function () {
+        var thisSave = this;
+        var argSave = arguments;
+
+        function f_3x() {
+          f_3.apply(thisSave, argSave);
+          timer = null;
+        }
+
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        timer = setTimeout(f_3x, ms);
+      }
+    }
+
+    var f_3 = debounce_2(f_3, 1000);
+
+    f_3(1); // вызов отложен на 1000 мс
+    f_3(2); // предыдущий отложенный вызов игнорируется, текущий (2) откладывается на 1000 мс
+
+    // через 1 секунду будет выполнен вызов f(1)
+
+    setTimeout( function() { f_3(3) }, 1100); // через 1100 мс отложим вызов еще на 1000 мс
+    setTimeout( function() { f_3(4) }, 1200); // игнорируем вызов (3)
+    // через 2200 мс от начала выполнения будет выполнен вызов f(4)
+
+  </script>
+
+
+  <h3>Task 7.3.12: Тормозилка </h3>
+  <pre>
+    Напишите функцию throttle(f, ms) – «тормозилку», которая возвращает обёртку, передающую вызов f не чаще, чем раз в ms миллисекунд.
+    У этой функции должно быть важное существенное отличие от debounce: если игнорируемый вызов оказался последним,
+    т.е. после него до окончания задержки ничего нет – то он выполнится.
+    Чтобы лучше понять, откуда взялось это требование, и как throttle должна работать –
+    разберём реальное применение, на которое и ориентирована эта задача.
+    Например, нужно обрабатывать передвижения мыши.
+    В JavaScript это делается функцией, которая будет запускаться при каждом микро-передвижении мыши и
+    получать координаты курсора. По мере того, как мышь двигается, эта функция может запускаться очень часто, может
+    быть 100 раз в секунду (каждые 10 мс).
+    Функция обработки передвижения должна обновлять некую информацию на странице.
+    При этом обновление – слишком «тяжёлый» процесс, чтобы делать его при каждом микро-передвижении.
+    Имеет смысл делать его раз в 100 мс, не чаще.
+    Пусть функция, которая осуществляет это обновление по передвижению, называется onmousemove.
+
+    Вызов throttle(onmousemove, 100), по сути, предназначен для того, чтобы «притормаживать» обработку onmousemove.
+    Технически, он должен возвращать обёртку, которая передаёт все вызовы onmousemove, но не чаще чем раз в 100 мс.
+
+    При этом промежуточные движения можно игнорировать, но мышь в конце концов где-то остановится.
+    И это последнее, итоговое положение мыши обязательно нужно обработать!
+
+    Визуально это даст следующую картину обработки перемещений мыши:
+
+        Первое обновление произойдёт сразу (это важно, посетитель тут же видит реакцию на своё действие).
+        Дальше может быть много вызовов (микро-передвижений) с разными координатами, но пока не пройдёт 100 мс – ничего не будет.
+        По истечении 100 мс – опять обновление, с последними координатами. Промежуточные микро-передвижения игнорированы.
+        В конце концов мышь где-то остановится, обновление по окончании очередной паузы 100 мс сработает с последними координатами.
+
+    Ещё раз заметим – задача из реальной жизни, и в ней принципиально важно, что последнее передвижение обрабатывается.
+    Пользователь должен увидеть, где остановил мышь.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Не правильно работает
+    <b>My solution</b>
+      var f_ = function(a) {
+        console.log("f_ = " + a)
+      };
+
+      function throttle(f, ms) {
+        var timer = null;
+
+        return function() {
+          var thisSave = this;
+          var argSave = arguments;
+
+          function onComplete() {
+            f.apply(thisSave, argSave);
+            timer = null;
+          }
+
+          if (timer) {
+            clearTimeout(timer);
+          } else {
+            onComplete();
+          }
+
+          timer = setTimeout(onComplete, ms);
+        }
+      }
+
+      // затормозить функцию до одного раза в 1000 мс
+      var f1000 = throttle(f_, 1000);
+
+      f1000(1); // выведет 1
+      f1000(2); // (тормозим, не прошло 1000 мс)
+      f1000(3); // (тормозим, не прошло 1000 мс)
+      f1000(4); // (тормозим, не прошло 1000 мс)
+      setTimeout(function() {f1000(5)}, 1200);
+
+      // когда пройдёт 1000 мс...
+      // выведет 4, промежуточное значение 2 и 3 игнорируется
+      // пото после паузы запуститься 5
+
+    <b>Not my solution</b>
+    function throttle(func, ms) {
+
+      var isThrottled = false,
+        savedArgs,
+        savedThis;
+
+      function wrapper() {
+
+        if (isThrottled) { // (2)
+          savedArgs = arguments;
+          savedThis = this;
+          return;
+        }
+
+        func.apply(this, arguments); // (1)
+
+        isThrottled = true;
+
+        setTimeout(function() {
+          isThrottled = false; // (3)
+          if (savedArgs) {
+            wrapper.apply(savedThis, savedArgs);
+            savedArgs = savedThis = null;
+          }
+        }, ms);
+      }
+
+      return wrapper;
+      }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var f_ = function(a) {
+      console.log("f_ = " + a)
+    };
+
+    function throttle(f, ms) {
+      var timer = null;
+
+      return function() {
+        var thisSave = this;
+        var argSave = arguments;
+
+        function onComplete() {
+          f.apply(thisSave, argSave);
+          timer = null;
+        }
+
+        if (timer) {
+          clearTimeout(timer);
+        } else {
+          onComplete();
+        }
+
+        timer = setTimeout(onComplete, ms);
+      }
+    }
+
+    // затормозить функцию до одного раза в 1000 мс
+    var f1000 = throttle(f_, 1000);
+
+    f1000(1); // выведет 1
+    f1000(2); // (тормозим, не прошло 1000 мс)
+    f1000(3); // (тормозим, не прошло 1000 мс)
+    f1000(4); // (тормозим, не прошло 1000 мс)
+    setTimeout(function() {f1000(5)}, 1200);
+
+    // когда пройдёт 1000 мс...
+    // выведет 4, промежуточное значение 2 и 3 игнорируется
+    // пото после паузы запуститься 5
+  </script>
+
+
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

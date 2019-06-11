@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Глобальные объекты, замыкания</title>
+</head>
+<body>
+
+  <!--**********
+  * Глобальные объекты
+  ************-->
+
+  <h1>5.1. Глобальные объекты </h1>
+  <h3>Task 5.1.1: Window и переменная  </h3>
+  <pre>
+    Каков будет результат кода?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    if ("a" in window) {
+      var a = 1;
+    }
+    document.write( a );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    if ("a" in window) {
+      var a = 1;
+    }
+    document.write( a );
+  </script>
+
+
+
+  <h3>Task 5.1.2: Window и переменная 2 </h3>
+  <pre>
+    Каков будет результат (перед a нет var)?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    if ("ab" in window) {
+      ab = 1;
+    }
+    document.write( ab );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    if ("ab" in window) {
+      ab = 1; //ab is not defined
+    }
+    document.write( ab );
+  </script>
+
+
+
+  <h3>Task 5.1.3: Window и переменная 3 </h3>
+  <pre>
+    Каков будет результат (перед a нет var, а ниже есть)?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    if ("a3" in window) {
+      a3 = 1;
+    }
+    document.write( ab );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    if ("a3" in window) {
+      a3 = 1; //ab is not defined
+    }
+    var a3;
+
+    document.write( a3 );
+  </script>
+
+
+
+
+  <!--**********
+  * Замыкания, функции изнутри
+  ************-->
+
+  <h1>5.2. Замыкания, функции изнутри </h1>
+  <h3>Task 5.2.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var currentCount = 1;
+    function makeCounter() {
+      var cc = currentCount;
+      return cc++;
+    }
+
+    //var counter = makeCounter();
+
+    document.write( makeCounter() );
+    document.write("<br>");
+    document.write( makeCounter() );
+    document.write("<br>");
+    document.write(currentCount);
+    document.write("<br>");
+
+
+    var currentCount2 = 1;
+    function makeCounter2() {
+
+      return currentCount2++;
+    }
+
+    //var counter = makeCounter();
+
+    document.write("<br>");
+    document.write( makeCounter2() );
+    document.write("<br>");
+    document.write( makeCounter2() );
+    document.write("<br>");
+    document.write(currentCount2);
+    document.write("<br>");
+
+
+    function makeCounter3() {
+      var currentCount3 = 1;
+
+      return function() {
+        return currentCount3++;
+      };
+    }
+
+    var counter3 = makeCounter3();
+
+    document.write("<br>");
+    document.write( counter3() );
+    document.write("<br>");
+    document.write( counter3() );
+    document.write("<br>");
+    document.write( counter3() );
+    document.write("<br>");
+
+  </script>
+
+
+
+  <h3>Task 5.2.2: Свойства функции </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeCounter4() {
+      function counter4() {
+        console.log(counter4.currentCount4);
+        return counter4.currentCount4++;
+      };
+      counter4.currentCount4 = 1;
+
+      return counter4;
+    }
+
+    var count = makeCounter4();
+
+    document.write("<br>");
+    document.write( count() );
+    document.write("<br>");
+    document.write( count() );
+    document.write("<br>");
+
+    count.currentCount4 = 5;
+    document.write( count() );
+
+
+  </script>
+
+
+
+  <h3>Task 5.2.3: Что выведет say в начале кода? </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    say('Вася'); // Что выведет? Не будет ли ошибки?
+
+    var phrase = 'Привет';
+
+    function say(name) {
+      document.write( name + ", " + phrase );
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    say('Вася'); // Что выведет? Не будет ли ошибки?
+
+    var phrase = 'Привет';
+
+    function say(name) {
+      document.write( name + ", " + phrase );
+    }
+
+
+  </script>
+
+
+
+  <h3>Task 5.2.4: Каков будет результат выполнения этого кода? </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var value = 0;
+
+    function f() {
+      if (1) {
+        value = true;
+      } else {
+        var value = false;
+      }
+
+      document.write( value );
+    }
+
+    f();
+    document.write("< br />");
+    document.write(value);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var value = 0;
+
+    function f() {
+      if (1) {
+        value = true;
+      } else {
+        var value = false;
+      }
+
+      document.write( value );
+    }
+
+    f();
+    document.write("<br />");
+    document.write(value);
+
+  </script>
+
+
+
+  <h3>Task 5.2.5: var window </h3>
+  <pre>
+    Каков будет результат выполнения этого кода? Почему?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function test() {
+      document.write( window );
+      var window = 5;
+      document.write("< br />");
+      document.write(window);
+    }
+
+    test();
+    document.write("< br />");
+    document.write( window );
+    document.write("< br />");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function test() {
+      document.write( window );
+      var window = 5;
+      document.write("<br />");
+      document.write(window);
+    }
+
+    test();
+    document.write("<br />");
+    document.write( window );
+    document.write("<br />");
+
+  </script>
+
+
+
+  <h3>Task 5.2.6: Вызов "на месте" </h3>
+  <pre>
+    Каков будет результат выполнения кода? Почему?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 5;
+
+    (function() {
+      document.write(a);
+    })();
+
+    document.write("<br />");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var a = 5;
+
+    (function() {
+      document.write(a);
+    })();
+
+    document.write("<br />");
+
+  </script>
+
+
+
+  <h3>Task 5.2.7: Перекрытие переменной" </h3>
+  <pre>
+    Если во внутренней функции есть своя переменная с именем currentCount – можно ли в ней получить currentCount из внешней функции?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Нет, нельзя.
+
+    Локальная переменная полностью перекрывает внешнюю.
+
+    function makeCounter55() {
+      var currentCount55 = 1;
+
+      return function() {
+        var currentCount55;
+        currentCount55 = 0;
+        return currentCount55;
+      }
+    }
+
+    var res = makeCounter55();
+    document.write("< br />");
+    document.write( res() );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeCounter55() {
+      var currentCount55 = 1;
+
+      return function() {
+        var currentCount55;
+        currentCount55 = 0;
+        return currentCount55;
+      }
+    }
+
+    var res = makeCounter55();
+    document.write("<br />");
+    document.write( res() );
+
+  </script>
+
+
+
+  <h3>Task 5.2.8: Глобальный счётчик </h3>
+  <pre>
+    Что выведут эти вызовы, если переменная currentCount находится вне makeCounter?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var currentCount66 = 1;
+
+    function makeCounter66() {
+      return function() {
+        return currentCount66++;
+      };
+    }
+
+    var counter66 = makeCounter66();
+    var counter266 = makeCounter66();
+
+    document.write( counter66() ); // 1
+    document.write("< br />");
+    document.write( counter66() ); // 2
+    document.write("< br />");
+
+    document.write( counter266() ); // 3
+    document.write("< br />");
+    document.write( counter266() ); // 4
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var currentCount66 = 1;
+
+    function makeCounter66() {
+      return function() {
+        return currentCount66++;
+      };
+    }
+
+    var counter66 = makeCounter66();
+    var counter266 = makeCounter66();
+
+    document.write( counter66() ); // 1
+    document.write("<br />");
+    document.write( counter66() ); // 2
+    document.write("<br />");
+
+    document.write( counter266() ); // 3
+    document.write("<br />");
+    document.write( counter266() ); // 4
+
+  </script>
+
+
+
+  <!--**********
+  * [[Scope]] для new Function
+  ************-->
+
+  <h1>5.3. [[Scope]] для new Function </h1>
+  <h3>Task 5.3.1: </h3>
+  <pre>
+    При создании функции с использованием new Function, её свойство [[Scope]]
+    ссылается не на текущий LexicalEnvironment, а на window.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 1;
+
+    function getFunc() {
+      var a = 2;
+
+      var func = new Function('', 'document.write(a)');
+
+      return func;
+    }
+
+    getFunc()(); // 1, из window
+
+    //*****
+    document.write("< br />");
+
+    var a2 = 1;
+
+    function getFunc2() {
+      var a2 = 2;
+
+      var func2 = function() {
+        document.write(a2);
+      }
+
+      return func2();
+    }
+
+    getFunc2(); // 2, из LexicalEnvironment функции getFunc2
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var a = 1;
+
+    function getFunc() {
+      var a = 2;
+
+      var func = new Function('', 'document.write(a)');
+
+      return func;
+    }
+
+    getFunc()(); // 1, из window
+
+    //*****
+    document.write("<br />");
+
+    var a2 = 1;
+
+    function getFunc2() {
+      var a2 = 2;
+
+      var func2 = function() {
+        document.write(a2);
+      }
+
+      return func2();
+    }
+
+    getFunc2(); // 2, из LexicalEnvironment функции getFunc2
+
+  </script>
+
+
+
+  <!--**********
+  * Локальные переменные для объекта
+  ************-->
+
+  <h1>5.4. Локальные переменные для объекта </h1>
+  <h3>Task 5.4.1: Объект счётчика + функция  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeCounter77() {
+      var currentCount77 = 1;
+
+      // возвращаемся к функции
+      function counter77() {
+        return currentCount77++;
+      }
+
+      // ...и добавляем ей методы!
+      counter77.set = function(value) {
+        currentCount77 = value;
+      };
+
+      counter77.reset = function() {
+        currentCount77 = 1;
+      };
+
+      return counter77;
+    }
+
+    var count77 = makeCounter77();
+
+    document.write( count77() ); // 1
+    document.write("<br />");
+    document.write( count77() ); // 2
+    document.write("<br />");
+
+    count77.set(5);
+    document.write( count77() ); // 5
+
+
+  </script>
+
+
+
+  <h3>Task 5.4.2: Сумма через замыкание  </h3>
+  <pre>
+    Напишите функцию sum, которая работает так: sum(a)(b) = a+b.
+
+    Да, именно так, через двойные скобки (это не опечатка). Например:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function sum(a) {
+
+      return function (b) {
+        return a + b;
+      };
+    }
+
+    document.write( sum(1)(2) ); // 3
+    document.write("< br />");
+    document.write( sum(5)(-1) ); // 4
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function sum(a) {
+
+      return function (b) {
+        return a + b;
+      };
+    }
+
+    document.write( sum(1)(2) ); // 3
+    document.write("<br />");
+    document.write( sum(5)(-1) ); // 4
+
+  </script>
+
+
+
+  <h3>Task 5.4.3: Функция - строковый буфер  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Не совсем правильное у меня (Если ввести 0 или false, то не работает)
+    <b>My solution</b>
+    function makeBuffer() {
+      var a = '';
+
+      function buffer(b) {
+        if (!b) return a;
+        a += b;
+      }
+
+      return buffer;
+    }
+
+    var buffer = makeBuffer();
+
+    // добавить значения к буферу
+    buffer('Замыкания');
+    buffer(' Использовать');
+    buffer(' Нужно!');
+    buffer(false);
+
+    // получить текущее значение
+    document.write( buffer() ); // Замыкания Использовать Нужно!
+
+    //правильное решение
+    <b>Not my solution</b>
+    function makeBuffer() {
+      var text = '';
+
+      return function(piece) {
+        if (arguments.length == 0) { // вызов без аргументов
+          return text;
+        }
+        text += piece;
+      };
+    };
+
+    var buffer = makeBuffer();
+
+    // добавить значения к буферу
+    buffer('Замыкания');
+    buffer(' Использовать');
+    buffer(' Нужно!');
+    alert( buffer() ); // 'Замыкания Использовать Нужно!'
+
+    var buffer2 = makeBuffer();
+    buffer2(0);
+    buffer2(1);
+    buffer2(0);
+
+    alert( buffer2() ); // '010'
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeBuffer() {
+      var a = '';
+
+      function buffer(b) {
+        if (!b) return a;
+        a += b;
+      }
+
+      return buffer;
+    }
+
+    var buffer = makeBuffer();
+
+    // добавить значения к буферу
+    buffer('Замыкания');
+    buffer(' Использовать');
+    buffer(' Нужно!');
+    buffer(2);
+    buffer(3);
+    buffer(false);
+
+    // получить текущее значение
+    document.write( buffer() ); // Замыкания Использовать Нужно!
+  </script>
+
+
+
+
+  <h3>Task 5.4.4: Строковый буфер с очисткой </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+    function makeBuffer() {
+      var a = '';
+
+      function buffer(b) {
+        if (arguments.length == 0) return a;
+        a += b;
+      };
+
+      buffer.clear = function() {
+        a = '';
+      };
+
+      return buffer;
+    }
+
+    var buffer = makeBuffer();
+
+    // добавить значения к буферу
+    buffer('Тест');
+    buffer(' тебя не съест ');
+
+    // получить текущее значение
+    document.write( buffer() ); // Тест тебя не съест
+
+    buffer.clear();
+
+    document.write( buffer() ); // ""
+
+    <b>Not my solution</b>
+
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeBuffer() {
+      var a = '';
+
+      function buffer(b) {
+        if (arguments.length == 0) return a;
+        a += b;
+      };
+
+      buffer.clear = function() {
+        a = '';
+      };
+
+      return buffer;
+    }
+
+    var buffer = makeBuffer();
+
+    // добавить значения к буферу
+    buffer('Тест');
+    buffer(' тебя не съест ');
+
+    // получить текущее значение
+    document.write( buffer() ); // Тест тебя не съест
+
+    buffer.clear();
+
+    document.write( buffer() ); // ""
+
+  </script>
+
+
+
+  <h3>Task 5.4.5: Сортировка </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+    function byField(field) {
+      return function(a, b) {
+        return a[field] > b[field] ? 1 : -1;
+      };
+    }
+
+    var users = [{
+      name: "Вася",
+      surname: 'Иванов',
+      age: 20
+    }, {
+      name: "Петя",
+      surname: 'Чапаев',
+      age: 25
+    }, {
+      name: "Маша",
+      surname: 'Медведева',
+      age: 18
+    }];
+
+
+
+    users.sort( byField('name') );
+    users.forEach(function(user) {
+      document.write(user.name);
+    }); // Вася, Маша, Петя
+
+    document.write("< br />");
+
+    users.sort( byField('age') );
+    users.forEach(function(user) {
+      document.write(user.name);
+    }); // Маша, Вася, Петя
+
+
+    <b>Not my solution</b>
+
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function byField(field) {
+      return function(a, b) {
+        return a[field] > b[field] ? 1 : -1;
+      };
+    }
+
+    var users = [{
+      name: "Вася",
+      surname: 'Иванов',
+      age: 20
+    }, {
+      name: "Петя",
+      surname: 'Чапаев',
+      age: 25
+    }, {
+      name: "Маша",
+      surname: 'Медведева',
+      age: 18
+    }];
+
+
+
+    users.sort( byField('name') );
+    users.forEach(function(user) {
+      document.write(user.name);
+    }); // Вася, Маша, Петя
+
+    document.write("<br />");
+
+    users.sort( byField('age') );
+    users.forEach(function(user) {
+      document.write(user.name);
+    }); // Маша, Вася, Петя
+
+  </script>
+
+
+
+  <h3>Task 5.4.6: Фильтрация через функцию </h3>
+  <pre>
+
+    Создайте функцию filter(arr, func), которая получает массив arr и возвращает новый, в который входят только те элементы arr, для которых func возвращает true.
+    Создайте набор «готовых фильтров»: inBetween(a,b) – «между a,b», inArray([...]) – "в массиве [...]". Использование должно быть таким:
+
+    filter(arr, inBetween(3,6)) – выберет только числа от 3 до 6,
+    filter(arr, inArray([1,2,3])) – выберет только элементы, совпадающие с одним из значений массива.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+      // inArray лучше у автора, но у меня кросбраузерный
+    <b>My solution</b>
+    function filter(arr, func) {
+      var arrNew = [];
+
+      for (var i = 0; i < arr.length; i++) {
+        if ( func(arr[i]) ) arrNew.push(arr[i]);
+      }
+
+      return arrNew;
+    }
+
+    function inBetween(min, max) {
+      return function(a) {
+        return (a >= min && a <= max) ;
+      }
+    }
+
+    function inArray(Arr) {
+      return function(a) {
+        for (var k = 0; k < Arr.length; k++) {
+          if (a == Arr[k]) return true;
+        }
+      }
+    }
+
+    var arr_1 = [1, 2, 3, 4, 5, 6, 7];
+
+    document.write( filter(arr_1, function(a) {
+      return a % 2 == 0;
+    }) ); // 2, 4, 6
+    document.write("< br>");
+
+    document.write( filter(arr_1, inBetween(3, 6)) ); // 3, 4, 5, 6
+    document.write("< br>");
+
+    document.write( filter(arr_1, inArray([1, 2, 10])) ); // 1,2
+
+    // inArray лучше у автора
+    <b>Not my solution</b>
+    function filter(arr, func) {
+      var result = [];
+
+      for (var i = 0; i < arr.length; i++) {
+        var val = arr[i];
+        if (func(val)) {
+          result.push(val);
+        }
+      }
+
+      return result;
+    }
+
+    function inBetween(a, b) {
+        return function(x) {
+          return x >= a && x <= b;
+        };
+      }
+
+    function inArray(arr) {
+      return function(x) {
+        return arr.indexOf(x) != -1;
+      };
+    }
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function filter(arr, func) {
+      var arrNew = [];
+
+      for (var i = 0; i < arr.length; i++) {
+        if ( func(arr[i]) ) arrNew.push(arr[i]);
+      }
+
+      return arrNew;
+    }
+
+    function inBetween(min, max) {
+      return function(a) {
+        return (a >= min && a <= max) ;
+      }
+    }
+
+    function inArray(Arr) {
+      return function(a) {
+        for (var k = 0; k < Arr.length; k++) {
+          if (a == Arr[k]) return true;
+        }
+      }
+    }
+
+    var arr_1 = [1, 2, 3, 4, 5, 6, 7];
+
+    document.write( filter(arr_1, function(a) {
+      return a % 2 == 0;
+    }) ); // 2, 4, 6
+    document.write("<br>");
+
+    document.write( filter(arr_1, inBetween(3, 6)) ); // 3, 4, 5, 6
+    document.write("<br>");
+
+    document.write( filter(arr_1, inArray([1, 2, 10])) ); // 1,2
+
+  </script>
+
+
+
+  <h3>Task 5.4.7: Армия функций </h3>
+  <pre>
+    Следующий код создает массив функций-стрелков shooters.
+    По замыслу, каждый стрелок должен выводить свой номер:
+    Почему все стрелки́ выводят одно и то же? Поправьте код, чтобы стрелки работали как задумано.
+    Предложите несколько вариантов исправления.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+
+
+
+    <b>Not my solution</b>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function makeArmy1() {
+
+      var shooters = [];
+
+      for (var i = 0; i < 10; i++) {
+        var shooter = function(a) { // функция-стрелок
+          document.write( a ); // выводит свой номер
+        };
+        shooters.push(shooter);
+      }
+
+      return shooters;
+    }
+
+    var army1 = makeArmy1();
+
+    document.write("<br>");
+    army1[0](0); // стрелок выводит 10, а должен 0
+    document.write("<br>");
+    army1[5](5); // стрелок выводит 10...
+    // .. все стрелки выводят 10 вместо 0,1,2...9
+    document.write("<br>");
+
+    var k;
+
+    function makeArmy2() {
+      var shooters = [];
+      for (var i = 0; i < 10; i++) {
+        function shooter() { // функция-стрелок
+          //k = i;
+          document.write( k ); // выводит свой номер
+        };
+        shooters.push(shooter);
+      }
+
+      return shooters;
+    }
+
+    var army2 = makeArmy2();
+    k = 1;
+
+    document.write("<br>");
+    army2[k](); // стрелок выводит 10, а должен 0
+    document.write("<br>");
+    k = 6;
+    army2[k](); // стрелок выводит 10...
+    // .. все стрелки выводят 10 вместо 0,1,2...9
+    document.write("<br>");
+
+
+    // Not my solution
+    function makeArmy3() {
+
+      var shooters = [];
+
+      for (var i = 0; i < 10; i++) {
+
+        var shooter = function me() {
+          document.write( me.i );
+        };
+        shooter.i = i;
+
+        shooters.push(shooter);
+      }
+
+      return shooters;
+    }
+
+    var army3 = makeArmy3();
+
+    document.write("<br>");
+    army3[0](); // 0
+    document.write("<br>");
+    army3[9](); // 9
+    document.write("<br>");
+
+
+    function makeArmy4() {
+
+      var shooters = [];
+
+      for (var i = 0; i < 10; i++) {
+
+        var shooter = (function (x) {
+          return function() {
+            document.write( x );
+          }
+        })(i);
+
+        /* Можно и так записать
+        var shooter = function(i) { // без скобок вокруг function(i)
+          return function() {
+            alert( i );
+          };
+          }(i);
+        */
+
+
+        shooters.push(shooter);
+      }
+
+      return shooters;
+    }
+
+    var army4 = makeArmy4();
+
+    document.write("<br>");
+    army4[0](); // 0
+    document.write("<br>");
+    army4[9](); // 9
+    document.write("<br>");
+
+
+    function makeArmy5() {
+
+      var shooters = [];
+
+      for (var i = 0; i < 10; i++) (function(i) {
+
+        var shooter = function() {
+            document.write( i );
+          }
+
+        shooters.push(shooter);
+      })(i);
+
+      return shooters;
+    }
+
+    var army5 = makeArmy5();
+
+    document.write("<br>");
+    army5[0](); // 0
+    document.write("<br>");
+    army5[1](); // 1
+    document.write("<br>");
+
+  </script>
+
+
+
+  <!--**********
+  * Модули через замыкания
+  ************-->
+
+  <h1>5.5. Модули через замыкания </h1>
+  <h3>Task 5.5.1: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var b = 16;
+
+    Потом подключаем файл, в котором:
+
+    ;(
+      function() {
+
+        var b = 3;
+
+        function sumNumbers(a, b) {
+          console.log(a + b);
+          return a + b;
+        }
+
+        window.sumNumbers = sumNumbers;
+
+      }()
+    );
+
+    document.write( sumNumbers(2, b) ); // 18, хотя в модули b = 3, если б не было модуля, то ответ был бы 5
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+    var b = 16;
+  </script>
+
+  <script src="js/modul.js">
+  </script>
+
+  <script type="text/javascript">
+    'use strict';
+
+    document.write( sumNumbers(2, b) ); // 18, хотя в модули b = 3, если б не было модуля, то ответ был бы 5
+  </script>
+
+
+
+  <!--**********
+  * Управление памятью в JavaScript
+  ************-->
+
+  <h1>5.6. Управление памятью в JavaScript </h1>
+  <h3>Task 5.6.1: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 5,
+        b = 3,
+        c, d;
+    c = a = b;
+
+    document.write("a=", a, " b=", b, " c=", c); // 3
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var a = 5,
+        b = 3,
+        c, d;
+    c = a = b;
+
+    document.write("a=", a, " b=", b, " c=", c); // 3
+  </script>
+
+
+  <h3>Task 5.6.2: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function marry(man, woman) {
+      woman.husband = man;
+      man.wife = woman;
+
+      return {
+        father: man,
+        mother: woman
+      }
+    }
+
+    var family = marry({
+      name: "Василий"
+    },{
+      name: "Мария"
+    });
+
+    document.write(family.father.name); // Василий
+    document.write("< br>");
+    document.write(family.mother.name); // Мария
+    document.write("< br>");
+    document.write(family.mother.husband.name); // Василий
+    document.write("< br>");
+    document.write(family.father.wife.name); // Мария
+    document.write("< br>");
+    family.father.wife.name = "Александра";
+    document.write(family.father.wife.name);  // Александра
+    document.write("< br>");
+    document.write(family.father); // Object
+    document.write("< br>");
+
+    delete family.father;
+    delete family.mother.husband;
+    document.write(family.father); // undefined
+    document.write("< br>");
+    document.write("Если мы удалили только объект father (delete family.father), то сам объект останется, но доступ к св-ву father будет недоступно.");
+    document.write("< br>");
+    document.write("чтобы полностью очистить из памяти нужно, еще delete.family.mother.husband.");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function marry(man, woman) {
+      woman.husband = man;
+      man.wife = woman;
+
+      return {
+        father: man,
+        mother: woman
+      }
+    }
+
+    var family = marry({
+      name: "Василий"
+    },{
+      name: "Мария"
+    });
+
+    document.write(family.father.name); // Василий
+    document.write("<br>");
+    document.write(family.mother.name); // Мария
+    document.write("<br>");
+    document.write(family.mother.husband.name); // Василий
+    document.write("<br>");
+    document.write(family.father.wife.name); // Мария
+    document.write("<br>");
+    family.father.wife.name = "Александра";
+    document.write(family.father.wife.name);  // Александра
+    document.write("<br>");
+    document.write(family.father); // Object
+    document.write("<br>");
+
+    delete family.father;
+    delete family.mother.husband;
+    document.write(family.father); // undefined
+    document.write("<br>");
+    document.write("Если мы удалили только объект father (delete family.father), то сам объект останется, но доступ к св-ву father будет недоступно.");
+    document.write("<br>");
+    document.write("чтобы полностью очистить из памяти нужно, еще delete.family.mother.husband.");
+
+  </script>
+
+
+
+  <h3>Task 5.6.3: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write("Press f12 and f5");
+    document.write("<br>");
+
+    var val = "Surprice";
+
+    function f() {
+      var val = "Closest value ";
+
+      function g() {
+        debugger; // выполните в консоли alert( val ); Surprice! в Chrome, Opera
+      }
+
+      return g;
+    }
+
+    var gg = f();
+    gg();
+
+    document.write("Code end");
+  </script>
+
+
+  <!--**********
+  * Устаревшая конструкция "with"
+  ************-->
+
+  <h1>5.7. Устаревшая конструкция "with"  </h1>
+  <h3>Task 5.7.1: Устаревшая конструкция "with" </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    //'use strict';  Не работает код иначе
+
+    var a = {name: "Denis"};
+    with(a) {
+      name = "Petya";
+      age = 12;
+    }
+    document.write(a);
+    document.write("<br>");
+    document.write(a.name);
+    document.write("<br>");
+    document.write(a.age);
+
+    //вместо width
+    a.name = "Disa";
+    a.age = 15;
+    document.write("<br>");
+    document.write(a.name + " " + a.age);
+  </script>
+
+
+
+  <h3>Task 5.7.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+
+
+    var i = 0;
+
+    function fast() {
+      i++;
+    }
+
+    function slow() {
+      with(i) {}
+      i++;
+    }
+
+    var time = performance.now();
+    while (i < 1000000) fast();
+    document.write( "Без with: " + (performance.now() - time) );
+    document.write("<br>");
+
+    var time = performance.now();
+    i = 0;
+    while (i < 1000000) slow();
+    document.write( "С with: " + (performance.now() - time) );
+  </script>
+
+
+
+  <h3>Task 5.7.3: With + переменные </h3>
+  <pre>
+    Что выведет этот код?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Это тоже самое что и код ниже
+    var a = 1;
+    var b;
+
+    var obj = {
+      b: 2
+    }
+
+    with(obj) {
+      alert( a + b );
+    }
+  </pre>
+  <script type="text/javascript">
+
+    var a = 1;
+
+    var obj = {
+    b: 2
+    };
+
+    with(obj) {
+    var b;
+    document.write( a + b );
+    }
+
+  </script>
+
+
+
+
+  <hr>
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Размер вашего экрана</title>
+</head>
+<body>
+
+  <script type="text/javascript">
+    'use strict';
+
+    document.write('Размеры Вашего экрана. Ширина = ' + screen.width + "; Высота = " + screen.height);
+    document.write('<br>');
+    document.write('Если Вы сдвините экран влево или вниз, система выведет сообщение (обновите браузер)');
+    document.write('<br>');
+
+    if (screenX < 0) {
+      alert('Ваше окно браузер слева вылезает за экран.\n Часть изображения обрезано');
+    }
+    if ( (outerHeight + screenTop) > screen.availHeight && (outerHeight + screenTop) != screen.height ) {
+      alert('Ваше окно браузер снизу вылезает за экран.\n Часть изображения обрезано');
+    }
+    if ( ( outerWidth + screenLeft) > screen.width ) {
+      alert('Ваше окно браузера справо вылезает за экран на ' + ( (outerWidth + screenLeft) - screen.width ) + 'px \n Передвиньте экран влево!');
+    }
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title> Пробный урок скрытия</title>
+
+  <style>
+    p {
+      padding: 20px;
+    }
+
+    #wrap1 {
+      z-index: 99;
+    }
+    #wrap1, #wrap2 {
+      width: 500px;
+      height: 300px;
+      background-color: lightgray;
+      position: relative;
+      margin: 10px;
+    }
+    #wrap2 {
+      background-color: lightblue;
+    }
+    .close {
+      position: absolute;
+      top: 1px;
+      right: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    @keyframes invis1 {
+      0% {
+        /* opacity: 1; */
+        /* transform: scale(1); */
+      }
+      30% {
+        transform: translate(200px, 300px);
+      }
+      60% {
+        /* opacity: 0.1; */
+        transform: translate(600px, 150px);
+      }
+      80% {
+        /* opacity: 0.1; */
+        transform: translate(400px, 0px);
+      }
+      100% {
+        opacity: 0.1;
+        transform: translate(0px, 600px);
+      }
+
+    }
+
+    @keyframes invis2 {    
+      50% {
+        /* opacity: 0.4; */
+        -o-transform: perspective(1000px) rotateY(60deg);
+      	-ms-transform: perspective(1000px) rotateY(60deg);
+      	-moz-transform: perspective(1000px) rotateY(60deg);
+      	-webkit-transform: perspective(1000px) rotateY(60deg);
+      	transform: perspective(1000px) rotateY(60deg);
+      }
+      100% {
+        transform: scale(0.1);
+      }
+
+    }
+
+    .invis1 {
+      /* background-color: green!important;
+      transition: 2s cubic-bezier(.18,.89,.32,1.28); */
+      transform-origin: left top;
+      animation: invis1 2s ease-in-out;
+    }
+
+    .invis2 {
+      /* background-color: green!important;
+      transition: 2s cubic-bezier(.18,.89,.32,1.28); */
+      /* transform-origin: left top; */
+      animation: invis2 2s ease-in-out;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="wrap1">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, dolor?
+    </p>
+    <div class="close">
+      x
+    </div>
+  </div>
+
+  <div id="wrap2">
+    <div class="close">
+      x
+    </div>
+  </div>
+
+  <div>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, dolor?
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, dolor?
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, dolor?
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, dolor?
+    </p>
+  </div>
+
+  <script type="text/javascript">
+    var wrap1 = document.getElementById("wrap1");
+    wrap1.onclick = function(e) {
+      if (e.target.closest(".close")) {
+        this.className = "invis1";
+        e.target.style.display = "none";
+        this.style.position = "absolute";
+      }
+      e.target.onmousedown = function() {return false};
+    };
+
+    wrap1.onanimationend = function() {
+      this.style.display = "none";
+    };
+
+    var wrap2 = document.getElementById("wrap2");
+    wrap2.onclick = function(e) {
+      if (e.target.closest(".close")) {
+        this.className = "invis2";
+      }
+    };
+
+    wrap2.onanimationend = function() {
+      this.style.display = "none";
+    };
+
+  </script>
+</body>
+</html>

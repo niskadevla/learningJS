@@ -1,0 +1,546 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <!--**********
+  *  Основы XMLHttpRequest
+  ************-->
+
+  <h1>2.3. Основы XMLHttpRequest </h1>
+  <h3>Task 2.3.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <button onclick="loadPhones()">Загрузить phones.json!</button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function loadPhones() {
+      var xhr = new XMLHttpRequest();
+      console.log(xhr);
+      // Синхронный запрос
+      xhr.open('GET', 'phones.json', false);
+      xhr.send();
+      // ...весь JavaScript "подвиснет", пока запрос не завершится
+
+      if (xhr.status != 200) {
+        // обработать ошибку
+        alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+      } else {
+        // вывести результат
+        alert(xhr.responseText);
+      }
+    }
+  </script>
+
+  <br>
+  <hr>
+
+  <br>
+  <br>
+  <button id="button" onclick="loadPhones2()">Загрузить phones.json!</button>
+
+  <script>
+    function loadPhones2() {
+      var xhr = new XMLHttpRequest();
+      console.log(xhr);
+      // Асинхронный запрос
+      xhr.open('GET', 'phones.json', true);
+      xhr.send();
+
+      xhr.onreadystatechange = function() { // (3)
+        for (let i = 0; i < 200000000; i++) {
+          let ii = i++;
+        }
+
+        if (this.readyState != 4) return;
+
+        button.innerHTML = 'Готово!';
+
+        if (this.status != 200) {
+          // обработать ошибку
+          alert( 'ошибка: ' + (this.status ? this.statusText : 'запрос не удался') );
+        } else {
+          // вывести результат
+          alert(xhr.responseText);
+        }
+
+      }
+
+      button.innerHTML = 'Загружаю...'; // (2)
+      button.disabled = true;
+    }
+
+  </script>
+
+
+  <br>
+  <hr>
+
+  <br>
+  <br>
+  <button id="button2" onclick="loadPhones3()">Загрузить phones.json!</button>
+
+  <script>
+    function loadPhones3() {
+      var xhr = new XMLHttpRequest();
+      console.log(xhr);
+      // Асинхронный запрос
+      xhr.open('GET', 'phones.json', true);
+      xhr.send();
+
+      xhr.onload = function() {
+        // вывести результат
+        alert(xhr.responseText);
+      }
+
+      xhr.onloadend = function() {
+        button2.innerHTML = 'Готово!';
+      }
+
+      // xhr.onreadystatechange = function() {
+      //   for (let i = 0; i < 200000000; i++) {
+      //     let ii = i++;
+      //   }
+      //
+      //   if (this.readyState != 4) return;
+      //
+      //   button2.innerHTML = 'Готово!';
+      //
+      //   if (this.status != 200) {
+      //     // обработать ошибку
+      //     alert( 'ошибка: ' + (this.status ? this.statusText : 'запрос не удался') );
+      //   } else {
+      //     // вывести результат
+      //     alert(xhr.responseText);
+      //   }
+      //
+      // }
+
+      button2.innerHTML = 'Загружаю...'; // (2)
+      button2.disabled = true;
+    }
+
+  </script>
+
+
+  <h3>Task 2.3.2: Выведите телефоны </h3>
+  <pre>
+    Создайте код, который загрузит файл phones.json из текущей директории и
+    выведет все названия телефонов из него в виде списка.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function loadPhoneNames() {
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('GET', 'phones.json', true);
+
+      xhr.send();
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4) return;
+
+        if (xhr.status != 200) {
+          console.log(xhr.status + ' : ' + xhr.statusText);
+        } else {
+          // Парсим данные ответа в объект JS
+          var responseText = JSON.parse(xhr.responseText);
+
+          //Создаем массив только имен телефонов
+          responseText = responseText.map(function(obj) {
+            return obj.name;
+          });
+
+          //Находим элемент button5
+          var button5 = document.getElementById("button5");
+          // Создаем новый элемент ul
+          var ul = document.createElement('ul');
+
+          //Для каждого имени телефона создаем li и помещаем в ul
+          for (var i = 0; i < responseText.length; i++) {
+            var li = document.createElement('li');
+            li.innerHTML = responseText[i];
+            ul.appendChild(li);
+          }
+
+          // Удаляет button5 и ставит на его место ul
+          button5.replaceWith(ul);
+        }
+      }
+    }
+
+  </pre>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function loadPhoneNames() {
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('GET', 'phones.json', true);
+
+      xhr.send();
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4) return;
+
+        if (xhr.status != 200) {
+          console.log(xhr.status + ' : ' + xhr.statusText);
+        } else {
+          // Парсим данные ответа в объект JS
+          var responseText = JSON.parse(xhr.responseText);
+
+          //Создаем массив только имен телефонов
+          responseText = responseText.map(function(obj) {
+            return obj.name;
+          });
+
+          //Находим элемент button5
+          var button5 = document.getElementById("button5");
+          // Создаем новый элемент ul
+          var ul = document.createElement('ul');
+
+          //Для каждого имени телефона создаем li и помещаем в ul
+          for (var i = 0; i < responseText.length; i++) {
+            var li = document.createElement('li');
+            li.innerHTML = responseText[i];
+            ul.appendChild(li);
+          }
+
+          // Удаляет button5 и ставит на его место ul
+          button5.replaceWith(ul);
+        }
+      }
+    }
+  </script>
+
+
+  <br>
+  <hr>
+
+  Общее решение
+
+  <button id="button6" onclick="loadPhoneNames()">Загрузить phones.json!</button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var button6 = document.getElementById("button6");
+
+    function loadPhoneNames() {
+      var xhr2 = new XMLHttpRequest();
+
+      //Создаем GET запрос с антикешем
+      xhr2.open('GET', 'phones.json?r=' + Math.random(), true);
+      xhr2.send();
+
+      xhr2.onreadystatechange = function() {
+        if (xhr2.readyState != 4) return;
+
+        if (xhr2.status != 200) {
+          console.log(xhr2.status + ' : ' + xhr2.statusText);
+        } else {
+          try {
+            // Парсим данные ответа в объект JS
+            var phones = JSON.parse(xhr2.responseText);
+            showPhones(phones);
+          } catch(e) {
+            console.log("Некорректный ответ " + e.message);
+          }
+        }
+      }
+
+      button6.innerHTML = 'Загружаю...';
+      button6.disabled = true;
+    }
+
+    function showPhones(phones) {
+      // Создаем новый элемент ul
+      var ul = document.createElement('ul');
+
+      //Для каждого имени телефона создаем li и помещаем в ul
+      phones.forEach(function(phone) {
+        var li = ul.appendChild(document.createElement('li'));
+        li.innerHTML = phone.name;
+      });
+
+      // Удаляет button6 и ставит на его место ul
+      button6.replaceWith(ul);
+    }
+  </script>
+
+  <br>
+  <hr>
+
+
+
+  <!--**********
+  *  XMLHttpRequest POST, формы и кодировка
+  ************-->
+
+  <h1>2.4. XMLHttpRequest POST, формы и кодировка </h1>
+  <h3>Task 2.4.1: Get запрос </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    .form-services {
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      width: 30%;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-control {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <form class="form-services" name="formServices">
+    <h3>Форма заказа</h3>
+    <div class="form-group">
+      <select class="form-control" name="nameServices">
+        <option value="1">1.1</option>
+        <option value="2">1.2</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" name="" value="">
+    </div>
+
+    <div class="form-group">
+      <input type="submit" value="Посчитать">
+    </div>
+
+    Сумма заказа: <span>0</span> грн.
+
+  </form>
+
+  <br>
+  <hr>
+
+  <button id="button7">Загрузить services.json!</button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var form = document.forms.formServices;
+    var button7 = document.getElementById("button7");
+
+    form.onsubmit = function(e) {
+      loadServices();
+      e.preventDefault();
+    }
+
+    button7.onclick = loadServices;
+
+    function loadServices() {
+      var xhr2 = new XMLHttpRequest();
+
+      //Создаем GET запрос
+      xhr2.open('GET', 'json/services.json', true);
+      xhr2.send();
+
+      xhr2.timeout = 1000;
+
+      xhr2.ontimeout = function() {
+        button7.innerHTML = 'Превышено время загрузки';
+      }
+
+      xhr2.onreadystatechange = function() {
+
+        if (xhr2.readyState != 4) return;
+
+        if (xhr2.status != 200) {
+          console.log(xhr2.status + ' : ' + xhr2.statusText);
+          button7.innerHTML = xhr2.status + ' : ' + xhr2.statusText;
+        } else {
+          try {
+            // Парсим данные ответа в объект JS
+            //В виде массива
+            var services = JSON.parse(xhr2.responseText);
+            showServices(services);
+          } catch(e) {
+            console.log("Некорректный ответ " + e.message);
+            button7.innerHTML = "Некорректный ответ";
+          }
+        }
+      }
+
+      button7.innerHTML = 'Загружаю...';
+      button7.disabled = true;
+    }
+
+    function showServices(services) {
+      // Создаем новый элемент ul
+      var ul = document.createElement('ul');
+
+      //Для каждого  создаем li и помещаем в ul
+      services.forEach(function(service) {
+        var li = ul.appendChild(document.createElement('li'));
+
+        for (var key in service) {
+          li.innerHTML = service[key];
+        }
+
+      });
+
+      // Удаляет button7 и ставит на его место ul
+      button7.replaceWith(ul);
+    }
+  </script>
+
+  <br>
+  <hr>
+
+
+
+  <form class="form-services" method="post" name="formServices2">
+    <h3>Форма заказа</h3>
+    <div class="form-group">
+      <select class="form-control" name="nameServices">
+        <option value="1">1.1</option>
+        <option value="2">1.2</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" name="" value="">
+    </div>
+
+    <div class="form-group">
+      <input type="submit" value="Посчитать">
+    </div>
+
+    Сумма заказа: <span>0</span> грн.
+
+  </form>
+
+  <button id="button8">Загрузить services.json!</button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var form = document.forms.formServices2;
+    var button8 = document.getElementById("button8");
+    var formData = new FormData(form);
+
+    form.onsubmit = function(e) {
+      loadServices();
+      e.preventDefault();
+    }
+
+    button8.onclick = loadServices;
+
+    function loadServices() {
+      var xhr2 = new XMLHttpRequest();
+
+      //Создаем POST запрос
+      xhr2.open('POST', '/json/services.json', true);
+      // xhr2.setRequestHeader('Content-type', 'multipart/form-data');
+      // xhr2.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+
+      xhr2.timeout = 10000;
+
+      xhr2.ontimeout = function() {
+        button8.innerHTML = 'Превышено время загрузки';
+      }
+
+      xhr2.onload = xhr2.onerror = function() {
+        if (xhr2.status != 200) {
+          console.log(xhr2.status + ' : ' + xhr2.statusText);
+          button8.innerHTML = xhr2.status + ' : ' + xhr2.statusText;
+        } else {
+          try {
+            // Парсим данные ответа в объект JS
+            //В виде массива
+            var services = JSON.parse(xhr2.responseText);
+            showServices(services);
+            console.log(xhr2.getAllResponseHeaders());
+          } catch(e) {
+            console.log("Некорректный ответ " + e.message);
+            button8.innerHTML = "Некорректный ответ";
+          }
+        }
+      }
+
+      xhr2.send(formData);
+
+      button8.innerHTML = 'Загружаю...';
+      button8.disabled = true;
+    }
+
+    function showServices(services) {
+      // Создаем новый элемент ul
+      var ul = document.createElement('ul');
+
+      //Для каждого  создаем li и помещаем в ul
+      services.forEach(function(service) {
+        var li = ul.appendChild(document.createElement('li'));
+
+        for (var key in service) {
+          li.innerHTML = service[key];
+        }
+
+      });
+
+      // Удаляет button8 и ставит на его место ul
+      button8.replaceWith(ul);
+    }
+
+
+  </script>
+
+
+  <br> <br> <br>
+  <hr>
+
+
+  <form enctype="multipart/form-data" method="post" name="fileinfo">
+    <label>Your email address:</label>
+    <input type="email" autocomplete="on" autofocus name="userid" placeholder="email" required size="32" maxlength="64" /><br />
+    <label>Custom file label:</label>
+    <input type="text" name="filelabel" size="12" maxlength="32" /><br />
+    <label>File to stash:</label>
+    <input type="file" name="file" required />
+    <input type="submit" value="Stash the file!" />
+  </form>
+  <div></div>
+
+
+  <br><br>
+
+</body>
+
+</html>

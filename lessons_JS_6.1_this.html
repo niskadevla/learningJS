@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Методы объектов и контекст вызова</title>
+</head>
+<body>
+
+  <!--**********
+  * Методы объектов, this
+  ************-->
+
+  <h1>6.1. </h1>
+  <h3>Task 6.1.1:  </h3>
+  <pre>
+    При объявлении объекта можно указать свойство-функцию.
+    Свойства-функции называют «методами» объектов. Их можно добавлять и
+    удалять в любой момент, в том числе и явным присваиванием.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {
+      name: 'Василий'
+    };
+
+    user.sayHi = function() { // присвоили метод после создания объекта
+      document.write('Привет!');
+    };
+
+    // Вызов метода:
+    user.sayHi();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: 'Василий'
+    };
+
+    user.sayHi = function() { // присвоили метод после создания объекта
+      document.write('Привет!');
+    };
+
+    // Вызов метода:
+    user.sayHi();
+
+  </script>
+
+
+  <h3>Task 6.1.2:  </h3>
+  <pre>
+    Для доступа к текущему объекту из метода используется ключевое слово this.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {
+      name: 'Василий',
+
+      sayHi: function() {
+        document.write(this.name);
+      }
+    };
+
+    user.sayHi();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: 'Василий',
+
+      sayHi: function() {
+        document.write(this.name);
+      }
+    };
+
+    user.sayHi();
+
+  </script>
+
+
+  <h3>Task 6.1.3:  </h3>
+  <pre>
+    Через this метод может не только обратиться к любому свойству объекта,
+    но и передать куда-то ссылку на сам объект целиком:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {
+      name: 'Денис',
+
+      sayHi: function() {
+        showName(this);
+      }
+    };
+
+    function showName(namedObj) {
+      document.write(namedObj.name);
+    }
+
+    user.sayHi();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: 'Денис',
+
+      sayHi: function() {
+        showName(this);
+      }
+    };
+
+    function showName(namedObj) {
+      document.write(namedObj.name);
+    }
+
+    user.sayHi();
+
+  </script>
+
+
+
+  <h3>Task 6.1.4: this в Функциях </h3>
+  <pre>
+    Любая функция может иметь в себе this. Совершенно неважно, объявлена ли она в объекте или отдельно от него.
+    Значение this называется контекстом вызова и будет определено в момент вызова функции.
+    Итак, значение this не зависит от того, как функция была создана,
+    оно определяется исключительно в момент вызова.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {name: "Vasya"};
+    var admin = {name: "Denis"};
+
+    function func() {
+      document.write(this.name);
+    }
+
+    user.f = func; //Здесь происходит присвоение функции, т.е f - свойство объекта, а его значение (св-ва) это функция
+    admin.g = func;
+
+    //this равен объекту перед точкой:
+    user.f(); // Vasya // происходит запуск функции func ( т.к. стоят скобки) и в this передается объект user
+    document.write("< br />");
+    admin.g(); // Denis
+    document.write("< br />");
+    admin['g'](); // Denis (не важно, доступ к объекту через точку или квадратные скобки)
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {name: "Vasya"};
+    var admin = {name: "Denis"};
+
+    function func() {
+      document.write(this.name);
+    }
+
+    user.f = func; //Здесь происходит присвоение функции, т.е f - свойство объекта, а его значение (св-ва) это функция
+    admin.g = func;
+
+    //this равен объекту перед точкой:
+    user.f(); // Vasya // происходит запуск функции func ( т.к. стоят скобки) и в this передается объект user
+    document.write("<br />");
+    admin.g(); // Denis
+    document.write("<br />");
+    admin['g'](); // Denis (не важно, доступ к объекту через точку или квадратные скобки)
+
+  </script>
+
+
+  <h3>Task 6.1.5: Значение this при вызове без контекста </h3>
+  <pre>
+    Если функция использует this – это подразумевает работу с объектом. Но и прямой вызов func() технически возможен.
+    Как правило, такая ситуация возникает при ошибке в разработке.
+    При этом this получает значение window, глобального объекта
+    Таково поведение в старом стандарте.
+    А в режиме use strict вместо глобального объекта this будет undefined:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function func() {
+      document.write( this ); // выведет [object Window] или [object global]
+    }
+
+    func();
+
+  </script>
+
+
+
+  <h3>Task 6.1.6: Ссылочный тип </h3>
+  <pre>
+    Контекст this никак не привязан к функции, даже если она создана в объявлении объекта.
+    Чтобы this передался, нужно вызвать функцию именно через точку (или квадратные скобки).
+    В последней строке примера метод получен в результате выполнения тернарного оператора и тут же вызван.
+    <b>но this при этом теряется.</b>
+    Работа вызова obj.method() состоит из двух независимых операций: точка . –
+    получение свойства и скобки () – его вызов (предполагается, что это функция).
+    Функция сама по себе не запоминает контекст.
+    Точка возвращает не функцию, а значение специального «ссылочного» типа Reference Type.
+    Этот тип представляет собой связку «base-name-strict», где:
+      base – как раз объект,
+      name – имя свойства,
+      strict – вспомогательный флаг для передачи use strict.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: "Вася",
+      hi: function() { document.write(this.name); },
+      bye: function() { document.write("Пока"); }
+    };
+
+    document.write("<br />" + "(простой вызов работает):" + "<br />");
+    user.hi(); // Вася (простой вызов работает)
+
+    // а теперь вызовем user.hi или user.bye в зависимости от имени
+    (user.name == "Вася" ? user.hi : user.bye)(); // undefined (в консоли)
+  </script>
+
+  <hr>
+
+
+  <h3>Task 6.1.7: Вызов в контексте массива </h3>
+  <pre>
+    Каким будет результат? Почему?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var arr = ["a", "b"];
+
+    arr.push(function() {
+      document.write( this );
+    });
+
+    arr[2](); // a, b, function() { document.write( this );}
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr = ["a", "b"];
+
+    arr.push(function() {
+      document.write( this );
+    });
+
+    arr[2](); // a, b, function() { document.write( this );}
+  </script>
+
+
+  <h3>Task 6.1.8: Проверка синтаксиса </h3>
+  <pre>
+    Каков будет результат этого кода?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var obj = {
+      go: function() { alert(this) }
+    } // тут забыли поставить точку с запятой ;
+
+    (obj.go)()
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var obj = {
+      go: function() { document.write(this) }
+    };
+
+    (obj.go)();
+  </script>
+
+
+  <h3>Task 6.1.9: Почему this присваивается именно так? </h3>
+  <pre>
+    Вызовы (1) и (2) в примере ниже работают не так, как (3) и (4):
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    "use strict"
+
+    var obj, method;
+
+    obj = {
+      go: function() { alert(this); }
+    };
+
+    obj.go();            // (1) object
+
+    (obj.go)();          // (2) object
+
+    (method = obj.go)();      // (3) undefined
+
+    (obj.go || obj.stop)(); // (4) undefined
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var obj, method;
+
+    obj = {
+      go: function() { document.write(this); }
+    };
+
+    obj.go();            // (1) object
+    document.write("<br />");
+    (obj.go)();          // (2) object
+    document.write("<br />");
+    (method = obj.go)();      // (3) undefined
+    document.write("<br />");
+    (obj.go || obj.stop)(); // (4) undefined
+  </script>
+
+
+
+  <h3>Task 6.1.10: Значение this в объявлении объекта </h3>
+  <pre>
+    Что выведет alert в этом коде? Почему?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {
+      firstName: "Василий",
+
+      export: this
+    };
+
+    alert( user.export.firstName );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      firstName: "Василий",
+
+      export: this
+    };
+
+    document.write( user.export.firstName ); // undefined, т.к идет обращение к window.firstName
+  </script>
+
+
+  <h3>Task 6.1.11: Создайте калькулятор </h3>
+  <pre>
+    Создайте объект calculator с тремя методами:
+
+    read() запрашивает prompt два значения и сохраняет их как свойства объекта
+    sum() возвращает сумму этих двух значений
+    mul() возвращает произведение этих двух значений
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var calculator = {
+      read: function() {
+          this.a = +prompt("a?", 0);
+          this.b = +prompt("b?", 0);
+      },
+      sum: function() {
+        return this.a + this.b;
+      },
+      mul: function() {
+        return this.a * this.b;
+      }
+    }
+
+    calculator.read();
+    document.write( calculator.sum() );
+    document.write("< br />");
+    document.write( calculator.mul() );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var calculator = {
+      read: function() {
+          this.a = +prompt("a?", 0);
+          this.b = +prompt("b?", 0);
+      },
+      sum: function() {
+        return this.a + this.b;
+      },
+      mul: function() {
+        return this.a * this.b;
+      }
+    }
+
+    calculator.read();
+    document.write( calculator.sum() );
+    document.write("<br />");
+    document.write( calculator.mul() );
+  </script>
+
+
+
+  <h3>Task 6.1.12: Цепочка вызовов </h3>
+  <pre>
+    Есть объект «лестница» ladder
+    Модифицируйте код методов объекта, чтобы вызовы можно было делать цепочкой, вот так:
+      ladder.up().up().down().up().down().showStep(); // 1
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var ladder = {
+      step: 0,
+      up: function() { // вверх по лестнице
+        this.step++;
+        return this;
+      },
+      down: function() { // вниз по лестнице
+        this.step--;
+        return this;
+      },
+      showStep: function() { // вывести текущую ступеньку
+        document.write( this.step );
+        return this;
+      }
+    };
+
+    ladder.up();
+    ladder.up();
+    ladder.down();
+    ladder.showStep(); // 1
+
+    //ladder.up().up().down().up().down().showStep(); // 1
+  </script>
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

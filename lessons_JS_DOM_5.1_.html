@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_5.1_</title>
+</head>
+<body>
+
+  <!--**********
+  *  Графические компоненты
+  ************-->
+
+  <h1>5.2. Графические компоненты </h1>
+  <h3>Task 5.2.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div id="sweets-menu" class="menu">
+    <span class="title">Сладости</span>
+    <ul>
+      <li>Торт</li>
+      <li>Пончик</li>
+      <li>Пирожное</li>
+      <li>Шоколадка</li>
+      <li>Мороженое</li>
+    </ul>
+  </div>
+
+  <style media="screen">
+    .menu ul {
+      display: none;
+      margin: 0;
+    }
+
+    .menu .title {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .menu .title:before {
+      /* content: '▶'; */
+      content: '+';
+      padding-right: 6px;
+      color: green;
+    }
+
+    .menu.open ul {
+      display: block;
+    }
+
+    .menu.open .title:before {
+      /* content: '▼'; */
+      content: '-';
+    }
+  </style>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Menu(options) {
+      var elem = options.elem;
+
+      elem.onmousedown = function() {
+        return false;
+      }
+
+      elem.onclick = function(event) {
+        if (event.target.closest('.title')) {
+          elem.classList.toggle('open');
+        }
+      };
+
+    }
+
+    var menu = new Menu({
+      elem: document.getElementById('sweets-menu')
+    });
+
+
+  </script>
+
+
+  <br>
+
+
+  <h3>Task 5.2.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <button onclick="menu.toggle()">menu.toggle()</button>
+  <button onclick="menu.open()">menu.open()</button>
+  <button onclick="menu.close()">menu.close()</button>
+
+  <div id="nav">
+
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Menu(options) {
+      var elem;
+
+      function getElem() {
+        if (!elem) render();
+        return elem;
+      }
+
+      function render() {
+        elem = document.createElement('div');
+        elem.className = "menu";
+
+        var titleElem = document.createElement('span');
+        elem.appendChild(titleElem);
+        titleElem.className = "title";
+        titleElem.textContent = options.title;
+
+        elem.onmousedown = function() {
+          return false;
+        };
+
+        elem.onclick = function(event) {
+          if (event.target.closest('.title')) {
+            toggle();
+          }
+        }
+
+      }
+
+      function renderItems() {
+        var items = options.items || [];
+        var list = document.createElement('ul');
+        items.forEach(function(item) {
+          var li = document.createElement('li');
+          li.textContent = item;
+          list.appendChild(li);
+        });
+        elem.appendChild(list);
+      }
+
+      function open() {
+        if (!elem.querySelector('ul')) {
+          renderItems();
+        }
+        elem.classList.add('open');
+      };
+
+      function close() {
+        elem.classList.remove('open');
+      };
+
+      function toggle() {
+        if (elem.classList.contains('open')) close();
+        else open();
+      };
+
+      this.getElem = getElem;
+      this.toggle = toggle;
+      this.close = close;
+      this.open = open;
+    }
+
+
+    //Using
+
+    var menu = new Menu({
+      title: "Сладости",
+      items: [
+        "Торт",
+        "Пончик",
+        "Пирожное",
+        "Шоколадка",
+        "Мороженое"
+      ]
+    });
+
+    var menu2 = new Menu({
+      title: "Сладости",
+      items: [
+        "Торт",
+        "Пончик",
+        "Пирожное",
+        "Шоколадка",
+        "Мороженое"
+      ]
+    });
+
+    nav.appendChild(menu.getElem());
+    nav.appendChild(menu2.getElem());
+
+
+  </script>
+
+
+
+  <br>
+  <hr>
+
+
+
+  <h3>Task 5.2.3: Часики </h3>
+  <pre>
+    Создайте компонент «Часы» (Clock).
+    Остальные методы, если нужны, должны быть приватными.
+    При нажатии на alert часы должны приостанавливаться, а затем продолжать идти с правильным временем.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+      <b>My solution</b>
+      function Clock() {
+
+        var elem = document.createElement("div");
+        elem.id = "clock";
+        elem.className = "clock";
+        elem.innerHTML = '< span class="hour">00</ span>:< span class="min">00</ span>:< span class="sec">00</ span>';
+        document.body.appendChild(elem);
+        var timerId;
+
+        function render() {
+
+            var date = new Date();
+
+            var hh = date.getHours();
+            if (hh < 10) {
+              hh = '0' + hh;
+            }
+
+            var mm = date.getMinutes();
+            if (mm < 10) {
+              mm = '0' + mm;
+            }
+
+            var ss = date.getSeconds();
+            if (ss < 10) {
+              ss = '0' + ss;
+            }
+
+            elem.innerHTML = '< span class="hour">' + hh + '</ span>:< span class="min">' + mm + '</ span>:< span class="sec">' + ss + '</ span>';
+        }
+
+        function start() {
+          render() ;
+          timerId = setInterval(render, 1000);
+        }
+
+
+        function stop() {
+          if (timerId) clearInterval(timerId);
+        }
+
+        this.start = start;
+        this.stop = stop;
+
+      }
+
+      var pageClock = new Clock();
+
+      //pageClock.start(); // старт
+      //pageClock.stop(); // стоп
+
+    <b>Not my solution</b>
+    function Clock(options) {
+      var elem = options.elem;
+
+      var timer;
+
+      function render() {
+        var date = new Date();
+
+        var hours = date.getHours();
+        if (hours < 10) hours = '0' + hours;
+        elem.querySelector('.hour').innerHTML = hours;
+
+        var min = date.getMinutes();
+        if (min < 10) min = '0' + min;
+        elem.querySelector('.min').innerHTML = min;
+
+        var sec = date.getSeconds();
+        if (sec < 10) sec = '0' + sec;
+        elem.querySelector('.sec').innerHTML = sec;
+      }
+
+      this.stop = function() {
+        clearInterval(timer);
+      };
+
+      this.start = function() {
+        render();
+        timer = setInterval(render, 1000);
+      };
+
+    }
+  </pre>
+
+  <!-- <div id="clock" class="clock">
+    <span class="hour">00</span>:<span class="min">00</span>:<span class="sec">00</span>
+  </div> -->
+
+  <style>
+    .hour {
+      color: green
+    }
+
+    .min {
+      color: blue
+    }
+
+    .sec {
+      color: red
+    }
+  </style>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Clock() {
+
+      var elem = document.createElement("div");
+      elem.id = "clock";
+      elem.className = "clock";
+      elem.innerHTML = '<span class="hour">00</span>:<span class="min">00</span>:<span class="sec">00</span>';
+      document.body.appendChild(elem);
+      var timerId;
+
+      function render() {
+
+          var date = new Date();
+
+          var hh = date.getHours();
+          if (hh < 10) {
+            hh = '0' + hh;
+          }
+
+          var mm = date.getMinutes();
+          if (mm < 10) {
+            mm = '0' + mm;
+          }
+
+          var ss = date.getSeconds();
+          if (ss < 10) {
+            ss = '0' + ss;
+          }
+
+          elem.innerHTML = '<span class="hour">' + hh + '</span>:<span class="min">' + mm + '</span>:<span class="sec">' + ss + '</span>';
+      }
+
+      function start() {
+        render() ;
+        timerId = setInterval(render, 1000);
+      }
+
+
+      function stop() {
+        if (timerId) clearInterval(timerId);
+      }
+
+      this.start = start;
+      this.stop = stop;
+
+    }
+
+    var pageClock = new Clock();
+
+    //pageClock.start(); // старт
+    //pageClock.stop(); // стоп
+
+  </script>
+
+  <input type="button" onclick="pageClock.start()" value="Старт">
+  <input type="button" onclick="pageClock.stop()" value="Стоп">
+
+  <input type="button" onclick="alert('Часы должны останавливаться\
+    во время alert,\nи продолжать корректно работать после нажатия на ОК')"\
+    value="alert для проверки корректного возобновления">
+
+
+  <br>
+
+
+  <h3>Task 5.2.4: Слайдер-компонент </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Bad solution
+    <b>My solution</b>
+    //***
+
+    function getCoords(elem) { // кроме IE8-
+      var box = elem.getBoundingClientRect();
+
+      return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+      };
+
+    }
+
+    function Slider(options) {
+       var sliderElem = options.elem;
+       var thumbElem = sliderElem.querySelector(".thumb");
+
+       thumbElem.onmousedown = function(e) {
+         render(e);
+       };
+
+       function render(e) {
+         var thumbCoords = getCoords(thumbElem);
+         var shiftX = e.pageX - thumbCoords.left;
+         // shiftY здесь не нужен, слайдер двигается только по горизонтали
+
+         var sliderCoords = getCoords(sliderElem);
+
+         function thumbMove(e) {
+           //  вычесть координату родителя, т.к. position: relative
+           var newLeft = e.pageX - shiftX - sliderCoords.left;
+
+           // курсор ушёл вне слайдера
+           if (newLeft < 0) {
+             newLeft = 0;
+           }
+           var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
+           if (newLeft > rightEdge) {
+             newLeft = rightEdge;
+           }
+
+           thumbElem.style.left = newLeft + 'px';
+         }
+
+
+         thumbElem.ondragstart = function() {
+           return false;
+         };
+
+
+         document.onmousemove = function(e) {
+           thumbMove(e);
+         }
+
+         document.onmouseup = function() {
+           document.onmousemove = document.onmouseup = null;
+         };
+
+         return false; // disable selection start (cursor change)
+       }
+    }
+
+   var filter = new Slider({
+     elem: document.getElementById("slider")
+   });
+
+   //document.getElementByClassName("filter")[0].appendChild(filter);
+
+   <b>Not my solution</b>
+   var slider = new Slider({
+      elem: document.getElementById('slider')
+    });
+
+    function Slider(options) {
+      var elem = options.elem;
+      var thumbElem = elem.querySelector('.thumb');
+
+      var sliderCoords, thumbCoords, shiftX, shiftY;
+
+      elem.ondragstart = function() {
+        return false;
+      };
+
+      elem.onmousedown = function(event) {
+        if (event.target.closest('.thumb')) {
+          startDrag(event.clientX, event.clientY);
+          return false; // disable selection start (cursor change)
+        }
+      }
+
+      function startDrag(startClientX, startClientY) {
+        thumbCoords = thumbElem.getBoundingClientRect();
+        shiftX = startClientX - thumbCoords.left;
+        shiftY = startClientY - thumbCoords.top;
+
+        sliderCoords = elem.getBoundingClientRect();
+
+        document.addEventListener('mousemove', onDocumentMouseMove);
+        document.addEventListener('mouseup', onDocumentMouseUp);
+      }
+
+
+
+      function moveTo(clientX) {
+        // вычесть координату родителя, т.к. position: relative
+        var newLeft = clientX - shiftX - sliderCoords.left;
+
+        // курсор ушёл вне слайдера
+        if (newLeft < 0) {
+          newLeft = 0;
+        }
+        var rightEdge = elem.offsetWidth - thumbElem.offsetWidth;
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        thumbElem.style.left = newLeft + 'px';
+      }
+
+
+      function onDocumentMouseMove(e) {
+        moveTo(e.clientX);
+      }
+
+      function onDocumentMouseUp() {
+        endDrag();
+      }
+
+
+      function endDrag() {
+        document.removeEventListener('mousemove', onDocumentMouseMove);
+        document.removeEventListener('mouseup', onDocumentMouseUp);
+      }
+
+    }
+  </pre>
+
+  <style>
+  .slider {
+    border-radius: 5px;
+    background: #E0E0E0;
+    background: -moz-linear-gradient(left top, #E0E0E0, #EEEEEE) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, right bottom, from(#E0E0E0), to(#EEEEEE));
+    background: linear-gradient(left top, #E0E0E0, #EEEEEE);
+    width: 310px;
+    height: 15px;
+    margin: 5px;
+  }
+
+  .thumb {
+    width: 10px;
+    height: 25px;
+    border-radius: 3px;
+    position: relative;
+    left: 10px;
+    top: -5px;
+    background: blue;
+    cursor: pointer;
+  }
+  </style>
+
+  <div id="slider" class="slider">
+    <div class="thumb"></div>
+  </div>
+
+  <!-- <div class="filter"></div> -->
+
+  <script type="text/javascript">
+    'use strict';
+
+     //***
+
+     function getCoords(elem) { // кроме IE8-
+       var box = elem.getBoundingClientRect();
+
+       return {
+         top: box.top + pageYOffset,
+         left: box.left + pageXOffset
+       };
+
+     }
+
+     function Slider(options) {
+        var sliderElem = options.elem;
+        var thumbElem = sliderElem.querySelector(".thumb");
+
+        thumbElem.onmousedown = function(e) {
+          render(e);
+        };
+
+        function render(e) {
+          var thumbCoords = getCoords(thumbElem);
+          var shiftX = e.pageX - thumbCoords.left;
+          // shiftY здесь не нужен, слайдер двигается только по горизонтали
+
+          var sliderCoords = getCoords(sliderElem);
+
+          function thumbMove(e) {
+            //  вычесть координату родителя, т.к. position: relative
+            var newLeft = e.pageX - shiftX - sliderCoords.left;
+
+            // курсор ушёл вне слайдера
+            if (newLeft < 0) {
+              newLeft = 0;
+            }
+            var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
+            if (newLeft > rightEdge) {
+              newLeft = rightEdge;
+            }
+
+            thumbElem.style.left = newLeft + 'px';
+          }
+
+
+          thumbElem.ondragstart = function() {
+            return false;
+          };
+
+
+          document.onmousemove = function(e) {
+            thumbMove(e);
+          }
+
+          document.onmouseup = function() {
+            document.onmousemove = document.onmouseup = null;
+          };
+
+          return false; // disable selection start (cursor change)
+        }
+     }
+
+    var filter = new Slider({
+      elem: document.getElementById("slider")
+    });
+
+    //document.getElementByClassName("filter")[0].appendChild(filter);
+
+
+  </script>
+
+
+
+  <br>
+
+
+
+  <h3>Task 5.2.5: Компонент: список с выделением </h3>
+  <pre>
+    Перепишите решение задачи Список с выделением в виде компонента.
+
+    У компонента должен быть единственный публичный метод getSelected(),
+    который возвращает выбранные значения в виде массива.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    // <b>Отличие:</b>
+    //this.getSelected = function() {
+      return [].map.call(elem.querySelectorAll('.selected'), function(li) {
+        return li.innerHTML;
+      });
+    };
+
+    <b>My solution</b>
+    function ListSelect(options) {
+      var ul = options.elem;
+      var lastClickedLi = null;
+
+      function clickList(event) {
+        var target = event.target;
+
+        // возможно, клик был внутри списка UL, но вне элементов LI
+        if (target.tagName != "LI") return;
+
+        // для Mac проверяем Cmd, т.к. Ctrl + click там контекстное меню
+        if (event.metaKey || event.ctrlKey) {
+          toggleSelect(target);
+        } else if (event.shiftKey) {
+          selectFromLast(target);
+        } else {
+          selectSingle(target);
+        }
+
+        lastClickedLi = target;
+      }
+
+      // --- функции для выделения ---
+
+      function toggleSelect(li) {
+        li.classList.toggle('selected');
+      }
+
+      function selectFromLast(target) {
+        var startElem = lastClickedLi || ul.children[0];
+
+        var isLastClickedBefore = startElem.compareDocumentPosition(target) & 4;
+
+        if (isLastClickedBefore) {
+          for (var elem = startElem; elem != target; elem = elem.nextElementSibling) {
+            elem.classList.add('selected');
+          }
+        } else {
+          for (var elem = startElem; elem != target; elem = elem.previousElementSibling) {
+            elem.classList.add('selected');
+          }
+        }
+        elem.classList.add('selected');
+      }
+
+
+      function deselectAll() {
+        for (var i = 0; i < ul.children.length; i++) {
+          ul.children[i].classList.remove('selected');
+        }
+      }
+
+      function selectSingle(li) {
+        deselectAll();
+        li.classList.add('selected');
+      }
+
+
+      // --- обработчики ---
+      ul.addEventListener("click", clickList);
+      ul.addEventListener("mousedown", function(e) {
+        e.preventDefault();
+      });
+
+      this.getSelected = function() {
+        var arrSelected = [];
+
+        for (var i = 0; i < ul.children.length; i++) {
+          if (ul.children[i].classList.contains("selected")) {
+            arrSelected.push(ul.children[i].innerText);
+          }
+        }
+
+        return arrSelected;
+      }
+
+    }
+
+
+    var listSelect = new ListSelect({
+      elem: document.querySelector('#selectList ul')
+    });
+
+    <b>Not my solution</b>
+    function ListSelect(options) {
+    var elem = options.elem;
+
+    var lastClickedLi = null;
+
+    elem.onmousedown = function() {
+      return false;
+    };
+
+    elem.onclick = function(e) {
+      var li = e.target.closest('li');
+      if (!li) return;
+
+      if (e.metaKey || e.ctrlKey) { // для Mac проверяем Cmd, т.к. Ctrl + click там контекстное меню
+        toggleSelect(li);
+      } else if (e.shiftKey) {
+        selectFromLast(li);
+      } else {
+        selectSingle(li);
+      }
+
+      lastClickedLi = li;
+    }
+
+    function deselectAll() {
+      [].forEach.call(elem.children, function(child) {
+        child.classList.remove('selected')
+      });
+    }
+
+    function toggleSelect(li) {
+      li.classList.toggle('selected');
+    }
+
+    function selectSingle(li) {
+      deselectAll();
+      li.classList.add('selected');
+    }
+
+    function selectFromLast(target) {
+      var startElem = lastClickedLi || elem.children[0];
+
+      target.classList.add('selected');
+      if (startElem == target) {
+        // клик на том же элементе, что и раньше
+        // это особый случай
+        return;
+      }
+
+      var isLastClickedBefore = startElem.compareDocumentPosition(target) & 4;
+
+      if (isLastClickedBefore) {
+        for (var elem = startElem; elem != target; elem = elem.nextElementSibling) {
+          elem.classList.add('selected');
+        }
+      } else {
+        for (var elem = startElem; elem != target; elem = elem.previousElementSibling) {
+          elem.classList.add('selected');
+        }
+      }
+    }
+
+    this.getSelected = function() {
+      return [].map.call(elem.querySelectorAll('.selected'), function(li) {
+        return li.innerHTML;
+      });
+    };
+  }
+  </pre>
+
+  <style>
+    .selected {
+      background: #0f0;
+    }
+
+    li {
+      cursor: pointer;
+    }
+    #selectList {
+      display: flex;
+    }
+  </style>
+
+  Клик на элементе выделяет только его.
+  <br> Ctrl(Cmd)+Клик добавляет/убирает элемент из выделенных.
+  <br> Shift+Клик добавляет промежуток от последнего кликнутого к выделению.
+  <br>
+
+  <div id="selectList">
+    <ul>
+      <li>Кристофер Робин</li>
+      <li>Винни-Пух</li>
+      <li>Ослик Иа</li>
+      <li>Мудрая Сова</li>
+      <li>Кролик. Просто кролик.</li>
+    </ul>
+  </div>
+
+  <button type="button" name="button" onclick="alert(listSelect.getSelected());">listSelect.getSelected()</button>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function ListSelect(options) {
+      var ul = options.elem;
+      var lastClickedLi = null;
+
+      function clickList(event) {
+        var target = event.target;
+
+        // возможно, клик был внутри списка UL, но вне элементов LI
+        if (target.tagName != "LI") return;
+
+        // для Mac проверяем Cmd, т.к. Ctrl + click там контекстное меню
+        if (event.metaKey || event.ctrlKey) {
+          toggleSelect(target);
+        } else if (event.shiftKey) {
+          selectFromLast(target);
+        } else {
+          selectSingle(target);
+        }
+
+        lastClickedLi = target;
+      }
+
+      // --- функции для выделения ---
+
+      function toggleSelect(li) {
+        li.classList.toggle('selected');
+      }
+
+      function selectFromLast(target) {
+        var startElem = lastClickedLi || ul.children[0];
+
+        var isLastClickedBefore = startElem.compareDocumentPosition(target) & 4;
+
+        if (isLastClickedBefore) {
+          for (var elem = startElem; elem != target; elem = elem.nextElementSibling) {
+            elem.classList.add('selected');
+          }
+        } else {
+          for (var elem = startElem; elem != target; elem = elem.previousElementSibling) {
+            elem.classList.add('selected');
+          }
+        }
+        elem.classList.add('selected');
+      }
+
+
+      function deselectAll() {
+        for (var i = 0; i < ul.children.length; i++) {
+          ul.children[i].classList.remove('selected');
+        }
+      }
+
+      function selectSingle(li) {
+        deselectAll();
+        li.classList.add('selected');
+      }
+
+
+      // --- обработчики ---
+      ul.addEventListener("click", clickList);
+      ul.addEventListener("mousedown", function(e) {
+        e.preventDefault();
+      });
+
+      this.getSelected = function() {
+        var arrSelected = [];
+
+        for (var i = 0; i < ul.children.length; i++) {
+          if (ul.children[i].classList.contains("selected")) {
+            arrSelected.push(ul.children[i].innerText);
+          }
+        }
+
+        return arrSelected;
+      }
+
+    }
+
+
+    var listSelect = new ListSelect({
+      elem: document.querySelector('#selectList ul')
+    });
+
+
+  </script>
+
+
+
+
+  <br>
+
+
+  <h3>Task 5.2.6: Голосовалка </h3>
+  <pre>
+    Напишите функцию-конструктор new Voter(options) для голосовалки.
+    Она должна получать элемент в options.elem.
+    По клику на + и — число должно увеличиваться или уменьшаться.
+    Публичный метод voter.setVote(vote) должен устанавливать текущее число – значение голоса.
+    Все остальные методы и свойства пусть будут приватными.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+    function Voter(options) {
+      var elem = options.elem;
+      var voteElem = elem.querySelector(".vote")
+      var count;
+
+      function renderVote(count) {
+        voteElem.innerHTML = count;
+      }
+
+      function up() {
+        count++;
+        renderVote(count);
+      }
+
+      function down() {
+        count--;
+        renderVote(count);
+      }
+
+      this.setVote = function(c) {
+        count = c || 0;
+        renderVote(c);
+      }
+
+
+      elem.querySelector(".down").onclick = down;
+      elem.querySelector(".up").onclick = up;
+
+      elem.onmousedown = function() {
+        return false;
+      }
+    }
+
+    var voter = new Voter({
+      elem: document.getElementById('voter')
+    });
+
+    voter.setVote(1);
+
+
+    <b>Not my solution</b>
+    function Voter(options) {
+      var elem = options.elem;
+
+      var voteElem = elem.querySelector('.vote');
+
+      elem.onclick = function(event) {
+        // сам обработчик не меняет голос, он вызывает функцию
+        if (event.target.closest('.down')) {
+          voteDecrease();
+        } else if (event.target.closest('.up')) {
+          voteIncrease();
+        }
+      }
+
+      elem.onmousedown = function() {
+        return false;
+      };
+
+      // ----------- методы -------------
+
+      function voteDecrease() {
+        voteElem.innerHTML = +voteElem.innerHTML - 1;
+      }
+
+      function voteIncrease() {
+        voteElem.innerHTML = +voteElem.innerHTML + 1;
+      }
+
+      this.setVote = function(vote) {
+        voteElem.innerHTML = +vote;
+      };
+
+    }
+
+    var voter = new Voter({
+      elem: document.getElementById('voter')
+    });
+    voter.setVote(1);
+  </script>
+  </pre>
+
+  <style>
+    .voter {
+      font-family: 'DejaVu Sans Mono', 'Lucida Console', 'Menlo', 'Monaco', monospace;
+      font-size: 18px;
+    }
+
+    .up,
+    .down {
+      cursor: pointer;
+      color: blue;
+      font-weight: bold;
+    }
+  </style>
+
+  <div id="voter" class="voter">
+    <span class="down">—</span>
+    <span class="vote">0</span>
+    <span class="up">+</span>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Voter(options) {
+      var elem = options.elem;
+      var voteElem = elem.querySelector(".vote")
+      var count;
+
+      function renderVote(count) {
+        voteElem.innerHTML = count;
+      }
+
+      function up() {
+        count++;
+        renderVote(count);
+      }
+
+      function down() {
+        count--;
+        renderVote(count);
+      }
+
+      this.setVote = function(c) {
+        count = c || 0;
+        renderVote(c);
+      }
+
+
+      elem.querySelector(".down").onclick = down;
+      elem.querySelector(".up").onclick = up;
+
+      elem.onmousedown = function() {
+        return false;
+      }
+    }
+
+    var voter = new Voter({
+      elem: document.getElementById('voter')
+    });
+
+    voter.setVote(1);
+
+  </script>
+
+
+
+
+  <br>
+
+
+
+  <h3>Task 5.2.7: Голосовалка в прототипном стиле ООП </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div id="voter2" class="voter">
+    <span class="down">—</span>
+    <span class="vote">0</span>
+    <span class="up">+</span>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Voter(options) {
+      var elem = options.elem;
+
+      var voteElem = elem.querySelector('.vote');
+
+      elem.onclick = function(event) {
+        // сам обработчик не меняет голос, он вызывает функцию
+        if (event.target.closest('.down')) {
+          voteDecrease();
+        } else if (event.target.closest('.up')) {
+          voteIncrease();
+        }
+      }
+
+      elem.onmousedown = function() {
+        return false;
+      };
+
+      // ----------- методы -------------
+
+      function voteDecrease() {
+        voteElem.innerHTML = +voteElem.innerHTML - 1;
+      }
+
+      function voteIncrease() {
+        voteElem.innerHTML = +voteElem.innerHTML + 1;
+      }
+
+      function setVote(vote) {
+        voteElem.innerHTML = +vote;
+      }
+
+      Voter.prototype.setVote = setVote.bind(this);
+
+    }
+
+    // var voter = new Voter({
+    //   elem: document.getElementById('voter2')
+    // });
+    //
+    // voter.setVote(1);
+
+
+    //***
+
+    function Voter3(options) {
+      var elem = this._elem = options.elem;
+      this._voteElem = elem.querySelector('.vote');
+
+      elem.onmousedown = function() {
+        return false;
+      };
+
+      elem.onclick = this._onClick.bind(this);
+    }
+
+    Voter3.prototype._onClick = function(event) {
+      if (event.target.closest('.down')) {
+        this._voteDecrease();
+      } else if (event.target.closest('.up')) {
+        this._voteIncrease();
+      }
+    };
+
+    Voter3.prototype._voteIncrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + 1;
+    };
+
+    Voter3.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - 1;
+    };
+
+    Voter3.prototype.setVote = function(vote) {
+      this._voteElem.innerHTML = +vote;
+    };
+
+    //*** Проверка
+    var voter3 = new Voter3({
+      elem: document.getElementById('voter2')
+    });
+
+    //voter3.setVote(1);
+
+  </script>
+
+
+
+
+  <br>
+
+
+
+
+  <h3>Task 5.2.8: Добавить двойной голос в голосовалку </h3>
+  <pre>
+    Создайте функцию-конструктор StepVoter, которая наследует от голосовалки,
+    созданной в задаче Голосовалка в прототипном стиле ООП и добавляет
+    голосовалке опцию options.step, которая задаёт «шаг» голоса.
+
+    P.S. Код voter.js изменять нельзя, нужно не переписать Voter,
+    а отнаследовать от него.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Same solution
+    <b>My solution</b>
+    function Voter4(options) {
+      var elem = this._elem = options.elem;
+      this._voteElem = elem.querySelector('.vote');
+
+      elem.onmousedown = function() {
+        return false;
+      };
+
+      elem.onclick = this._onClick.bind(this);
+    }
+
+    Voter4.prototype._onClick = function(event) {
+      if (event.target.closest('.down')) {
+        this._voteDecrease();
+      } else if (event.target.closest('.up')) {
+        this._voteIncrease();
+      }
+    };
+
+    Voter4.prototype._voteIncrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + 1;
+    };
+
+    Voter4.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - 1;
+    };
+
+    Voter4.prototype.setVote = function(vote) {
+      this._voteElem.innerHTML = +vote;
+    };
+
+    //***
+
+    function StepVoter(options) {
+      Voter4.apply(this, arguments);
+      this._step = options.step || 1;
+    }
+
+    StepVoter.prototype = Object.create(Voter4.prototype);
+    StepVoter.prototype.constructor = StepVoter;
+
+    StepVoter.prototype._voteIncrease = function() {
+      //Voter4.prototype._voteIncrease.apply(this, arguments);
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + this._step;
+    };
+
+    StepVoter.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - this._step;
+    };
+
+
+    //*** Проверка
+
+    var voter5 = new StepVoter({
+      elem: document.getElementById('voter4'),
+      step: 2 // увеличивать/уменьшать сразу на 2 пункта
+    });
+
+    // voter5.setVote(1);
+
+    <b>Not my solution</b>
+    function StepVoter(options) {
+      Voter.apply(this, arguments);
+      this._step = options.step || 1;
+    }
+    StepVoter.prototype = Object.create(Voter.prototype);
+
+    StepVoter.prototype._voteIncrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + this._step;
+    };
+
+    StepVoter.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - this._step;
+    };
+  </pre>
+
+  <div id="voter4" class="voter">
+    <span class="down">—</span>
+    <span class="vote">0</span>
+    <span class="up">+</span>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Voter4(options) {
+      var elem = this._elem = options.elem;
+      this._voteElem = elem.querySelector('.vote');
+
+      elem.onmousedown = function() {
+        return false;
+      };
+
+      elem.onclick = this._onClick.bind(this);
+    }
+
+    Voter4.prototype._onClick = function(event) {
+      if (event.target.closest('.down')) {
+        this._voteDecrease();
+      } else if (event.target.closest('.up')) {
+        this._voteIncrease();
+      }
+    };
+
+    Voter4.prototype._voteIncrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + 1;
+    };
+
+    Voter4.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - 1;
+    };
+
+    Voter4.prototype.setVote = function(vote) {
+      this._voteElem.innerHTML = +vote;
+    };
+
+    //***
+
+    function StepVoter(options) {
+      Voter4.apply(this, arguments);
+      this._step = options.step || 1;
+    }
+
+    StepVoter.prototype = Object.create(Voter4.prototype);
+    StepVoter.prototype.constructor = StepVoter;
+
+    StepVoter.prototype._voteIncrease = function() {
+      //Voter4.prototype._voteIncrease.apply(this, arguments);
+      this._voteElem.innerHTML = +this._voteElem.innerHTML + this._step;
+    };
+
+    StepVoter.prototype._voteDecrease = function() {
+      this._voteElem.innerHTML = +this._voteElem.innerHTML - this._step;
+    };
+
+
+    //*** Проверка
+
+    var voter5 = new StepVoter({
+      elem: document.getElementById('voter4'),
+      step: 2 // увеличивать/уменьшать сразу на 2 пункта
+    });
+
+    // voter5.setVote(1);
+
+  </script>
+
+  <br>
+
+
+
+  <!--**********
+  * Вёрстка графических компонентов
+  ************-->
+
+  <h1>5.3. Вёрстка графических компонентов  </h1>
+  <h3>Task 5.3.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div class="dialog">
+  <h2 class="title">Заголовок</h2>
+  <div class="content">
+    HTML-содержимое.
+  </div>
+  <div class="close">Закрыть</div>
+</div>
+
+<style>
+.dialog {
+  background: lightgreen;
+  border: lime 2px solid;
+  border-radius: 10px;
+  padding: 4px;
+  position: relative;
+}
+
+.dialog .title {
+  margin: 0;
+  font-size: 24px;
+  color: darkgreen;
+}
+
+.dialog .content {
+  padding: 10px 0 0 0;
+}
+
+.dialog .close {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  font-size: 10px;
+}
+</style>
+
+  <script type="text/javascript">
+    'use strict';
+
+  </script>
+
+
+<br><br>
+</body>
+</html>

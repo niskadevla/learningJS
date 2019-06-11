@@ -1,0 +1,24 @@
+/*************/
+/* Preloader */
+/*************/
+.preloader {
+  width: 0; height: 0;
+  margin: 60px;
+  border: 13px solid transparent;
+  border-radius:50%;
+  box-shadow: -30px -30px 0 0 red,
+  30px 30px 0 0 blue,
+  -30px 30px 0 0 yellow,
+  30px -30px 0 0 grey,
+  0 -45px 0 0 orange,
+  0 45px 0 0 aqua,
+  45px 0 0 0 brown,
+  -45px 0 0 0 crimson;
+  transition: transform 2s;
+}
+
+.preloader:hover {
+  cursor: pointer;
+  transform: rotate(360deg);
+  transition: transform 2s;
+}

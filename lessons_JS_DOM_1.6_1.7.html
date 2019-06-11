@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_1.6...</title>
+</head>
+<body>
+  <!--**********
+  * Внутреннее устройство поисковых методов
+  ************-->
+
+  <h1>1.6. Внутреннее устройство поисковых методов  </h1>
+  <h3>Task 1.6.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <section>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </section>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var resultGet = document.getElementsByTagName('div');
+    var resultQuery = document.querySelectorAll('div');
+    console.log("resultGet = ", resultGet);
+    console.log("resultQuery = ", resultQuery);
+
+    // вместо document может быть любой элемент
+    var elems = document.getElementsByTagName('div');
+    document.write( elems[0] );
+    document.write('<br />');
+    document.write( elems[995] );
+    document.write('<br />');
+    document.write( elems[500] );
+    document.write('<br />');
+    document.write( elems.length );
+    document.write('<br />');
+
+  </script>
+
+  <br>
+
+  <script type="text/javascript">
+     for (var i = 0; i < 10000; i++) document.write('<span> </span>');
+
+     var elements = document.body.getElementsByTagName('span');
+     var len = elements.length;
+
+     var d = new Date;
+     for (var i = 0; i < len; i++) elements[i];
+     document.write( "Последовательно: " + (new Date - d) + "мс" ); // (1)
+     document.write('<br />');
+
+     var d = new Date;
+     for (var i = 0; i < len; i += 2) elements[i], elements[len - i - 1];
+     document.write( "Вразнобой: " + (new Date - d) + "мс" ); // (2)
+     document.write('<br />');
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 1.6.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // var lis = document.body.getElementsByTagName('li');
+    //
+    // document.body.innerHTML = "";
+    //
+    // document.write( lis.length );
+    // document.write('< br />');
+
+    var menu = document.getElementById('menu');
+    var lis = menu.getElementsByTagName('li');
+
+    //document.body.innerHTML = "";
+
+    //document.write( lis.length ); // 3
+  </pre>
+
+  <ul id="menu">
+    <li>Главная страница</li>
+    <li>Форум</li>
+    <li>Магазин</li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // var lis = document.body.getElementsByTagName('li');
+    //
+    // document.body.innerHTML = "";
+    //
+    // document.write( lis.length );
+    // document.write('<br />');
+
+    var menu = document.getElementById('menu');
+    var lis = menu.getElementsByTagName('li');
+
+    //document.body.innerHTML = "";
+    //document.write( lis.length ); // 3
+
+  </script>
+
+
+
+  <h3>Task 1.6.3: Сравнение количества элементов </h3>
+  <pre>
+    Для любого документа сделаем следующее
+    Что произойдёт со значениями aList1.length, aList2.length, если в
+    документе вдруг появится ещё одна ссылка < a href="#">...</ a>?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <button type="button" name="button" onclick="add_a()">+</button>
+  <button type="button" name="button" onclick="del_a()">-</button>
+  <br> <br>
+
+  <a href="#">1. Главное</a>
+  <div id="div_a"></div>
+  <br>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var aList1 = document.getElementsByTagName('a'); // динамическое
+    var aList2 = document.querySelectorAll('a'); // статическое
+
+    document.write('<br>');
+    document.write(aList1.length);
+    document.write('<br>');
+    document.write(aList2.length);
+
+    // Начало
+    var count = 1,
+      div_aInner = [],
+      div_a;
+
+    function add_a() {
+      //При каждом вызове счетчик увеличивается на один
+      count++;
+
+      //Находим элемент div в котором есть ссылка и будет добавляться еще
+      div_a = document.getElementById('div_a');
+
+      // В переменную записываем содержимое тега div c id = div_a
+      div_aInner.push(div_a.innerHTML);
+      // Прибавляем к содержимому еще одну ссылку
+      div_a.innerHTML += '<a href="#">' + count + '. Ссылка</a> <br>';
+
+      // Выводим в консоль количество элементов, считываемых двумя способами
+      console.log(aList1.length); // get*
+      console.log(aList2.length); // query*
+    }
+
+    function del_a() {
+
+      // Проверяем есть ли в массиве элементы, т.е. есть ли ссылки
+      if ( div_aInner.length  ) {
+        count--;
+        // в содержимое div'a мы вставляем предыдущий элемент массива
+        div_a.innerHTML = div_aInner[div_aInner.length - 1];
+        // Удаляем последний элемент, с помощью уменьшения длины массива
+        div_aInner.length = div_aInner.length - 1;
+
+        // Выводим в консоль количество элементов, считываемых двумя способами
+        console.log(aList1.length); // get*
+        console.log(aList2.length); // query*
+      }
+
+    }
+
+  </script>
+
+
+
+  <h3>Task 1.6.4: Бенчмаркинг методов поиска в DOM </h3>
+  <pre>
+    Какой метод поиска элементов работает быстрее: getElementsByTagName(tag) или querySelectorAll(tag)?
+    Напишите код, который измеряет разницу между ними.
+    P.S. В задаче есть подвох, все не так просто. Если разница больше 10 раз – вы решили ее неверно.
+    Тогда подумайте, почему такое может быть.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Результат схожий
+    <b>My solution</b>
+      var timeStart1 = new Date();
+
+      for (var i = 0; i < 1000; i++) {
+        var getP = document.body.getElementsByTagName('p');
+        var arr = [];
+
+        for (var j = 0; j < getP.length; j++) {
+          arr.push(getP[j]);
+        }
+
+      }
+
+      //console.log(getP);
+      document.write( (new Date() - timeStart1) + ' ms' );
+      document.write("< br>");
+
+
+      var timeStart2 = new Date();
+
+      for (var i = 0; i < 1000; i++) {
+        var getP = document.body.querySelectorAll('p');
+      }
+
+      document.write( (new Date() - timeStart2) + ' ms' );
+      document.write("< br>");
+
+    <b>Not my solution</b>
+      function bench(f, times) {
+       var d = new Date();
+       for (var i = 0; i < times; i++) f();
+       return new Date() - d;
+     }
+
+
+     function runGetList() {
+       var results = document.getElementsByTagName('p');
+       var len = results.length;
+       for (var i = 0; i < len; i++) {
+         var elem = results[i];
+       }
+     }
+
+     function runQueryList() {
+       var results = document.querySelectorAll('p');
+       var len = results.length;
+       for (var i = 0; i < len; i++) {
+         var elem = results[i];
+       }
+     }
+
+
+     function log(msg) {
+       document.write(msg);
+       document.write('< br>');
+     }
+
+
+     log('getElementsByTagName: ' + bench(runGetList, 1000));
+     log('querySelectorAll: ' + bench(runQueryList, 1000));
+
+     <b>  Более правильный тест – это не только запустить поиск, но и получить
+       все элементы, как это делается в реальной жизни.</b>
+
+  </pre>
+
+  <div>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // var timeStart1 = new Date();
+    //
+    // for (var i = 0; i < 1000; i++) {
+    //   var getP = document.body.getElementsByTagName('p');
+    //   var arr = [];
+    //
+    //   for (var j = 0; j < getP.length; j++) {
+    //     arr.push(getP[j]);
+    //   }
+    //
+    // }
+    //
+    // //console.log(getP);
+    // document.write( (new Date() - timeStart1) + ' ms' );
+    // document.write("<br>");
+    //
+    //
+    // var timeStart2 = new Date();
+    //
+    // for (var i = 0; i < 1000; i++) {
+    //   var getP = document.body.querySelectorAll('p');
+    // }
+    //
+    // document.write( (new Date() - timeStart2) + ' ms' );
+    // document.write("<br>");
+
+    function bench(f, times) {
+     var d = new Date();
+     for (var i = 0; i < times; i++) f();
+     return new Date() - d;
+   }
+
+
+   function runGetList() {
+     var results = document.getElementsByTagName('p');
+     var len = results.length;
+     for (var i = 0; i < len; i++) {
+       var elem = results[i];
+     }
+   }
+
+   function runQueryList() {
+     var results = document.querySelectorAll('p');
+     var len = results.length;
+     for (var i = 0; i < len; i++) {
+       var elem = results[i];
+     }
+   }
+
+
+   function log(msg) {
+     document.write(msg);
+     document.write('<br>');
+   }
+
+
+   log('getElementsByTagName: ' + bench(runGetList, 300) + ' ms');
+   log('querySelectorAll: ' + bench(runQueryList, 300) + ' ms');
+
+  </script>
+
+
+
+  <h3>Task 1.6.5: Получить второй LI </h3>
+  <pre>
+    Есть длинный список ul
+    Как наиболее эффективно получить второй LI?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      var li_2 = document.querySelector('ol').getElementsByTagName('li')[1];
+
+      console.log(li_2);
+  </pre>
+
+  <ol>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ol>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var li_2 = document.querySelector('ol').getElementsByTagName('li')[1];
+
+    console.log(li_2);
+
+  </script>
+
+
+
+  <!--**********
+  * Свойства узлов: тип, тег и содержимое
+  ************-->
+
+  <h1>1.7. Свойства узлов: тип, тег и содержимое  </h1>
+  <h3>Task 1.7.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <b>Text</b>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var text = document.getElementsByTagName('b');
+
+    console.log(text);
+    console.dir(text);
+
+  </script>
+
+
+  <hr>
+
+  <div>Читатели:</div>
+  <ul>
+    <li>Вася</li>
+    <li>Петя</li>
+  </ul>
+
+  <!-- комментарий -->
+
+  <script>
+    var childNodes = document.body.childNodes;
+
+    for (var i = 0; (i < childNodes.length) && (i < 30); i++) {
+
+      // отфильтровать не-элементы
+      if (childNodes[i].nodeType != 1) continue;
+
+      document.write( childNodes[i] );
+      document.write('<br />');
+
+    }
+
+  </script>
+
+
+
+  <hr>
+
+  <input type="text_1" name="text_1" value="lalala" autocomplete="address-line3">
+
+  <script type="text/javascript">
+
+    console.log( document.getElementsByName('text_1') );
+
+  </script>
+
+
+
+  <hr>
+
+  <div id="my"></div>
+
+  <script>
+    var elem = document.getElementById('my');
+    elem.innerHTML = 'ТЕСТ<script>alert( 1 );</scr' + 'ipt>';
+  </script>
+
+
+
+  <hr>
+
+  <script>
+  var div = document.body.children[3];
+
+  // заменяем div.outerHTML на <p>...</p>
+  div.outerHTML = '<p>Новый элемент!</p>';
+
+  // ... но содержимое div.outerHTML осталось тем же, несмотря на "перезапись"
+  document.write( div.outerHTML ); // решение
+</script>
+
+
+
+<hr>
+
+Привет
+<!-- Комментарий -->
+<script>
+  for (var i = 0; i < document.body.childNodes.length; i++) {
+    //alert( document.body.childNodes[i].data );
+  }
+</script>
+
+
+<hr>
+
+<div>Текст</div>
+<div hidden>С атрибутом hidden</div>
+<div>Со свойством hidden</div>
+
+<script>
+  var lastDiv = document.body.lastChild.previousElementSibling;
+  console.log(lastDiv.textContent);
+  lastDiv.hidden = true;
+</script>
+
+
+<hr>
+
+<script>
+  var body = document.body;
+
+  // body.innerHTML = "<!--" + body.tagName + "-->";
+  //
+  // alert( body.firstChild.data ); // BODY
+</script>
+
+<hr>
+
+<script type="text/javascript">
+
+  console.log(document);
+
+  document.write(document.cookie);
+
+</script>
+
+
+
+<hr>
+
+<div>Привет, Мир!</div>
+
+<script>
+  var div = document.body.lastElementChild.previousElementSibling;
+
+  // заменяем div.outerHTML на <p>...</p>
+  div.outerHTML = '<p>Новый элемент!</p>';
+
+  // ... но содержимое div.outerHTML осталось тем же, несмотря на "перезапись"
+  document.write( div.outerHTML ); // <div>Привет, Мир!</div>
+</script>
+
+
+
+<h3>Task 1.7.11: Где в DOM-иерархии document? </h3>
+<pre>
+  Объектом какого класса является document?
+
+  Какое место он занимает в DOM-иерархии?
+
+  Наследует ли он Node или Element?
+
+  Воспользуйтесь для решения тем фактом, что DOM-узлы образуют стандартную прототипную иерархию классов.
+</pre>
+<h3>Решение</h3>
+<pre>
+  //Не совсем верно
+  <b>My solution</b>
+    document.write(document);
+    document.write('< br />');
+    document.write( (document instanceof Node) ); // true
+
+  <b>Not my solution</b>
+</pre>
+
+<script type="text/javascript">
+  'use strict';
+
+  document.write('document = ' + document); //[object HTMLDocument]
+  document.write('<br />');
+  document.write( (document instanceof Node) ); // true
+  document.write('<br />');
+  document.write('<br />');
+
+
+  // цепочка наследования:
+  document.write(HTMLDocument.prototype.constructor); // function HTMLDocument
+  document.write('<br />');
+  document.write(HTMLDocument.prototype.__proto__.constructor); // function Document
+  document.write('<br />');
+  document.write(HTMLDocument.prototype.__proto__.__proto__.constructor); // function Node
+
+</script>
+
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+</body>
+</html>

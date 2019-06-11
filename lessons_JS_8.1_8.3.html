@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ООП в функциональном стиле</title>
+</head>
+<body>
+  <!--**********
+  * ООП в функциональном стиле
+  ************-->
+
+  <h1>8.2. Внутренний и внешний интерфейс </h1>
+  <h3>Task 8.2.1: Добавить метод и свойство кофеварке </h3>
+  <pre>
+    Улучшите готовый код кофеварки, который дан ниже: добавьте в
+    кофеварку публичный метод stop(),
+    который будет останавливать кипячение (через clearTimeout).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Решение идентично
+    <b>My solution</b>
+      function CoffeeMachine(power) {
+        this.waterAmount = 0;
+
+        var WATER_HEAT_CAPACITY = 4200;
+
+        var self = this;
+        var timerId;
+
+        function getBoilTime() {
+          return self.waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+        }
+
+        function onReady() {
+          alert( 'Кофе готово!' );
+        }
+
+        this.run = function() {
+          timerId = setTimeout(onReady, getBoilTime());
+        };
+
+        this.stop = function() {
+          clearTimeout(timerId);
+        };
+
+      }
+
+      var coffeeMachine = new CoffeeMachine(50000);
+      coffeeMachine.waterAmount = 200;
+
+      coffeeMachine.run();
+      coffeeMachine.stop(); // кофе приготовлен не будет
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine(power) {
+      this.waterAmount = 0;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      var self = this;
+      var timerId;
+
+      function getBoilTime() {
+        return self.waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      function onReady() {
+        alert( 'Кофе готово!' );
+      }
+
+      this.run = function() {
+        timerId = setTimeout(onReady, getBoilTime());
+      };
+
+      this.stop = function() {
+        clearTimeout(timerId);
+      };
+
+    }
+
+    var coffeeMachine = new CoffeeMachine(50000);
+    coffeeMachine.waterAmount = 200;
+
+    coffeeMachine.run();
+    coffeeMachine.stop(); // кофе приготовлен не будет
+  </script>
+
+
+  <!--**********
+  *  Геттеры и сеттеры
+  ************-->
+
+  <h1>8.3. Геттеры и сеттеры  </h1>
+  <h3>Task 8.3.1: Геттер и сеттер для воды </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine2(power, capacity) { // capacity - ёмкость кофеварки
+      var waterAmount = 0;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      // "умная" установка свойства
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить воды больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      function onReady() {
+        alert( 'Кофе готов!' );
+      }
+
+      this.run = function() {
+        setTimeout(onReady, getTimeToBoil());
+      };
+
+      this.getWaterAmount = function() {
+        return waterAmount;
+      };
+
+    }
+
+    var coffeeMachine2 = new CoffeeMachine2(1000, 500);
+    coffeeMachine2.setWaterAmount(450); // Если будет больше 500  - ошибка! //выведется в консоль
+    document.write( coffeeMachine2.getWaterAmount() ); // 450
+    document.write("<br />");
+
+  </script>
+
+
+
+  <h3>Task 8.3.2: Единый геттер-сеттер</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine3(power, capacity) { // capacity - ёмкость кофеварки
+      var waterAmount = 0;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      // "умная" установка свойства
+      this.WaterAmount = function(amount) {
+        // вызов без параметра, значит режим геттера, возвращаем свойство
+        if (!arguments.length) return waterAmount;
+
+        // иначе режим сеттера
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить воды больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      function onReady() {
+        alert( 'Кофе готов!' );
+      }
+
+      this.run = function() {
+        setTimeout(onReady, getTimeToBoil());
+      };
+
+
+    }
+
+    var coffeeMachine3 = new CoffeeMachine3(1000, 500);
+    coffeeMachine3.WaterAmount(500); // Если будет больше 500  - ошибка! //выведется в консоль
+    document.write( coffeeMachine3.WaterAmount() ); // 500
+    document.write("<br />");
+
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 8.3.3: Написать объект с геттерами и сеттерами</h3>
+  <pre>
+    Напишите конструктор User для создания объектов:
+
+    С приватными свойствами имя firstName и фамилия surname.
+    С сеттерами для этих свойств.
+    С геттером getFullName(), который возвращает полное имя.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // легко
+    <b>My solution</b>
+    function User() {
+      var firstName, surname;
+
+      this.setFirstName = function(name) {
+        firstName = name;
+      }
+
+      this.setSurname = function(s_name) {
+        surname = s_name;
+      }
+
+      this.getFullName = function() {
+        return firstName + ' ' + surname;
+      }
+    }
+
+    var user = new User();
+    user.setFirstName("Петя");
+    user.setSurname("Иванов");
+
+    document.write( user.getFullName() ); // Петя Иванов
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function User() {
+      var firstName, surname;
+
+      this.setFirstName = function(name) {
+        firstName = name;
+      }
+
+      this.setSurname = function(s_name) {
+        surname = s_name;
+      }
+
+      this.getFullName = function() {
+        return firstName + ' ' + surname;
+      }
+    }
+
+    var user = new User();
+    user.setFirstName("Петя");
+    user.setSurname("Иванов");
+
+    document.write( user.getFullName() ); // Петя Иванов
+
+  </script>
+
+
+
+  <h3>Task 8.3.4: Добавить геттер для power </h3>
+  <pre>
+    Добавьте кофеварке геттер для приватного свойства power,
+    чтобы внешний код мог узнать мощность кофеварки.
+
+    Обратим внимание, что ситуация, когда у свойства power есть геттер,
+    но нет сеттера – вполне обычна.
+
+    Здесь это означает, что мощность power можно указать лишь при создании кофеварки и в
+    дальнейшем её можно прочитать, но нельзя изменить.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //легко!
+    <b>My solution</b>
+    function CoffeeMachine4(power, capacity) {
+      var waterAmount;
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить воды больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function() {
+        return waterAmount;
+      };
+
+      this.getPower = function() {
+        return power;
+      }
+
+    }
+
+    var coffeeMachine4 = new CoffeeMachine4(700, 1000);
+    document.write( coffeeMachine4.getPower() );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine4(power, capacity) {
+      var waterAmount;
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить воды больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function() {
+        return waterAmount;
+      };
+
+      this.getPower = function() {
+        return power;
+      }
+
+    }
+
+    var coffeeMachine4 = new CoffeeMachine4(700, 1000);
+    document.write( coffeeMachine4.getPower() );
+
+  </script>
+
+
+
+  <h3>Task 8.3.5: Добавить публичный метод кофеварке  </h3>
+  <pre>
+    Добавьте кофеварке публичный метод addWater(amount), который будет добавлять воду.
+
+    При этом, конечно же, должны происходить все необходимые проверки – на
+    положительность и превышение ёмкости.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //У меня код чуть длиннее, но надежней работает с отрицательными значениями
+    //Например если сначала залить, потом написать отрицательное значение, то у меня сработает ошибка
+    <b>My solution</b>
+      function CoffeeMachine5(power, capacity) {
+        var waterAmount = 0;
+
+        var WATER_HEAT_CAPACITY = 4200;
+
+        function getTimeToBoil() {
+          return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+        }
+
+        this.setWaterAmount = function(amount) {
+          if (amount < 0) {
+            throw new Error("Значение должно быть положительным");
+          }
+          if (amount > capacity) {
+            throw new Error("Нельзя залить больше, чем " + capacity);
+          }
+
+          waterAmount = amount;
+        };
+
+        function onReady() {
+          alert( 'Кофе готов!' );
+        }
+
+        this.run = function() {
+          setTimeout(onReady, getTimeToBoil());
+        };
+
+        this.addWater = function(amount) {
+          if (amount < 0) {
+            throw new Error("Значение должно быть положительным");
+          }
+          if (amount > capacity || (waterAmount + amount) > capacity ) {
+            throw new Error("Нельзя залить больше, чем " + capacity);
+          }
+
+          waterAmount += amount;
+        }
+
+      }
+
+      var coffeeMachine5 = new CoffeeMachine5(100000, 400);
+      coffeeMachine5.addWater(200);
+      coffeeMachine5.addWater(100);
+      coffeeMachine5.addWater(300); // Нельзя залить больше, чем 400
+      coffeeMachine5.run();
+
+      <b>Not my solution</b>
+      // this.addWater = function(amount) {
+      //   this.setWaterAmount(waterAmount + amount);
+      // };
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine5(power, capacity) {
+      var waterAmount = 0;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      function onReady() {
+        alert( 'Кофе готов!' );
+      }
+
+      this.run = function() {
+        setTimeout(onReady, getTimeToBoil());
+      };
+
+      this.addWater = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity || (waterAmount + amount) > capacity ) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount += amount;
+      }
+    }
+
+    var coffeeMachine5 = new CoffeeMachine5(100000, 400);
+    coffeeMachine5.addWater(200);
+    coffeeMachine5.addWater(100);
+    coffeeMachine5.addWater(300); // Нельзя залить больше, чем 400
+    coffeeMachine5.run();
+
+  </script>
+
+
+
+  <h3>Task 8.3.6: Создать сеттер для onReady </h3>
+  <pre>
+    Обычно когда кофе готов, мы хотим что-то сделать, например выпить его.
+    Сейчас при готовности срабатывает функция onReady,
+    но она жёстко задана в коде:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+     // Мое не совсем правильное решение, оно обнуляет таймер и заново.
+     //Нужно было сделать замыкание
+    <b>My solution</b>
+    function CoffeeMachine6(power, capacity) {
+      var waterAmount = 0;
+      var timerId;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function(amount) {
+        return waterAmount;
+      };
+
+      var onReady = function() {
+        console.log( 'Кофе готов!' );
+      }
+
+      this.setOnReady = function(fun) {
+        if (!!arguments.length) {
+          onReady = fun;
+          if (timerId) {
+            clearTimeout(timerId);
+            setTimeout(onReady, getTimeToBoil());
+          }
+        }
+      };
+
+      this.run = function() {
+        timerId = setTimeout(onReady, getTimeToBoil());
+      };
+
+    }
+
+
+    var coffeeMachine6 = new CoffeeMachine6(20000, 500);
+    coffeeMachine6.setWaterAmount(150);
+
+    coffeeMachine6.setOnReady(function() {
+      var amount = coffeeMachine6.getWaterAmount();
+      console.log( 'Готов кофе: ' + amount + 'мл' ); // Кофе готов: 150 мл
+    });
+
+    coffeeMachine6.run();
+
+    <b>Not my solution</b>
+      this.setOnReady = function(newOnReady) {
+        onReady = newOnReady;
+      };
+
+      this.run = function() {
+        setTimeout(function() {
+          onReady();
+        }, getTimeToBoil());
+      };
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine6(power, capacity) {
+      var waterAmount = 0;
+      var timerId;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function(amount) {
+        return waterAmount;
+      };
+
+      var onReady = function() {
+        console.log( 'Кофе готов!' );
+      }
+
+      this.setOnReady = function(fun) {
+        if (!!arguments.length) {
+          onReady = fun;
+          if (timerId) {
+            clearTimeout(timerId);
+            setTimeout(onReady, getTimeToBoil());
+          }
+        }
+      };
+
+      this.run = function() {
+        timerId = setTimeout(onReady, getTimeToBoil());
+      };
+
+    }
+
+
+    var coffeeMachine6 = new CoffeeMachine6(20000, 500);
+    coffeeMachine6.setWaterAmount(150);
+
+    coffeeMachine6.setOnReady(function() {
+      var amount = coffeeMachine6.getWaterAmount();
+      console.log( 'Готов кофе: ' + amount + 'мл' ); // Кофе готов: 150 мл
+    });
+
+    coffeeMachine6.run();
+
+  </script>
+
+
+
+  <h3>Task 8.3.7: Добавить метод isRunning </h3>
+  <pre>
+    Из внешнего кода мы хотели бы иметь возможность понять – запущена кофеварка или нет.
+
+    Для этого добавьте кофеварке публичный метод isRunning(), который будет возвращать true,
+    если она запущена и false, если нет.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b> My solution</b>
+    function CoffeeMachine7(power, capacity) {
+      var waterAmount = 0;
+      var timerId;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function(amount) {
+        return waterAmount;
+      };
+
+      var onReady = function() {
+        console.log( 'Кофе готов!' );
+      }
+
+      this.setOnReady = function(fun) {
+        if (fun) {
+          onReady = fun;
+        }
+      };
+
+      this.run = function() {
+        timerId = setTimeout(function(){
+          timerId = null;
+          onReady();
+        }, getTimeToBoil());
+      };
+
+      this.isRunning = function() {
+        return timerId ? true : false; // это лучше записать return !!timerId;
+      }
+
+    }
+
+
+    var coffeeMachine7 = new CoffeeMachine7(20000, 500);
+    coffeeMachine7.setWaterAmount(100);
+
+    alert( 'До: ' + coffeeMachine7.isRunning() ); // До: false
+
+    coffeeMachine7.run();
+    alert( 'В процессе: ' + coffeeMachine7.isRunning() ); // В процессе: true
+
+    coffeeMachine7.setOnReady(function() {
+      alert( "После: " + coffeeMachine7.isRunning() ); // После: false
+    });
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine7(power, capacity) {
+      var waterAmount = 0;
+      var timerId;
+
+      var WATER_HEAT_CAPACITY = 4200;
+
+      function getTimeToBoil() {
+        return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+      }
+
+      this.setWaterAmount = function(amount) {
+        if (amount < 0) {
+          throw new Error("Значение должно быть положительным");
+        }
+        if (amount > capacity) {
+          throw new Error("Нельзя залить больше, чем " + capacity);
+        }
+
+        waterAmount = amount;
+      };
+
+      this.getWaterAmount = function(amount) {
+        return waterAmount;
+      };
+
+      var onReady = function() {
+        console.log( 'Кофе готов!' );
+      }
+
+      this.setOnReady = function(fun) {
+        if (fun) {
+          onReady = fun;
+        }
+      };
+
+      this.run = function() {
+        timerId = setTimeout(function(){
+          timerId = null;
+          onReady();
+        }, getTimeToBoil());
+      };
+
+      this.isRunning = function() {
+        return timerId ? true : false; // это лучше записать return !!timerId;
+      }
+
+    }
+
+
+    var coffeeMachine7 = new CoffeeMachine7(20000, 500);
+    coffeeMachine7.setWaterAmount(100);
+
+    alert( 'До: ' + coffeeMachine7.isRunning() ); // До: false
+
+    coffeeMachine7.run();
+    alert( 'В процессе: ' + coffeeMachine7.isRunning() ); // В процессе: true
+
+    coffeeMachine7.setOnReady(function() {
+      alert( "После: " + coffeeMachine7.isRunning() ); // После: false
+    });
+
+  </script>
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

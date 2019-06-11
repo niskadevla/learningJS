@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_4.1_</title>
+</head>
+<body>
+  <!--**********
+  *  Навигация и свойства элементов формы
+  ************-->
+
+  <h1>4.1. Навигация и свойства элементов формы </h1>
+  <h3>Task 4.1.1: Добавьте опцию к селекту </h3>
+  <pre>
+    При помощи JavaScript:
+
+    Выведите значение и текст текущей выбранной опции.
+    Добавьте опцию: < option value="Classic">Классика</ option>.
+    Сделайте её выбранной.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Весь цикл лучше заменить на
+    //var selectedOption = select.options[select.selectedIndex];
+    <b>My solution</b>
+    var form = document.forms.add_option;
+    var span = form.nextElementSibling;
+    var select = form.elements[0];
+
+    for (var i = 0; i < select.options.length; i++) {
+      var option = select.options[i];
+      if (option.selected) {
+        console.log(select.options.length);
+        span.innerHTML = "value = " + option.value + "; Text = " + option.text;
+      }
+    }
+
+    var newOption = new Option("Классика", "Classic", true, true);
+    select.appendChild(newOption);
+
+    <b>Not my solution</b>
+    // 1)
+    var selectedOption = select.options[select.selectedIndex];
+
+    alert( selectedOption.value  + " - " + selectedOption.text );
+
+    // 2)
+    var newOption = new Option("Classic", "Классика");
+    select.appendChild(newOption);
+
+    // 3)
+    newOption.selected = true;
+  </pre>
+
+  <form name="add_option" action="">
+    <select>
+      <option value="Rock"> Рок </option>
+      <option selected="selected" value="Blues">Блюз</option>
+    </select>
+  </form>
+  <span></span>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var form1 = document.forms.add_option;
+    var span1 = form1.nextElementSibling;
+    var select1 = form1.elements[0];
+
+    for (var i = 0; i < select1.options.length; i++) {
+      var option = select1.options[i];
+      if (option.selected) {
+        span1.innerHTML = "value = " + option.value + "; Text = " + option.text;
+      }
+    }
+
+    var newOption = new Option("Классика", "Classic", true, true);
+    select1.appendChild(newOption);
+    span1.innerHTML = "value = " + newOption.value + "; Text = " + newOption.text;
+
+
+    select1.addEventListener("change", function() {
+      var option = this.options[this.selectedIndex];
+      span1.innerHTML = "value = " + option.value + "; Text = " + option.text;
+    });
+
+
+  //   // 1)
+  // var selectedOption = select.options[select.selectedIndex];
+  //
+  // alert( selectedOption.value  + " - " + selectedOption.text );
+  //
+  // // 2)
+  // var newOption = new Option("Classic", "Классика");
+  // select.appendChild(newOption);
+  //
+  // // 3)
+  // newOption.selected = true;
+
+
+  </script>
+
+
+  <br>
+  <hr>
+
+
+  <!--**********
+  * Фокусировка: focus/blur
+  ************-->
+
+  <style>
+   body { background: #40968c; }
+   input[type="search"] {
+    border: 1px solid #98baba; /* Параметры рамки */
+    background: transparent; /* Прозрачный фон */
+    padding: 1px 4px; /* Поля вокруг текста */
+    color: #fff; /* Цвет текста */
+   }
+   input[type="search"]::-moz-placeholder {
+    color: #dbb984; /* Цвет подсказывающего текста */
+    font-weight: bold;
+   }
+  </style>
+
+  <form>
+   <p><input type="search" placeholder="Поиск по сайту" name="q">
+   <input type="submit" value="Найти"></p>
+  </form>
+
+
+
+  <br>
+  <hr>
+
+
+
+  <h1>4.2. Фокусировка: focus/blur </h1>
+  <h3>Task 4.2.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    // window.addEventListener("focus", function() {
+    //   console.log(document.activeElement);
+    // }, true);
+
+
+  </script>
+
+
+
+  <h3>Task 4.2.2: Улучшенный плейсхолдер </h3>
+  <pre>
+    Реализуйте более удобный плейсхолдер-подсказку на JavaScript через атрибут data-placeholder.
+    Правила работы плейсхолдера:
+    Элемент изначально содержит плейсхолдер. Специальный класс placeholder придает ему синий цвет.
+    При фокусировке плейсхолдер показывается уже над полем, становясь «подсказкой».
+    При снятии фокуса, подсказка убирается, если поле пустое – плейсхолдер возвращается в него.
+    В этой задаче плейсхолдер должен работать на одном конкретном input.
+    Подумайте, если input много, как здесь применить делегирование?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // My code is better
+    //Только нужно было добавить: tooltip.style.fontSize = getComputedStyle(input).fontSize;
+    <b>My solution</b>
+    var input = document.querySelector('[data-placeholder]');
+    var tooltip = document.createElement('div');
+    input.before(tooltip);
+
+    showPlaceholder(input);
+
+    // Показать placeholder внутри input
+    // Также можно сделать это при помощи вёрстки, отдельным элементом
+    function showPlaceholder(input) {
+      input.classList.add('placeholder');
+      input.value = input.dataset.placeholder;
+    }
+
+    function hidePlaceholder(input) {
+      input.classList.remove('placeholder');
+      input.value = "";
+    }
+
+    function showTooltip(input) {
+      tooltip.innerHTML = input.dataset.placeholder;
+      tooltip.classList.add('placeholder-tooltip');
+
+      var coords = input.getBoundingClientRect();
+      tooltip.style.top = (coords.top - tooltip.offsetHeight) + 'px';
+      tooltip.style.left = coords.left + 'px';
+    }
+
+    function hideTooltip(input) {
+      tooltip.innerHTML = "";
+      tooltip.classList.remove('placeholder-tooltip');
+    }
+
+
+    document.addEventListener('focusin', function(e) {
+      var target = e.target;
+
+      if (target.hasAttribute('data-placeholder')) {
+        hidePlaceholder(target);
+        showTooltip(target);
+      }
+    });
+
+    document.addEventListener('focusout', function(e) {
+      var target = e.target;
+
+      if (target.hasAttribute('data-placeholder')) {
+        showPlaceholder(target);
+        hideTooltip(target);
+      }
+    });
+
+    <b>Not my solution</b>
+    var input = document.querySelector('[data-placeholder]');
+
+    showPlaceholder(input);
+
+    // Показать placeholder внутри input
+    // Также можно сделать это при помощи вёрстки, отдельным элементом
+    function showPlaceholder(input) {
+      input.classList.add('placeholder');
+      input.value = input.dataset.placeholder;
+    }
+
+    // Показать подсказку над элементом (будет вместо placeholder)
+    function showTooltip(input) {
+      var tooltip = document.createElement('span');
+      tooltip.innerHTML = input.dataset.placeholder;
+      tooltip.className = 'placeholder-tooltip';
+      tooltip.style.fontSize = getComputedStyle(input).fontSize;
+      tooltip.style.left = input.getBoundingClientRect().left + 'px';
+      document.body.appendChild(tooltip);
+      tooltip.style.top = input.getBoundingClientRect().top - tooltip.offsetHeight - 4 + 'px';
+      input.tooltip = tooltip;
+    }
+
+    input.onfocus = function() {
+      if (input.classList.contains('placeholder')) {
+        input.classList.remove('placeholder');
+        input.value = '';
+      }
+
+      showTooltip(input);
+    };
+
+    input.onblur = function() {
+      document.body.removeChild(input.tooltip);
+      delete input.tooltip;
+
+      // показываем placeholder обратно, если input пуст
+      if (input.value == '') {
+        showPlaceholder(input);
+      }
+    };
+  </pre>
+
+  <style media="screen">
+    /* стиль для input с плейсхолдером */
+
+    .placeholder {
+      color: blue;
+      font-family: serif;
+    }
+    /* стиль для подсказки над элементом (вместо плейсхолдера при фокусировке) */
+
+    .placeholder-tooltip {
+      color: blue;
+      font-family: serif;
+      position: fixed;
+      z-index: 999;
+    }
+  </style>
+
+  <p>Красивый placeholder:</p>
+
+  <input type="email" data-placeholder="E-mail">
+  <input type="text" class="placeholder" data-placeholder="Name">
+  <br>
+  <br>
+  <input type="password" class="placeholder" data-placeholder="Password">
+
+  <script type="text/javascript">
+    'use strict';
+
+    var input = document.querySelector('[data-placeholder]');
+    var tooltip = document.createElement('div');
+    input.before(tooltip);
+
+    showPlaceholder(input);
+
+    // Показать placeholder внутри input
+    // Также можно сделать это при помощи вёрстки, отдельным элементом
+    function showPlaceholder(input) {
+      input.classList.add('placeholder');
+      input.value = input.dataset.placeholder;
+    }
+
+    function hidePlaceholder(input) {
+      input.classList.remove('placeholder');
+      input.value = "";
+    }
+
+    function showTooltip(input) {
+      tooltip.innerHTML = input.dataset.placeholder;
+      tooltip.classList.add('placeholder-tooltip');
+
+      var coords = input.getBoundingClientRect();
+      tooltip.style.top = (coords.top - tooltip.offsetHeight) + 'px';
+      tooltip.style.left = coords.left + 'px';
+    }
+
+    function hideTooltip(input) {
+      tooltip.innerHTML = "";
+      tooltip.classList.remove('placeholder-tooltip');
+    }
+
+
+    document.addEventListener('focusin', function(e) {
+      var target = e.target;
+
+      if (target.hasAttribute('data-placeholder')) {
+        hidePlaceholder(target);
+        showTooltip(target);
+      }
+    });
+
+    document.addEventListener('focusout', function(e) {
+      var target = e.target;
+
+      if (target.hasAttribute('data-placeholder')) {
+        showPlaceholder(target);
+        hideTooltip(target);
+      }
+    });
+
+  </script>
+
+
+  <br>
+  <hr>
+
+
+  <h3>Task 4.2.3: Мышонок на "клавиатурном" приводе </h3>
+  <pre>
+    Кликните по мышонку. Затем нажимайте клавиши со стрелками, и он будет двигаться.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Мой код длиннее, но принцип такойже
+    <b>My solution</b>
+    var mouse = document.getElementById("mouse");
+
+    mouse.onclick = function() {
+      this.style.position = "absolute";
+      var self = this;
+      var rect = this.getBoundingClientRect();
+      var coords = {
+        top: rect.top + window.pageYOffset,
+        left: rect.left + window.pageXOffset,
+        width: rect.width,
+        height: rect.height
+      };
+
+      this.style.left = coords.left + 'px';
+      this.style.top = coords.top + 'px';
+
+      var controlMoving = function(e) {
+        //направление влево
+        if (e.keyCode === 37) {
+          self.style.left = parseInt(self.style.left) - coords.width + 'px';
+        }
+
+        //направление вправо
+        if (e.keyCode === 39) {
+          self.style.left = parseInt(self.style.left) + coords.width + 'px';
+        }
+
+        //направление вверх
+        if (e.keyCode === 38) {
+          self.style.top = parseInt(self.style.top) - coords.height + 'px';
+        }
+
+        //направление вниз
+        if (e.keyCode === 40) {
+          self.style.top = parseInt(self.style.top) + coords.height + 'px';
+        }
+      }
+
+      this.onkeydown = function(e) {
+        var e = e || window.event;
+
+        controlMoving(e);
+        return false;
+      };
+
+    };
+
+    <b>Not my solution</b>
+    document.getElementById('mouse').onclick = function() {
+      this.style.left = this.getBoundingClientRect().left + 'px';
+      this.style.top = this.getBoundingClientRect().top + 'px';
+
+      this.style.position = 'fixed';
+    };
+
+
+    document.getElementById('mouse').onkeydown = function(e) {
+      switch (e.keyCode) {
+        case 37: // влево
+          this.style.left = parseInt(this.style.left) - this.offsetWidth + 'px';
+          return false;
+        case 38: // вверх
+          this.style.top = parseInt(this.style.top) - this.offsetHeight + 'px';
+          return false;
+        case 39: // вправо
+          this.style.left = parseInt(this.style.left) + this.offsetWidth + 'px';
+          return false;
+        case 40: // вниз
+          this.style.top = parseInt(this.style.top) + this.offsetHeight + 'px';
+          return false;
+      }
+    };
+  </pre>
+
+  <style>
+    #mouse {
+      display: inline-block;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    #mouse:focus {
+      outline: 1px dashed black;
+    }
+  </style>
+
+  <p>Кликните на мышонка и передвигайте его, нажимая клавиши со стрелками.</p>
+
+  <pre id="mouse" tabIndex = "1">
+     _   _
+    (q\_/p)
+     /. .\
+    =\_t_/=   __
+     /   \   (
+    ((   ))   )
+    /\) (/\  /
+    \  Y  /-'
+     nn^nn
+</pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var mouse = document.getElementById("mouse");
+
+    mouse.onfocus = function() {
+      this.style.position = "absolute";
+      var self = this;
+      var rect = this.getBoundingClientRect();
+      var coords = {
+        top: rect.top + window.pageYOffset,
+        left: rect.left + window.pageXOffset,
+        width: rect.width,
+        height: rect.height
+      };
+
+      this.style.left = coords.left + 'px';
+      this.style.top = coords.top + 'px';
+
+      var controlMoving = function(e) {
+        //направление влево
+        if (e.keyCode === 37) {
+          self.style.left = parseInt(self.style.left) - coords.width + 'px';
+        }
+
+        //направление вправо
+        if (e.keyCode === 39) {
+          self.style.left = parseInt(self.style.left) + coords.width + 'px';
+        }
+
+        //направление вверх
+        if (e.keyCode === 38) {
+          self.style.top = parseInt(self.style.top) - coords.height + 'px';
+        }
+
+        //направление вниз
+        if (e.keyCode === 40) {
+          self.style.top = parseInt(self.style.top) + coords.height + 'px';
+        }
+
+      }
+
+      this.onkeydown = function(e) {
+        var e = e || window.event;
+
+        controlMoving(e);
+        return false;
+      };
+
+    };
+
+  </script>
+
+
+
+
+  <h3>Task 4.2.4: Горячие клавиши </h3>
+  <pre>
+    Создайте < div>, который при нажатии Ctrl+E превращается в < textarea>.
+
+    Изменения, внесенные в поле, можно сохранить обратно в < div> сочетанием
+    клавиш Ctrl+S, при этом < div> получит в виде HTML содержимое < textarea>.
+
+    Если же нажать Esc, то < textarea> снова превращается в < div>,
+    изменения не сохраняются.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+    var area = document.getElementById("area");
+    var view = document.getElementById("view");
+    var ctrlE = false;
+
+    document.addEventListener("keydown", function(e) {
+      //Если нажато Ctrl-E
+      if (e.ctrlKey && e.keyCode === 69 && !ctrlE ) {
+        area.style.display = "block";
+        view.style.display = "none";
+
+        area.value = view.innerHTML;
+        area.focus();
+
+        ctrlE = true;
+        e.preventDefault();
+      }
+      // Esc
+      if (e.keyCode === 27 && ctrlE) {
+        ctrlE = false;
+        area.style.display = "";
+        view.style.display = "";
+        e.preventDefault();
+      }
+      // Ctrl-S
+      if (ctrlE && e.ctrlKey && e.keyCode === 83) {
+        area.style.display = "";
+        view.style.display = "";
+
+        view.innerHTML = area.value;
+
+        ctrlE = false;
+        e.preventDefault();
+      }
+    });
+
+    <b>Not my solution</b>
+    document.onkeydown = function(e) {
+      if (e.keyCode == 27) { // escape
+        cancel();
+        return false;
+      }
+
+      if ((e.ctrlKey && e.keyCode == 'E'.charCodeAt(0)) && !area.offsetHeight) {
+        edit();
+        return false;
+      }
+
+      if ((e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) && area.offsetHeight) {
+        save();
+        return false;
+      }
+    }
+
+    function edit() {
+      view.style.display = 'none';
+      area.value = view.innerHTML;
+      area.style.display = 'block';
+      area.focus();
+    }
+
+    function save() {
+      area.style.display = 'none';
+      view.innerHTML = area.value;
+      view.style.display = 'block';
+    }
+
+    function cancel() {
+      area.style.display = 'none';
+      view.style.display = 'block';
+    }
+  </pre>
+
+  <style media="screen">
+    #view,
+    #area {
+      height: 150px;
+      width: 400px;
+      font-family: sans-serif;
+      font-size: 14px;
+    }
+
+    #view {
+      /* padding + border = 3px */
+
+      padding: 2px;
+      border: 1px solid black;
+    }
+
+    #area {
+      display: none;
+      /* replace padding with border (still 3px not to shift the contents) */
+
+      border: 3px groove blue;
+      padding: 0px;
+    }
+
+    #area:focus {
+      outline: none;
+      /* remove focus border in Safari */
+    }
+  </style>
+
+  <ul>
+    <li>Ctrl-E to start editing.</li>
+    <li>While editing: Ctrl-S to save, Esc to cancel.</li>
+  </ul>
+
+
+  <textarea id="area"></textarea>
+  <div id="view">Text</div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var area = document.getElementById("area");
+    var view = document.getElementById("view");
+    var ctrlE = false;
+
+    document.addEventListener("keydown", function(e) {
+      //Если нажато Ctrl-E
+      if (e.ctrlKey && e.keyCode === 69 && !ctrlE ) {
+        area.style.display = "block";
+        view.style.display = "none";
+
+        area.value = view.innerHTML;
+        area.focus();
+
+        ctrlE = true;
+        e.preventDefault();
+      }
+      // Esc
+      if (e.keyCode === 27 && ctrlE) {
+        ctrlE = false;
+        area.style.display = "";
+        view.style.display = "";
+        e.preventDefault();
+      }
+      // Ctrl-S
+      if (ctrlE && e.ctrlKey && e.keyCode === 83) {
+        area.style.display = "";
+        view.style.display = "";
+
+        view.innerHTML = area.value;
+
+        ctrlE = false;
+        e.preventDefault();
+      }
+    });
+
+  </script>
+
+
+
+
+  <h3>Task 4.2.5: Редактирование TD по клику </h3>
+  <pre>
+    Сделать ячейки таблицы td редактируемыми по клику.
+
+    При клике – ячейка < td> превращается в редактируемую, можно менять HTML.
+    Размеры ячеек при этом не должны меняться.
+    В один момент может редактироваться одна ячейка.
+    При редактировании под ячейкой появляются кнопки для приема и отмены редактирования,
+    только клик на них заканчивает редактирование.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //У меня код короче, но на счет лучше не уверен
+    <b>My solution</b>
+    var table = document.getElementById('bagua-table');
+    var textarea = document.getElementById("textarea");
+    var ok = document.getElementById("ok");
+    var cancel = document.getElementById("cancel");
+    var isEdit = false;
+
+    table.onclick = function(e) {
+      var target = e.target;
+      var td = target.closest("td");
+      if (!td || isEdit) return;
+
+      isEdit = true;
+
+      //Сохраняем данные ячейки в переменную
+      var text = td.innerHTML;
+      //Удаляем данные с ячейки
+      td.innerHTML = "";
+
+      //Вставляем в ячейку textarea
+      textarea.style.width = td.clientWidth + "px";
+      textarea.style.height = td.clientHeight + "px";
+      textarea.value = text;
+      textarea.style.display = "";
+      td.appendChild(textarea);
+      textarea.focus();
+
+      //Вставляем кнопки
+      td.appendChild(ok);
+      td.appendChild(cancel);
+      ok.style.display = "";
+      ok.style.top = td.offsetHeight + "px";
+      cancel.style.display = "";
+      cancel.style.top = td.offsetHeight + "px";
+
+      //Вешаем обрабочик на кнопку
+      ok.onclick = function() {
+        td.innerHTML = textarea.value;
+        isEdit = false;
+      }
+      cancel.onclick = function() {
+        td.innerHTML = text;
+        isEdit = false;
+      }
+    }
+
+    <b>Not my solution</b>
+    var table = document.getElementById('bagua-table');
+
+    var editingTd;
+
+    table.onclick = function(event) {
+
+      var target = event.target;
+
+      while (target != table) {
+        if (target.className == 'edit-cancel') {
+          finishTdEdit(editingTd.elem, false);
+          return;
+        }
+
+        if (target.className == 'edit-ok') {
+          finishTdEdit(editingTd.elem, true);
+          return;
+        }
+
+        if (target.nodeName == 'TD') {
+          if (editingTd) return; // already editing
+
+          makeTdEditable(target);
+          return;
+        }
+
+        target = target.parentNode;
+      }
+    }
+
+    function makeTdEditable(td) {
+      editingTd = {
+        elem: td,
+        data: td.innerHTML
+      };
+
+      td.classList.add('edit-td'); // td, not textarea! the rest of rules will cascade
+
+      var textArea = document.createElement('textarea');
+      textArea.style.width = td.clientWidth + 'px';
+      textArea.style.height = td.clientHeight + 'px';
+      textArea.className = 'edit-area';
+
+      textArea.value = td.innerHTML;
+      td.innerHTML = '';
+      td.appendChild(textArea);
+      textArea.focus();
+
+      td.insertAdjacentHTML("beforeEnd",
+        '< div class="edit-controls">< button class="edit-ok">OK</ button>< button class="edit-cancel">CANCEL</ button></ div>'
+      );
+    }
+
+    function finishTdEdit(td, isOk) {
+      if (isOk) {
+        td.innerHTML = td.firstChild.value;
+      } else {
+        td.innerHTML = editingTd.data;
+      }
+      td.classList.remove('edit-td'); // remove edit class
+      editingTd = null;
+    }
+  </pre>
+
+  <style>
+
+  /* общие стили для таблицы */
+
+    th {
+      text-align: center;
+      font-weight: bold;
+    }
+
+    td {
+      width: 150px;
+      white-space: nowrap;
+      text-align: center;
+      vertical-align: middle;
+      padding: 10px;
+      position: relative;
+    }
+
+    .nw {
+      background-color: #999;
+    }
+
+    .n {
+      background-color: #03f;
+      color: #fff;
+    }
+
+    .ne {
+      background-color: #ff6;
+    }
+
+    .w {
+      background-color: #ff0;
+    }
+
+    .c {
+      background-color: #60c;
+      color: #fff;
+    }
+
+    .e {
+      background-color: #09f;
+      color: #fff;
+    }
+
+    .sw {
+      background-color: #963;
+      color: #fff;
+    }
+
+    .s {
+      background-color: #f60;
+      color: #fff;
+    }
+
+    .se {
+      background-color: #0c3;
+      color: #fff;
+    }
+
+    #textarea {
+      /* width: 150px;
+      margin: -10px; */
+      padding: 0;
+      margin: -10px;
+      resize: none;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    #ok, #cancel {
+      position: absolute;
+      z-index: 999;
+    }
+    #ok {
+      left: 0;
+    }
+    #cancel {
+      right: 0;
+    }
+
+  </style>
+
+  <p>Кликните на ячейке для начала редактирования. Когда закончите -- нажмите OK или CANCEL.</p>
+
+  <table id="bagua-table">
+    <tr>
+      <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+    </tr>
+    <tr>
+      <td class="nw"><strong>Northwest</strong>
+        <br>Metal
+        <br>Silver
+        <br>Elders
+      </td>
+      <td class="n"><strong>North</strong>
+        <br>Water
+        <br>Blue
+        <br>Change
+      </td>
+      <td class="ne"><strong>Northeast</strong>
+        <br>Earth
+        <br>Yellow
+        <br>Direction
+      </td>
+    </tr>
+    <tr>
+      <td class="w"><strong>West</strong>
+        <br>Metal
+        <br>Gold
+        <br>Youth
+      </td>
+      <td class="c"><strong>Center</strong>
+        <br>All
+        <br>Purple
+        <br>Harmony
+      </td>
+      <td class="e"><strong>East</strong>
+        <br>Wood
+        <br>Blue
+        <br>Future
+      </td>
+    </tr>
+    <tr>
+      <td class="sw"><strong>Southwest</strong>
+        <br>Earth
+        <br>Brown
+        <br>Tranquility
+      </td>
+      <td class="s"><strong>South</strong>
+        <br>Fire
+        <br>Orange
+        <br>Fame
+      </td>
+      <td class="se"><strong>Southeast</strong>
+        <br>Wood
+        <br>Green
+        <br>Romance
+      </td>
+    </tr>
+  </table>
+
+  <textarea id="textarea" style="display: none">
+  </textarea>
+  <button type="button" id="ok" style="display: none">Ok</button>
+  <button type="button" id="cancel" style="display: none">Cancel</button>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var table = document.getElementById('bagua-table');
+    var textarea = document.getElementById("textarea");
+    var ok = document.getElementById("ok");
+    var cancel = document.getElementById("cancel");
+    var isEdit = false;
+
+    table.onclick = function(e) {
+      var target = e.target;
+      var td = target.closest("td");
+      if (!td || isEdit) return;
+
+      isEdit = true;
+
+      //Сохраняем данные ячейки в переменную
+      var text = td.innerHTML;
+      //Удаляем данные с ячейки
+      td.innerHTML = "";
+
+      //Вставляем в ячейку textarea
+      textarea.style.width = td.clientWidth + "px";
+      textarea.style.height = td.clientHeight + "px";
+      textarea.value = text;
+      textarea.style.display = "";
+      td.appendChild(textarea);
+      textarea.focus();
+
+      //Вставляем кнопки
+      td.appendChild(ok);
+      td.appendChild(cancel);
+      ok.style.display = "";
+      ok.style.top = td.offsetHeight + "px";
+      cancel.style.display = "";
+      cancel.style.top = td.offsetHeight + "px";
+
+      //Вешаем обрабочик на кнопку
+      ok.onclick = function() {
+        td.innerHTML = textarea.value;
+        isEdit = false;
+      }
+      cancel.onclick = function() {
+        td.innerHTML = text;
+        isEdit = false;
+      }
+    }
+
+  </script>
+
+
+  <br> <br>
+
+
+
+  <h3>Task 4.2.6: Красивый плейсхолдер для INPUT </h3>
+  <pre>
+    Создайте для < input type="password"> красивый, стилизованный плейсхолдер, например
+    При клике плейсхолдер просто исчезает и дальше не показывается.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //У автора круче решение
+    <b>My solution</b>
+    var input2 = document.getElementById("input2");
+    var wrap = document.getElementById("form_placeholder");
+    var placeholder2 = document.getElementById("placeholder2");
+
+    function placeholderRemove(e) {
+      var target = e.target;
+      if (target === input2 || target === placeholder2) {
+        placeholder2.parentNode.removeChild(placeholder2);
+        input2.focus();
+      }
+
+      wrap.removeEventListener("click", placeholderRemove);
+    }
+
+    wrap.addEventListener("click", placeholderRemove);
+
+    <b>Not my solution</b>
+    var placeholder = document.getElementById('placeholder');
+    var input = document.getElementById('input');
+
+    placeholder.onclick = function() {
+      input.focus();
+    }
+
+    input.onfocus = function() {
+      placeholder.parentNode && placeholder.parentNode.removeChild(placeholder);
+    }
+  </pre>
+
+  <style>
+    body {
+      font: 14px/14px sans-serif;
+    }
+
+    #form_placeholder input {
+      font: 14px/14px sans-serif;
+      width: 12em;
+      padding: 0;
+      margin: 0;
+    }
+
+    #placeholder2 {
+      font: 14px/14px sans-serif;
+      position: absolute;
+      margin: -1.3em 0 0 0.2em;
+      color: red;
+    }
+
+    #form_placeholder {
+      position: relative;
+    }
+
+
+  </style>
+
+  <div id="form_placeholder">
+    <div>Добро пожаловать</div>
+    <input type="password" id="input2">
+
+    <div id="placeholder2">Скажи пароль, друг</div>
+
+    <div>.. и заходи</div>
+  </div>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var input2 = document.getElementById("input2");
+    var wrap = document.getElementById("form_placeholder");
+    var placeholder2 = document.getElementById("placeholder2");
+
+    function placeholderRemove(e) {
+      var target = e.target;
+      if (target === input2 || target === placeholder2) {
+        placeholder2.parentNode.removeChild(placeholder2);
+        input2.focus();
+      }
+
+      wrap.removeEventListener("click", placeholderRemove);
+    }
+
+    wrap.addEventListener("click", placeholderRemove);
+
+
+  </script>
+
+
+
+
+  <h3>Task 4.2.7: Поле, предупреждающее о включенном CapsLock </h3>
+  <pre>
+    Создайте поле, которое будет предупреждать пользователя, если включен CapsLock.
+    Выключение CapsLock уберёт предупреждение.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Мой код хуже, но событие повешено на все input или можно только на password
+    <b>My solution</b>
+    var capsIndicator = document.getElementById("capsIndicator");
+    var isCapslock = null;
+
+    document.addEventListener("keypress", function(e) {
+      var str = String.fromCharCode(e.charCode);
+
+      if (!e.shiftKey) {
+        if ( e.charCode === str.toUpperCase().charCodeAt(0) ) {
+          isCapslock = true;
+        } else {
+          isCapslock = false;
+        }
+
+      } else if (e.shiftKey) {
+          if ( e.charCode !== str.toUpperCase().charCodeAt(0) ) {
+            isCapslock = true;
+          } else {
+            isCapslock = false;
+          }
+      }
+
+    });
+
+    document.addEventListener("keydown", function(e) {
+      if(e.keyCode === 20 && isCapslock !== null) {
+        isCapslock = !isCapslock;
+      }
+    });
+
+
+    var inputs = document.getElementsByTagName("input");
+    //var inputs = document.querySelectorAll("input[type = 'password']");
+
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].value = "";
+      inputs[i].onkeyup = function() {
+        capsIndicator.style.display = isCapslock ? "block" : "none";
+      };
+
+      inputs[i].onfocus = function() {
+        capsIndicator.style.display = isCapslock ? "block" : "none";
+      };
+
+      inputs[i].onblur= function() {
+        capsIndicator.style.display = "none";
+      };
+    }
+
+
+    <b>Not my solution</b>
+    /**
+     * Текущее состояние CapsLock
+     *  - null : неизвестно
+     *  - true/false : CapsLock включен/выключен
+     */
+    var capsLockEnabled = null;
+
+    function getChar(event) {
+      if (event.which == null) {
+        if (event.keyCode < 32) return null;
+        return String.fromCharCode(event.keyCode) // IE
+      }
+
+      if (event.which != 0 && event.charCode != 0) {
+        if (event.which < 32) return null;
+        return String.fromCharCode(event.which) // остальные
+      }
+
+      return null; // специальная клавиша
+    }
+
+    if (navigator.platform.substr(0, 3) != 'Mac') { // событие для CapsLock глючит под Mac
+      document.onkeydown = function(e) {
+        if (e.keyCode == 20 && capsLockEnabled !== null) {
+          capsLockEnabled = !capsLockEnabled;
+        }
+      }
+    }
+
+    document.onkeypress = function(e) {
+      e = e || event;
+
+      var chr = getChar(e);
+      if (!chr) return // special key
+
+      if (chr.toLowerCase() == chr.toUpperCase()) {
+        // символ, не зависящий от регистра, например пробел
+        // не может быть использован для определения CapsLock
+        return;
+      }
+
+      capsLockEnabled = (chr.toLowerCase() == chr && e.shiftKey) || (chr.toUpperCase() == chr && !e.shiftKey);
+    }
+
+
+    /**
+     * Проверить CapsLock
+     */
+    function checkCapsWarning() {
+      document.getElementById('capsIndicator').style.display = capsLockEnabled ? 'block' : 'none';
+    }
+
+    function removeCapsWarning() {
+      document.getElementById('capsIndicator').style.display = 'none';
+    }
+  </pre>
+
+  Введите текст(например, пароль) с нажатым CapsLock:
+ <input type="text" />
+ <input type="password" name="" value="">
+
+ <div style="display:none;color:red" id="capsIndicator">Внимание: нажат CapsLock!</div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var capsIndicator = document.getElementById("capsIndicator");
+    var isCapslock = null;
+
+    document.addEventListener("keypress", function(e) {
+      var str = String.fromCharCode(e.charCode);
+
+      if (!e.shiftKey) {
+        if ( e.charCode === str.toUpperCase().charCodeAt(0) ) {
+          isCapslock = true;
+        } else {
+          isCapslock = false;
+        }
+
+      } else if (e.shiftKey) {
+          if ( e.charCode !== str.toUpperCase().charCodeAt(0) ) {
+            isCapslock = true;
+          } else {
+            isCapslock = false;
+          }
+      }
+
+    });
+
+    document.addEventListener("keydown", function(e) {
+      if(e.keyCode === 20 && isCapslock !== null) {
+        isCapslock = !isCapslock;
+      }
+    });
+
+
+    var inputs = document.getElementsByTagName("input");
+    //var inputs = document.querySelectorAll("input[type = 'password']");
+
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].value = "";
+      inputs[i].onkeyup = function() {
+        capsIndicator.style.display = isCapslock ? "block" : "none";
+      };
+
+      inputs[i].onfocus = function() {
+        capsIndicator.style.display = isCapslock ? "block" : "none";
+      };
+
+      inputs[i].onblur= function() {
+        capsIndicator.style.display = "none";
+      };
+    }
+
+
+  </script>
+
+
+
+  <br>
+  <hr>
+
+
+  <!--**********
+  * Изменение: change, input, cut, copy, paste
+  ************-->
+
+  <h1>4.3. Изменение: change, input, cut, copy, paste </h1>
+  <h3>Task 4.3.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <input id="inputTest" type="password"> oninput: <span id="result"></span>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var input = document.getElementById('inputTest');
+
+    input.oninput = function(e) {
+      // console.log("e = ", e);
+      console.log("e.target.value = ", e.target.value);
+      document.getElementById('result').innerHTML = input.value;
+    };
+
+
+  </script>
+
+
+
+  <h3>Task 4.3.2: Автовычисление процентов по вкладу </h3>
+  <pre>
+    Создайте интерфейс для автоматического вычисления процентов по вкладу.
+
+    Ставка фиксирована: 12% годовых. При включённом поле «капитализация» –
+    проценты приплюсовываются к сумме вклада каждый месяц
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+
+    td select,
+    td input {
+      width: 150px;
+    }
+
+    #diagram td {
+      vertical-align: bottom;
+      text-align: center;
+      padding: 10px;
+    }
+
+    #diagram div {
+      margin: auto;
+    }
+
+  </style>
+
+  Калькулятор процентов, из расчёта 12% годовых.
+ <form name="calculator">
+   <table>
+     <tr>
+       <td>Сумма</td>
+       <td>
+         <input name="money" type="text" value="10000">
+       </td>
+     </tr>
+     <tr>
+       <td>Срок в месяцах</td>
+       <td>
+         <select name="months">
+           <option value="3">3 (минимум)</option>
+           <option value="6">6 (полгода)</option>
+           <option value="12" selected>12 (год)</option>
+           <option value="18">18 (1.5 года)</option>
+           <option value="24">24 (2 года)</option>
+           <option value="30">30 (2.5 года)</option>
+           <option value="36">36 (3 года)</option>
+         </select>
+       </td>
+     </tr>
+     <tr>
+       <td>С капитализацией</td>
+       <td>
+         <input name="capitalization" type="checkbox">
+       </td>
+     </tr>
+   </table>
+
+
+ </form>
+
+
+ <table id="diagram">
+   <tr>
+     <th>Было:</th>
+     <th>Станет:</th>
+   </tr>
+   <tr>
+     <th id="money-before"></th>
+     <th id="money-after"></th>
+   </tr>
+   <tr>
+     <td>
+       <div style="background: red;width:40px;height:100px" id="height-before"></div>
+     </td>
+     <td>
+       <div style="background: green;width:40px;height:0" id="height-after"></div>
+     </td>
+   </tr>
+ </table>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    const PERCENT = 12;
+
+    var formCalc = document.forms.calculator;
+    var inputMoney = formCalc.elements.money;
+    var selectMonths = formCalc.elements.months;
+    var inputCheckbox = formCalc.elements.capitalization;
+    var tableDiagram = document.getElementById("diagram");
+    var thMoneyBefore = document.getElementById("money-before");
+    var thMoneyAfter = document.getElementById("money-after");
+    var divHeightBefore = document.getElementById("height-before");
+    var divHeightAfter = document.getElementById("height-after");
+
+    //Начальные данные формы
+    var months = selectMonths.options[selectMonths.selectedIndex].value;
+    var money = inputMoney.value;
+    var capit = formCalc.elements.capitalization.checked;
+
+    //Начальная визуализация
+    changeMoney(money, months, capit);
+
+    // Визуальные изменения
+    function changeMoney(money, months, capit) {
+      var sum = sumMoney(money, months, capit);
+
+      thMoneyBefore.innerHTML = money;
+      thMoneyAfter.innerHTML = sum;
+
+      divHeightAfter.style.height = parseInt(getComputedStyle(divHeightBefore).height) * (sum  / money) + "px";
+    }
+
+    // Формула сложных процентов и простых
+    function sumMoney(money, months, capit) {
+      // Здесь 12 - это число месяцев в году
+      // 100 - это 100%
+      //Если расчитывать на, что % начисляются не ежемесячно, а ежедневно, то заменить на дни
+      // Сумма без капитализации
+      var sum1 = Math.round(money *  (1 + (PERCENT / 100 / 12) * months) );
+      //Сумма с капитализацией
+      var sum2 = Math.round(money *  Math.pow((1 + PERCENT / 100 / 12) , months));
+      var sum = capit ? sum2 : sum1;
+      return sum;
+    }
+
+    //Ввод только чисел
+    inputMoney.onkeypress = function(e) {
+      // 48 это 0, 57 это 9
+      if (e.charCode < 48 || e.charCode > 57) return false;
+    };
+
+    //Ввод суммы начального вклада
+    inputMoney.oninput = function() {
+      money = this.value;
+      changeMoney(money, months, capit);
+    };
+
+    //Выбираем количество месяцев
+    selectMonths.onchange = function() {
+      months = selectMonths.options[selectMonths.selectedIndex].value;
+      console.log("capit = ", capit);
+      changeMoney(money, months, capit);
+    };
+
+    //Изиенение чекбокса - капитализация
+    inputCheckbox.onchange = function() {
+      capit = !capit;
+      console.log("capit = ", capit);
+      changeMoney(money, months, capit);
+    };
+
+  </script>
+
+
+  <br>
+  <hr>
+
+
+
+
+  <!--**********
+  *  Формы: отправка, событие и метод submit
+  ************-->
+
+  <h1>4.4. Формы: отправка, событие и метод submit </h1>
+  <h3>Task 4.4.1: Модальное диалоговое окно </h3>
+  <pre>
+    Создайте функцию showPrompt(text, callback), которая выводит форму для ввода с сообщением text и кнопками ОК/Отмена.
+
+    При отправке формы (OK/ввод в текстовом поле) – должна вызываться функция callback со значением поля.
+    При нажатии на Отмена или на клавишу Esc – должна вызываться функция callback(null). Клавиша Esc должна закрывать форму всегда, даже если поле для ввода сообщения не в фокусе.
+
+    Особенности реализации:
+
+    Форма должна показываться в центре окна (и оставаться в центре при изменении его размеров, а также при прокрутке окна!).
+    Текст может состоять из нескольких строк, возможен любой HTML
+    При показе формы остальные элементы страницы использовать нельзя, не работают другие кнопки и т.п, это окно – модальное.
+    При показе формы – сразу фокус на INPUT для ввода.
+    Нажатия Tab/Shift+Tab переключают в цикле только по полям формы, они не позволяют переключиться на другие элементы страницы.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar code, у меня верстка лучше, можно еще лучше сделать черех flexbox
+    <b>My solution</b>
+    function showPrompt(text, callback) {
+      var promptFormContainer = document.getElementById("prompt-form-container");
+      promptFormContainer.style.display = "";
+      var form = document.getElementById("prompt-form");
+      var input = form.elements.text;
+      var promtMessage = document.getElementById("prompt-message");
+      var cancel = form.elements.cancel;
+
+      promtMessage.innerHTML = text;
+      input.focus();
+
+      function hidePrompt() {
+        promtMessage.innerHTML = "";
+        input.value = "";
+        promptFormContainer.style.display = "none";
+      }
+
+      // кнопка ок
+      form.onsubmit = function() {
+        callback(input.value);
+        hidePrompt();
+      };
+
+      //кнопка cancel and ESC
+      cancel.onclick = function() {
+        callback(null);
+        hidePrompt();
+      }
+      //клавиша ESC and cancel Tab
+      document.onkeydown = function(e) {
+        if(e.keyCode === 27 && promptFormContainer.offsetWidth) {
+          callback(null);
+          hidePrompt();
+        }
+      };
+
+      //клавиша отменяет Tab
+      var lastElem = form.elements[form.elements.length - 1];
+      var firstElem = form.elements[0];
+
+      lastElem.onkeydown = function(e) {
+          if (e.keyCode === 9 && !e.shiftKey) {
+            firstElem.focus();
+            return false;
+          }
+      }
+
+      firstElem.onkeydown = function(e) {
+          if (e.keyCode === 9 && e.shiftKey) {
+            lastElem.focus();
+            return false;
+          }
+      }
+
+    }
+
+    //Тест модального окна
+    document.getElementById("show-button").onclick = function() {
+      showPrompt("Введите что-нибудь< br>... умное :)", function(value) {
+        alert( value );
+      });
+    };
+
+    <b>Not my solution</b>
+    // Показать полупрозрачный DIV, затеняющий всю страницу
+   // (а форма будет не в нем, а рядом с ним, чтобы не полупрозрачная)
+   function showCover() {
+     var coverDiv = document.createElement('div');
+     coverDiv.id = 'cover-div';
+     document.body.appendChild(coverDiv);
+   }
+
+   function hideCover() {
+     document.body.removeChild(document.getElementById('cover-div'));
+   }
+
+   function showPrompt(text, callback) {
+     showCover();
+     var form = document.getElementById('prompt-form');
+     var container = document.getElementById('prompt-form-container');
+     document.getElementById('prompt-message').innerHTML = text;
+     form.elements.text.value = '';
+
+     function complete(value) {
+       hideCover();
+       container.style.display = 'none';
+       document.onkeydown = null;
+       callback(value);
+     }
+
+     form.onsubmit = function() {
+       var value = form.elements.text.value;
+       if (value == '') return false; // игнорировать пустой submit
+
+       complete(value);
+       return false;
+     };
+
+     form.elements.cancel.onclick = function() {
+       complete(null);
+     };
+
+     document.onkeydown = function(e) {
+       if (e.keyCode == 27) { // escape
+         complete(null);
+       }
+     };
+
+     var lastElem = form.elements[form.elements.length - 1];
+     var firstElem = form.elements[0];
+
+     lastElem.onkeydown = function(e) {
+       if (e.keyCode == 9 && !e.shiftKey) {
+         firstElem.focus();
+         return false;
+       }
+     };
+
+     firstElem.onkeydown = function(e) {
+       if (e.keyCode == 9 && e.shiftKey) {
+         lastElem.focus();
+         return false;
+       }
+     };
+
+
+     container.style.display = 'block';
+     form.elements.text.focus();
+   }
+
+   document.getElementById('show-button').onclick = function() {
+     showPrompt("Введите что-нибудь< br>...умное :)", function(value) {
+       alert("Вы ввели: " + value);
+     });
+   };
+  </pre>
+
+  <style>
+    #prompt-form {
+      display: inline-block;
+      padding: 5px 5px 5px 70px;
+      width: 200px;
+      border: 1px solid black;
+      background: white url(https://js.cx/clipart/prompt.png) no-repeat left 5px;
+      vertical-align: middle;
+    }
+
+    #prompt-form-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      background-color: rgb(0, 0, 0, 0.3);
+    }
+
+    /*Для того, чтобы задать базовую линию, т.е
+    * Этот блок растянеться на весь экран и снаружи будет вести себя как встроенный(inline)
+    */
+    #prompt-form-container:before {
+      display: inline-block;
+      height: 100%;
+      content: '';
+      vertical-align: middle;
+    }
+
+    #prompt-form input[name="text"] {
+      display: block;
+      margin: 5px;
+      width: 180px;
+    }
+
+
+
+    /* Современная верстка */
+    /* .wrap_popup {
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0, 0, 0, 0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        text-align: center;
+        z-index: 999;
+        border: 1px dashed red;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .popup {
+      width: 20%;
+      height: 20%;
+      background-color: rgb(67, 217, 213);
+      border: 2px dotted blue;
+    } */
+  </style>
+
+  <input type="button" value="Нажмите для показа формы ввода" id="show-button">
+
+ <div id="prompt-form-container">
+    <form id="prompt-form">
+      <div id="prompt-message">
+      </div>
+      <input name="text" type="text">
+      <input type="submit" value="Ок">
+      <input type="button" name="cancel" value="Отмена">
+    </form>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function showPrompt(text, callback) {
+      var promptFormContainer = document.getElementById("prompt-form-container");
+      var form = document.getElementById("prompt-form");
+      var input = form.elements.text;
+      var promtMessage = document.getElementById("prompt-message");
+      var cancel = form.elements.cancel;
+
+      promtMessage.innerHTML = text;
+
+      function hidePrompt(value) {
+        promtMessage.innerHTML = "";
+        input.value = "";
+        promptFormContainer.style.display = "none";
+        document.onkeydown = null;
+        callback(value);
+      }
+
+      // кнопка ок
+      form.onsubmit = function() {
+        if (input.value === "") return false;
+        hidePrompt(input.value);
+
+        return false;
+      };
+
+      //кнопка cancel and ESC
+      cancel.onclick = function() {
+        hidePrompt(null);
+      }
+      //клавиша ESC
+      document.onkeydown = function(e) {
+        if(e.keyCode === 27) {
+          hidePrompt(null);
+        }
+      };
+
+      //клавиша отменяет Tab
+      var lastElem = form.elements[form.elements.length - 1];
+      var firstElem = form.elements[0];
+
+      lastElem.onkeydown = function(e) {
+          if (e.keyCode === 9 && !e.shiftKey) {
+            firstElem.focus();
+            return false;
+          }
+      }
+
+      firstElem.onkeydown = function(e) {
+          if (e.keyCode === 9 && e.shiftKey) {
+            lastElem.focus();
+            return false;
+          }
+      }
+
+      promptFormContainer.style.display = "block";
+      input.focus();
+
+    }
+
+    //Тест модального окна
+    document.getElementById("show-button").onclick = function() {
+      showPrompt("Введите что-нибудь<br>... умное :)", function(value) {
+        alert( value );
+      });
+    };
+
+  </script>
+
+
+  <br>
+
+  <h3>Task 4.4.2: Валидация формы </h3>
+  <pre>
+    Напишите функцию validate(form), которая проверяет содержимое формы по клику на кнопку «Проверить».
+
+    Ошибки:
+
+      Одно из полей не заполнено.
+      Пароли не совпадают.
+
+    Ошибка должна сопровождаться сообщением у поля.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    //Все текстовые инпуты очищаю
+    for(var j = 0; j < document.forms.length; j++) {
+      for (var i = 0; i < document.forms[j].querySelectorAll("input[type='text']").length; i++) {
+        document.forms[j].querySelectorAll("input")[i].value = "";
+      }
+    }
+
+     function validate(form) {
+        var from = form.elements.from;
+        var password = form.elements.password;
+        var password2 = form.elements.password2;
+        var select = form.elements.to;
+        var area = form.elements.message;
+
+        if (!from.value) {
+          if (!from.nextElementSibling) {
+            from.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            from.after(span);
+            span.innerHTML = " Укажите от кого ";
+          }
+        } else {
+          from.classList.remove("error");
+          if (from.nextElementSibling) {
+            from.nextElementSibling.remove();
+          }
+        }
+
+        if (!password.value) {
+          if (!password.nextElementSibling) {
+            password.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            password.after(span);
+            span.innerHTML = " Укажите пароль ";
+          }
+        }else {
+          password.classList.remove("error");
+          if(password.nextElementSibling) {
+            password.nextElementSibling.remove();
+          }
+        }
+
+        if (password.value !== password2.value) {
+          if (!password2.nextElementSibling) {
+            password2.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            password2.after(span);
+            span.innerHTML = "Пароли не совпадают";
+          }
+        }else {
+          password2.classList.remove("error");
+          if(password2.nextElementSibling) {
+            password2.nextElementSibling.remove();
+          }
+        }
+
+        if (!select.value) {
+          select.classList.add("error");
+          var er4 = select.outerHTML + " < span class='error-message'> Укажите куда </ span> ";
+          select.parentNode.innerHTML = er4;
+        }else {
+          select.classList.remove("error");
+          if(select.nextElementSibling) {
+            select.nextElementSibling.remove();
+          }
+        }
+
+        if (area.value === "") {
+          if (!area.nextElementSibling) {
+            area.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            area.after(span);
+            span.innerHTML = " Отсутствует текст ";
+          }
+        }else {
+          area.classList.remove("error");
+          if(area.nextElementSibling) {
+            area.nextElementSibling.remove();
+          }
+        }
+
+     }
+
+
+     <b>Not my solution</b>
+     function showError(container, errorMessage) {
+      container.className = 'error';
+      var msgElem = document.createElement('span');
+      msgElem.className = "error-message";
+      msgElem.innerHTML = errorMessage;
+      container.appendChild(msgElem);
+    }
+
+    function resetError(container) {
+      container.className = '';
+      if (container.lastChild.className == "error-message") {
+        container.removeChild(container.lastChild);
+      }
+    }
+
+    function validate(form) {
+      var elems = form.elements;
+
+      resetError(elems.from.parentNode);
+      if (!elems.from.value) {
+        showError(elems.from.parentNode, ' Укажите от кого.');
+      }
+
+      resetError(elems.password.parentNode);
+      if (!elems.password.value) {
+        showError(elems.password.parentNode, ' Укажите пароль.');
+      } else if (elems.password.value != elems.password2.value) {
+        showError(elems.password.parentNode, ' Пароли не совпадают.');
+      }
+
+      resetError(elems.to.parentNode);
+      if (!elems.to.value) {
+        showError(elems.to.parentNode, ' Укажите, куда.');
+      }
+
+      resetError(elems.message.parentNode);
+      if (!elems.message.value) {
+        showError(elems.message.parentNode, ' Отсутствует текст.');
+      }
+
+    }
+  </pre>
+
+  <style>
+    #form-validate  td {
+      text-align: left;
+    }
+    #form-validate  td select,
+    #form-validate  td input {
+      width: 150px;
+    }
+
+    label {
+      display: block;
+    }
+
+    .error {
+      border: 1px solid red;
+    }
+
+    .error-message {
+      color: red;
+    }
+
+    #form-validate textarea {
+      resize: none;
+    }
+
+  </style>
+
+  <form id="form-validate">
+    <table>
+      <tr>
+        <td>От кого</td>
+        <td>
+          <input name="from" type="text">
+        </td>
+      </tr>
+      <tr>
+        <td>Ваш пароль</td>
+        <td>
+          <input name="password" type="password">
+        </td>
+      </tr>
+      <tr>
+        <td>Повторите пароль</td>
+        <td>
+          <input name="password2" type="password">
+        </td>
+      </tr>
+      <tr>
+        <td>Куда</td>
+        <td>
+          <select name="to">
+            <option></option>
+            <option value="1">Отдел снабжения</option>
+            <option value="2">Отдел разработки</option>
+            <option value="3">Директору</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    Сообщение:
+    <label>
+      <textarea name="message" style="display:block;width:400px;height:100px"></textarea>
+    </label>
+
+    <input type="button" onclick="validate(this.form)" value="Проверить">
+  </form>
+
+  <script type="text/javascript">
+    'use strict';
+
+    //Все текстовые инпуты очищаю
+    for(var j = 0; j < document.forms.length; j++) {
+      for (var i = 0; i < document.forms[j].querySelectorAll("input[type='text']").length; i++) {
+        document.forms[j].querySelectorAll("input")[i].value = "";
+      }
+    }
+
+     function validate(form) {
+        var from = form.elements.from;
+        var password = form.elements.password;
+        var password2 = form.elements.password2;
+        var select = form.elements.to;
+        var area = form.elements.message;
+
+        if (!from.value) {
+          if (!from.nextElementSibling) {
+            from.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            from.after(span);
+            span.innerHTML = " Укажите от кого ";
+          }
+        } else {
+          from.classList.remove("error");
+          if (from.nextElementSibling) {
+            from.nextElementSibling.remove();
+          }
+        }
+
+        if (!password.value) {
+          if (!password.nextElementSibling) {
+            password.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            password.after(span);
+            span.innerHTML = " Укажите пароль ";
+          }
+        }else {
+          password.classList.remove("error");
+          if(password.nextElementSibling) {
+            password.nextElementSibling.remove();
+          }
+        }
+
+        if (password.value !== password2.value) {
+          if (!password2.nextElementSibling) {
+            password2.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            password2.after(span);
+            span.innerHTML = "Пароли не совпадают";
+          }
+        }else {
+          password2.classList.remove("error");
+          if(password2.nextElementSibling) {
+            password2.nextElementSibling.remove();
+          }
+        }
+
+        if (!select.value) {
+          select.classList.add("error");
+          var er4 = select.outerHTML + " <span class='error-message'> Укажите куда </span> ";
+          select.parentNode.innerHTML = er4;
+        }else {
+          select.classList.remove("error");
+          if(select.nextElementSibling) {
+            select.nextElementSibling.remove();
+          }
+        }
+
+        if (area.value === "") {
+          if (!area.nextElementSibling) {
+            area.classList.add("error");
+            var span = document.createElement("span");
+            span.className = "error-message";
+            area.after(span);
+            span.innerHTML = " Отсутствует текст ";
+          }
+        }else {
+          area.classList.remove("error");
+          if(area.nextElementSibling) {
+            area.nextElementSibling.remove();
+          }
+        }
+
+     }
+
+  </script>
+
+  <br>
+  <hr>
+
+
+  <br> <br> <br>
+  <br> <br> <br>
+</body>
+</html>

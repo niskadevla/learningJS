@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Методы объектов и контекст вызова</title>
+</head>
+<body>
+
+  <!--**********
+  *  Привязка контекста и карринг: "bind"
+  ************-->
+
+  <h1>6.7. Привязка контекста и карринг: "bind" </h1>
+  <h3>Task 6.7.1: сделать обёртку </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user_1 = {
+      firstName: "Вася",
+      sayHi: function(who) {
+        alert( this.firstName + ": Привет, " + "Петя");
+      }
+    };
+
+    setTimeout(function() {
+      user_1.sayHi(); // Вася: Привет, Петя
+    }, 2000);
+
+    //setTimeout( user.sayHi, 2000 );
+  </script>
+
+
+
+  <h3>Task 6.7.2: bind для привязки контекста </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function bind(func, context) {
+      return function() { // (*)
+        return func.apply(context, arguments);
+      };
+    }
+
+    function f() {
+      document.write( this );
+    }
+
+    var g = bind(f, "Context");
+    g(); // Context
+
+    document.write("<br>");
+
+    var user2 = {
+      firstName: "Вася",
+      sayHi: function(who) { // здесь у sayHi есть один аргумент
+        document.write( this.firstName + ": Привет, " + who );
+      }
+    };
+
+    var sayHi = bind(user2.sayHi, user2);
+
+    // контекст Вася, а аргумент передаётся "как есть"
+    sayHi("Петя"); // Вася: Привет, Петя
+    document.write("<br>");
+    sayHi("Маша"); // Вася: Привет, Маша
+  </script>
+
+
+
+  <h3>Task 6.7.3: встроенный метод bind </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function f(a, b) {
+      document.write( this );
+      document.write("<br>");
+      document.write( a + b );
+    }
+
+    // вместо
+    // var g = bind(f, "Context");
+    var g = f.bind("Context");
+    g(1, 2); // Context, затем 3
+
+
+    var user3 = {
+      firstName: "Denis",
+      sayHi: function() {
+        alert( this.firstName );
+      }
+    };
+
+    // setTimeout( bind(user.sayHi, user), 1000 );
+    setTimeout(user3.sayHi.bind(user3), 1000); // Denis // аналог через встроенный метод
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 6.7.4: Запись в объект после bind </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function f() {
+      document.write( this );
+    }
+
+    var user4 = {
+      g: f.bind("Hello"),
+      gg: f
+    }
+
+    user4.g(); // Hello
+    document.write("< br>");
+    user4.gg(); // [object Object]
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function f() {
+      document.write( this );
+    }
+
+    var user4 = {
+      g: f.bind("Hello"),
+      gg: f
+    }
+
+    user4.g(); // Hello
+    document.write("<br>");
+    user4.gg(); // [object Object]
+  </script>
+
+
+
+  <h3>Task 6.7.5: Повторный bind </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function f() {
+      alert(this.name);
+    }
+
+    f = f.bind( {name: "Вася"} ).bind( {name: "Петя" } );
+
+    f();  // Вася
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function f() {
+      document.write(this.name);
+    }
+
+    f = f.bind( {name: "Денис"} ).bind( {name: "Петя" } );
+
+    f();  // Денис
+  </script>
+
+
+
+  <h3>Task 6.7.6: Свойство функции после bind </h3>
+  <pre>
+    В свойство функции записано значение. Изменится ли оно после применения bind? Обоснуйте ответ.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function sayHi2() {
+      alert( this.name );
+    }
+    sayHi2.test = 5;
+    document.write( sayHi2.test ); // 5
+    document.write("<br>");
+
+    var bound = sayHi2.bind({
+      name: "Вася"
+    });
+
+    document.write( bound.test ); // undefined.
+  </script>
+
+
+
+  <h3>Task 6.7.7: Использование функции вопросов </h3>
+  <pre>
+    Вызов user.checkPassword() в коде ниже должен, при помощи ask, спрашивать пароль и вызывать loginOk/loginFail в
+    зависимости от правильности ответа.
+    Однако, его вызов приводит к ошибке. Почему?
+    Исправьте выделенную строку, чтобы всё работало (других строк изменять не надо).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function ask(question, answer, ok, fail) {
+      var result = prompt(question, '');
+      if (result.toLowerCase() == answer.toLowerCase()) ok();
+      else fail();
+    }
+
+    var user = {
+      login: 'Василий',
+      password: '12345',
+
+      loginOk: function() {
+        alert( this.login + ' вошёл в сайт' );
+      },
+
+      loginFail: function() {
+        alert( this.login + ': ошибка входа' );
+      },
+
+      checkPassword: function() {
+        ask( "Ваш пароль?", this.password, this.loginOk.bind(this), this.loginFail.bind(this) );
+      }
+    };
+
+    user.checkPassword();
+
+    var vasya = user;
+    user = null;
+    vasya.checkPassword();
+
+    // Второе решение через замыкания (не мое)
+    function ask_3(question, answer, ok, fail) {
+      var result = prompt(question, '');
+      if (result.toLowerCase() == answer.toLowerCase()) ok();
+      else fail();
+    }
+
+    var user_3 = {
+      login: 'Дениска',
+      password: '12345',
+
+      loginOk: function() {
+        document.write( this.login + ' вошёл в сайт' );
+      },
+
+      loginFail: function() {
+        document.write( this.login + ': ошибка входа' );
+      },
+
+      checkPassword_3: function() {
+        var self = this;
+        ask_3( "Ваш пароль?", this.password, function () {self.loginOk();}, function () {self.loginFail();} );
+      }
+    };
+
+    user_3.checkPassword_3();
+    document.write("<br>");
+
+    var vasya_3 = user_3;
+    user_3 = null;
+    vasya_3.checkPassword_3();
+
+  </script>
+
+
+
+  <h3>Task 6.7.8: Использование функции вопросов с каррингом </h3>
+  <pre>
+    Сейчас он обладает важным недостатком: при записи в user другого значения объект перестанет корректно работать,
+    вы увидите это, запустив пример ниже (будет ошибка).
+    Исправьте выделенный фрагмент, чтобы код заработал.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function ask6(question, answer, ok, fail) {
+      var result = prompt(question, '');
+      if (result.toLowerCase() == answer.toLowerCase()) ok();
+      else fail();
+    }
+
+    var user6 = {
+      login: 'Василий Алибабаевич',
+      password: '12345',
+
+      // метод для вызова из ask
+      loginDone: function(result) {
+        document.write( this.login + (result ? ' вошёл в сайт' : ' ошибка входа') );
+      },
+
+      checkPassword: function() {
+        ask6("Ваш пароль?", this.password,
+            this.loginDone.bind(this,true)
+          ,
+            this.loginDone.bind(this,false)
+
+        );
+      }
+    };
+
+    var vasya6 = user6;
+    user6 = null;
+    vasya6.checkPassword();
+
+    //Второе Решение
+    function ask7(question, answer, ok, fail) {
+      var result = prompt(question, '');
+      if (result.toLowerCase() == answer.toLowerCase()) ok();
+      else fail();
+    }
+
+    var user7 = {
+      login: 'Grigoriy',
+      password: '12345',
+
+      // метод для вызова из ask
+      loginDone: function(result) {
+        document.write( this.login + (result ? ' вошёл в сайт' : ' ошибка входа') );
+      },
+
+      checkPassword: function() {
+        var userr = this;
+        ask7("Ваш пароль?", this.password,
+          function() {
+            userr.loginDone(true);
+          },
+          function() {
+            userr.loginDone(false);
+          }
+        );
+      }
+    };
+
+    var vasya7 = user7;
+    user7 = null;
+    document.write("<br>");
+    vasya7.checkPassword();
+
+  </script>
+
+
+
+  <!--**********
+  * Функции-обёртки, декораторы
+  ************-->
+
+  <h1>6.8. Функции-обёртки, декораторы </h1>
+  <h3>Task 6.8.1: Декоратор-таймер </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var timers = {};
+
+    // прибавит время выполнения f к таймеру timers[timer]
+    function timingDecorator(ff, timer) {
+      return function() {
+        var start = performance.now();
+
+        var result = ff.apply(this, arguments); // (*) // Здесь this не на что не влияет
+
+        if (!timers[timer]) timers[timer] = 0;
+        timers[timer] += performance.now() - start;
+
+        return result;
+      }
+    }
+
+    // функция может быть произвольной, например такой:
+    var fibonacci = function fff(n) {
+      return (n > 2) ? fff(n - 1) + fff(n - 2) : 1;
+    }
+
+    // использование: завернём fibonacci в декоратор
+    fibonacci = timingDecorator(fibonacci, "fibo");
+
+    // неоднократные вызовы...
+    document.write( fibonacci(10) ); // 55
+    document.write("<br>");
+    document.write( fibonacci(20) ); // 6765
+    document.write("<br>");
+    document.write( fibonacci(30) ); // 832040
+    document.write("<br>");
+    // ...
+
+    // в любой момент можно получить общее количество времени на вызовы
+    document.write( timers.fibo + 'мс' );
+    document.write("<br>");
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 6.8.2: Логирующий декоратор (1 аргумент) </h3>
+  <pre>
+    Создайте декоратор makeLogging(f, log), который берет функцию f и массив log.
+    Он должен возвращать обёртку вокруг f, которая при каждом вызове записывает («логирует»)
+    аргументы в log, а затем передает вызов в f.
+    В этой задаче можно считать, что у функции f ровно один аргумент.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Аналогичное решение
+    <b>My solution</b>
+      function work(a) {
+        document.write( a + ", добавлено в log" + "< br />" ); // work - произвольная функция, один аргумент
+      }
+
+      function makeLogging(f, log) {
+        return function() {
+          log.push(arguments[0]);
+          f.call(this, arguments[0]);
+        }
+      }
+
+      var log = [];
+      work = makeLogging(work, log);
+
+      work(1); // 1, добавлено в log
+      work(5); // 5, добавлено в log
+
+      for (var i = 0; i < log.length; i++) {
+        document.write( 'Лог: ' + log[i] + "< br />"); // "Лог:1", затем "Лог:5"
+      }
+
+
+      // Мое решение 2
+
+
+      function makeLogging_2(f, log) {
+        return function(a) {
+          log_2.push(a);
+          f.call(this, a);
+        }
+      }
+
+      var log_2 = [];
+      var work_2 = {
+        name: "Denis",
+        ages: function (a) {
+          document.write( a + ", добавлено в log" + "< br />" ); // work - произвольная функция, один аргумент
+        }
+      };
+      work_2.ages = makeLogging_2(work_2.ages, log_2);
+
+      work_2.ages(2); // 1, добавлено в log
+      work_2.ages(6); // 5, добавлено в log
+
+      for (var i = 0; i < log_2.length; i++) {
+        document.write( 'Лог: ' + log_2[i] + "< br />"); // "Лог:1", затем "Лог:5"
+      }
+
+      <b>Not my solution</b>
+      function work(a) {
+          /*...*/ // work - произвольная функция, один аргумент
+        }
+
+        function makeLogging(f, log) {
+
+          function wrapper(a) {
+              log.push(a);
+              return f.call(this, a);
+            }
+
+          return wrapper;
+        }
+
+        var log = [];
+        work = makeLogging(work, log);
+
+        work(1); // 1
+        work(5); // 5
+
+        for (var i = 0; i < log.length; i++) {
+          alert( 'Лог:' + log[i] ); // "Лог:1", затем "Лог:5"
+        }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function work(a) {
+      document.write( a + ", добавлено в log" + "<br />" ); // work - произвольная функция, один аргумент
+    }
+
+    function makeLogging(f, log) {
+      return function() {
+        log.push(arguments[0]);
+        f.call(this, arguments[0]);
+      }
+    }
+
+    var log = [];
+    work = makeLogging(work, log);
+
+    work(1); // 1, добавлено в log
+    work(5); // 5, добавлено в log
+
+    for (var i = 0; i < log.length; i++) {
+      document.write( 'Лог: ' + log[i] + "<br />"); // "Лог:1", затем "Лог:5"
+    }
+
+
+    // Мое решение 2
+
+
+    function makeLogging_2(f, log) {
+      return function(a) {
+        log_2.push(a);
+        f.call(this, a);
+      }
+    }
+
+    var log_2 = [];
+    var work_2 = {
+      name: "Denis",
+      ages: function (a) {
+        document.write( a + ", добавлено в log" + "<br />" ); // work - произвольная функция, один аргумент
+      }
+    };
+    work_2.ages = makeLogging_2(work_2.ages, log_2);
+
+    work_2.ages(2); // 1, добавлено в log
+    work_2.ages(6); // 5, добавлено в log
+
+    for (var i = 0; i < log_2.length; i++) {
+      document.write( 'Лог: ' + log_2[i] + "<br />"); // "Лог:1", затем "Лог:5"
+    }
+  </script>
+
+
+
+  <h3>Task 6.8.3: Логирующий декоратор (много аргументов) </h3>
+  <pre>
+    Создайте декоратор makeLogging(func, log), для функции func возвращающий обёртку,
+    которая при каждом вызове добавляет её аргументы в массив log
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У меня хуже
+    <b>My solution</b>
+      function work_3(a, b) {
+        document.write( a + b, "< br>" ); // work - произвольная функция
+      }
+
+      function makeLogging_3(f, log) {
+        function wrapper() {
+          var arr = [];
+          for (var i = 0; i < arguments.length; i++) {
+            arr.push(arguments[i]);
+          }
+          log_3.push(arr);
+          f.apply(this, arguments);
+        }
+
+        return wrapper;
+      }
+
+      var log_3 = [];
+      work_3 = makeLogging_3(work_3, log_3);
+
+      work_3(1, 2); // 3
+      work_3(4, 5); // 9
+
+      for (var i = 0; i < log_3.length; i++) {
+        var args = log_3[i]; // массив из аргументов i-го вызова
+        document.write("< br>");
+        document.write( 'Лог:' + args.join() ); // "Лог:1,2", "Лог:4,5"
+      }
+    <b>Not my solution</b>
+    function work(a, b) {
+      alert( a + b ); // work - произвольная функция
+    }
+
+    function makeLogging(f, log) {
+
+      function wrapper() {
+          log.push([].slice.call(arguments));
+          return f.apply(this, arguments);
+        }
+
+      return wrapper;
+    }
+
+    var log = [];
+    work = makeLogging(work, log);
+
+    work(1, 2); // 3
+    work(4, 5); // 9
+
+    for (var i = 0; i < log.length; i++) {
+      var args = log[i]; // массив из аргументов i-го вызова
+      alert( 'Лог:' + args.join() ); // "Лог:1,2", "Лог:4,5"
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function work_3(a, b) {
+      document.write( a + b, "<br>" ); // work - произвольная функция
+    }
+
+    function makeLogging_3(f, log) {
+      function wrapper() {
+        var arr = [];
+        for (var i = 0; i < arguments.length; i++) {
+          arr.push(arguments[i]);
+        }
+        log_3.push(arr);
+        f.apply(this, arguments);
+      }
+
+      return wrapper;
+    }
+
+    var log_3 = [];
+    work_3 = makeLogging_3(work_3, log_3);
+
+    work_3(1, 2); // 3
+    work_3(4, 5); // 9
+
+    for (var i = 0; i < log_3.length; i++) {
+      var args = log_3[i]; // массив из аргументов i-го вызова
+      document.write("<br>");
+      document.write( 'Лог:' + args.join() ); // "Лог:1,2", "Лог:4,5"
+    }
+  </script>
+
+
+
+  <h3>Task 6.8.4: Кеширующий декоратор </h3>
+  <pre>
+    Создайте декоратор makeCaching(f), который берет функцию f и возвращает обертку, которая кеширует её результаты.
+    В этой задаче функция f имеет только один аргумент, и он является числом.
+    При первом вызове обертки с определенным значением аргумента – она вызывает f и запоминает её результат.
+    При втором и последующих вызовах с тем же значением аргумента – возвращается сохраненное значение результата.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //У меня работает, только в начале
+    // У автора заносятся все кеши в объект, поэтому работает правильно,
+    // а у меня только с первым работает правильно
+    function f(x) {
+      return Math.random() * x; // random для удобства тестирования
+    }
+
+    function makeCaching(f) {
+      var compare, save;
+
+      function cache(a) {
+        if(!compare) {
+          compare = a;
+          save = f.call(this, a);
+          return save;
+        }
+        if (compare == a) return save;
+        else return f.call(this, a);
+      }
+
+      return cache;
+    }
+
+    f = makeCaching(f);
+
+    var a, b;
+
+    a = f(1);
+    b = f(1);
+    document.write( a == b ); // true (значение закешировано)
+    document.write("< br>");
+
+    b = f(2);
+    document.write( a == b ); // false, другой аргумент => другое значение
+    document.write("< br>");
+
+    b = f(1);
+    document.write( a == b ); // true
+    document.write("< br>");
+
+    a = f(1);
+    document.write( a == b ); // true
+    document.write("< br>");
+
+    a = f(7);
+    document.write( a == b ); // false
+    document.write("< br>");
+
+    b = f(7);
+    document.write( a == b ); // false
+    document.write("< br>");
+
+
+    document.write(a);
+    document.write("< br>");
+
+
+    //Не мое решение
+    document.write("******");
+    document.write("< br>");
+
+    function fz(x) {
+      return Math.random()*x;
+    }
+
+    function makeCachingz(f) {
+      var cache = {};
+
+      return function(x) {
+        if (!(x in cache)) {
+          cache[x] = f.call(this, x);
+        }
+        return cache[x];
+      };
+
+    }
+
+    fz = makeCachingz(fz);
+
+    var a = fz(1);
+    var b = fz(1);
+    document.write( a == b ); // true (значение закешировано)
+    document.write("< br>");
+
+    b = fz(2);
+    document.write( a == b ); // false, другой аргумент => другое значение
+    document.write("< br>");
+
+    b = fz(1);
+    document.write( a == b ); // true
+    document.write("< br>");
+
+    a = fz(1);
+    document.write( a == b ); // true
+    document.write("< br>");
+
+    a = fz(7);
+    document.write( a == b ); // false
+    document.write("< br>");
+
+    b = fz(7);
+    document.write( a == b ); // true
+    document.write("< br>");
+
+
+    document.write(a);
+    document.write("< br>");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    //У меня работает, только в начале
+    // У автора заносятся все кеши в объект, поэтому работает правильно,
+    // а у меня только с первым работает правильно
+    function f(x) {
+      return Math.random() * x; // random для удобства тестирования
+    }
+
+    function makeCaching(f) {
+      var compare, save;
+
+      function cache(a) {
+        if(!compare) {
+          compare = a;
+          save = f.call(this, a);
+          return save;
+        }
+        if (compare == a) return save;
+        else return f.call(this, a);
+      }
+
+      return cache;
+    }
+
+    f = makeCaching(f);
+
+    var a, b;
+
+    a = f(1);
+    b = f(1);
+    document.write( a == b ); // true (значение закешировано)
+    document.write("<br>");
+
+    b = f(2);
+    document.write( a == b ); // false, другой аргумент => другое значение
+    document.write("<br>");
+
+    b = f(1);
+    document.write( a == b ); // true
+    document.write("<br>");
+
+    a = f(1);
+    document.write( a == b ); // true
+    document.write("<br>");
+
+    a = f(7);
+    document.write( a == b ); // false
+    document.write("<br>");
+
+    b = f(7);
+    document.write( a == b ); // false
+    document.write("<br>");
+
+
+    document.write(a);
+    document.write("<br>");
+
+
+    //Не мое решение
+    document.write("******");
+    document.write("<br>");
+
+    function fz(x) {
+      return Math.random()*x;
+    }
+
+    function makeCachingz(f) {
+      var cache = {};
+
+      return function(x) {
+        if (!(x in cache)) {
+          cache[x] = f.call(this, x);
+        }
+        return cache[x];
+      };
+
+    }
+
+    fz = makeCachingz(fz);
+
+    var a = fz(1);
+    var b = fz(1);
+    document.write( a == b ); // true (значение закешировано)
+    document.write("<br>");
+
+    b = fz(2);
+    document.write( a == b ); // false, другой аргумент => другое значение
+    document.write("<br>");
+
+    b = fz(1);
+    document.write( a == b ); // true
+    document.write("<br>");
+
+    a = fz(1);
+    document.write( a == b ); // true
+    document.write("<br>");
+
+    a = fz(7);
+    document.write( a == b ); // false
+    document.write("<br>");
+
+    b = fz(7);
+    document.write( a == b ); // true
+    document.write("<br>");
+
+
+    document.write(a);
+    document.write("<br>");
+  </script>
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

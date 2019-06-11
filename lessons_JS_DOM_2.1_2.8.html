@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_2.1_</title>
+</head>
+<body>
+  <!--**********
+  * Введение в браузерные события
+  ************-->
+
+  <h1>2.1. Введение в браузерные события  </h1>
+  <h3>Task 2.1.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    button {
+      transition: width 1s;
+      width: 100px;
+    }
+
+    .wide {
+      width: 300px;
+    }
+  </style>
+
+  <button id="elem" onclick="this.classList.toggle('wide');">
+    Нажми меня
+  </button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    elem.addEventListener("transitionend", function() {
+      alert( "addEventListener" ); // сработает по окончании анимации
+    });
+
+  </script>
+
+
+  <br>
+  <hr>
+
+
+  <h3>Task 2.1.2: Спрятать при клике </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    hider.onclick = function() {
+      text.hidden = 'true';
+    }
+  </pre>
+
+  <input type="button" id="hider" value="Нажмите, чтобы спрятать текст" />
+
+  <div id="text">Текст</div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    hider.onclick = function() {
+      text.hidden = 'true';
+    }
+
+  </script>
+
+
+
+  <h3>Task 2.1.3: Спрятаться </h3>
+  <pre>
+    Создайте кнопку, при клике на которую, она будет скрывать сама себя.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    < input type="button" id="hide" value="Click to hide me" onclick="hideTo(this)">
+    < br>
+    < input type="button" value="Click to hide me" onclick="this.hidden='true'">
+
+    function hideTo(elem) {
+      elem.style.display = 'none';
+    }
+  </pre>
+
+  <style>
+    #hide_2 {
+      background-color: rgb(233, 52, 166);
+      padding: 6px 15px;
+      border: 1px solid rgb(247, 247, 247);
+      border-radius: 10px;
+      color: rgb(31, 31, 31);
+    }
+
+    #hide_2:hover {
+      cursor: pointer;
+      background-color: rgb(230, 84, 176);
+    }
+
+    .hide_2 {
+      opacity: 0.1;
+      transition: opacity 2s;
+    }
+  </style>
+
+  <input type="button" id="hide" value="Click to hide me" onclick="hideTo(this)">
+  <br>
+  <input type="button" value="Click to hide me" onclick="this.hidden='true'">
+  <br>
+  <input type="button" id="hide_2" value="Click to hide me" onclick="this.classList.toggle('hide_2')" ontransitionend="hideTo(this)">
+
+  <script type="text/javascript">
+    'use strict';
+
+    function hideTo(elem) {
+      elem.style.display = 'none';
+    }
+
+  </script>
+
+
+
+
+  <h3>Task 2.1.4: Какие обработчики сработают? </h3>
+  <pre>
+    В переменной button находится кнопка.
+    Изначально обработчиков на ней нет.
+    Что будет выведено при клике после выполнения кода?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var button_1 = document.getElementById('button_1');
+
+    button_1.addEventListener("click", function() { alert("1"); }); // 1
+
+    button_1.removeEventListener("click", function() { alert("1"); });
+
+    button_1.onclick = function() { alert(2); }; // 2
+
+  </pre>
+
+  <button type="button" id="button_1">Click me</button>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var button_1 = document.getElementById('button_1');
+
+    button_1.addEventListener("click", function() { console.log("1"); }); // 1
+
+    button_1.removeEventListener("click", function() { console.log("1"); });
+
+    button_1.onclick = function() { console.log(2); };  // 2
+
+  </script>
+
+
+
+  <h3>Task 2.1.5: Раскрывающееся меню (мое решение)</h3>
+  <pre>
+    Создайте меню, которое раскрывается/сворачивается при клике:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+
+  </pre>
+
+  <style>
+
+    .menu_1__list {
+      transition: opacity 2s;
+      display: none;
+    }
+
+    .menu_1__list__close {
+      opacity: 0.1;
+      transition: opacity 2s;
+    }
+
+    .menu_1__list__open {
+      opacity: 1;
+      transition: opacity 2s;
+    }
+
+    .menu_1__caption:hover {
+      cursor: pointer;
+    }
+
+    .menu_1__caption__open::before {
+      content: '▼';
+    }
+
+    .menu_1__caption__close::before {
+      content: '▶';
+    }
+
+    .menu_1__caption::before {
+      /* content: '▶'; */
+      color: green;
+      margin-right: 5px;
+    }
+
+  </style>
+
+  <div class="menu_1">
+    <!-- onclick="this.nextElementSibling.classList.toggle('menu_1__list')" -->
+    <span class="menu_1__caption menu_1__caption__close" >Сладости (нажми меня)! </span>
+    <ul class="menu_1__list menu_1__list__close">
+      <li>Торт</li>
+      <li>Пончик</li>
+      <li>Пирожное</li>
+    </ul>
+  </div>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function menuToggle(elem, clas) {
+      elem.classList.toggle(clas);
+    }
+
+    var span = document.getElementsByClassName('menu_1__caption')[0];
+    var ul = span.nextElementSibling;
+
+    span.addEventListener('click', function() {
+      menuToggle(ul,'menu_1__list__close');
+      menuToggle(ul,'menu_1__list__open');
+      menuToggle(span,'menu_1__caption__close');
+      menuToggle(span,'menu_1__caption__open');
+      menuToggle(ul,'menu_1__list');
+    });
+
+
+  </script>
+
+
+
+  <h3>Task 2.1.5: Раскрывающееся меню (не мое решение)</h3>
+  <pre>
+    Создайте меню, которое раскрывается/сворачивается при клике:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+
+  </pre>
+
+  <style>
+
+  .menu ul {
+    margin: 0;
+    list-style: none;
+    padding-left: 20px;
+    display: none;
+  }
+
+  .menu .title:hover {
+    cursor: pointer;
+  }
+
+  .menu .title::before {
+    content: '▶ ';
+    font-size: 80%;
+    color: green;
+  }
+
+  .menu.open .title::before {
+    content: '▼ ';
+  }
+
+  .menu.open ul {
+    display: block;
+  }
+
+
+  </style>
+
+  <div id="sweeties" class="menu">
+    <span class="title">Сладости (нажми меня)!</span>
+    <ul>
+      <li>Пирог</li>
+      <li>Пончик</li>
+      <li>Мед</li>
+    </ul>
+  </div>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var menuElem = document.getElementById('sweeties');
+    var titleElem = menuElem.querySelector('.title');
+
+    titleElem.onclick = function() {
+      menuElem.classList.toggle('open');
+    };
+
+
+  </script>
+
+
+
+
+  <h3>Task 2.1.6: Спрятать сообщение </h3>
+  <pre>
+    Есть список сообщений. Добавьте каждому сообщению по кнопке для его скрытия.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    // My solution
+    // var buttons = document.querySelectorAll('.remove-button');
+    //
+    // for (var i = 0; i < buttons.length; i++) {
+    //   buttons[i].addEventListener("click", function() {
+    //     this.parentNode.style.display = 'none';
+    //   });
+    // }
+
+    //Not my solution
+    var buttons = document.querySelectorAll('#messages-container .remove-button');
+
+    for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+
+      button.onclick = function() {
+        var el = this.parentNode;
+        el.parentNode.removeChild(el);
+      };
+    }
+
+  </pre>
+
+  <style>
+
+    h3 {
+      margin: 0;
+      padding-bottom: .3em;
+      font-size: 1.1em;
+    }
+
+    p {
+      margin: 0;
+      padding: 0 0 .5em;
+    }
+
+    .pane {
+      background: #edf5e1;
+      padding: 10px 20px 10px;
+      border-top: solid 2px #c4df9b;
+      width: 40%;
+      position: relative;
+    }
+
+    .remove-button {
+      font-size: 110%;
+      color: darkred;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      position: absolute;
+      top: 3px;
+      right: 10px;
+    }
+
+    .remove-button:hover {
+      cursor: pointer;
+    }
+
+  </style>
+
+  <!-- Кнопка для удаления: -->
+
+
+   <div id="messages-container">
+     <div class="pane">
+       <h3>Лошадь</h3>
+       <p>Домашняя лошадь — животное семейства непарнокопытных, одомашненный и единственный сохранившийся подвид дикой лошади, вымершей в дикой природе, за исключением небольшой популяции лошади Пржевальского.</p>
+       <button class="remove-button">[x]</button>
+     </div>
+     <div class="pane">
+       <h3>Осёл</h3>
+       <p>Домашний осёл или ишак — одомашненный подвид дикого осла, сыгравший важную историческую роль в развитии хозяйства и культуры человека. Все одомашненные ослы относятся к африканским ослам.</p>
+       <button class="remove-button">[x]</button>
+     </div>
+     <div class="pane">
+       <h3>Корова, а также пара слов о диком быке, о волах и о тёлках. </h3>
+       <p>Коро́ва — самка домашнего быка, одомашненного подвида дикого быка, парнокопытного жвачного животного семейства полорогих. Самцы вида называются быками, молодняк — телятами, кастрированные самцы — волами. Молодых (до первой стельности) самок называют
+         тёлками.
+       </p>
+       <button class="remove-button">[x]</button>
+     </div>
+   </div>
+
+  <script type="text/javascript">
+    'use strict';
+    // My solution
+    // var buttons = document.querySelectorAll('.remove-button');
+    //
+    // for (var i = 0; i < buttons.length; i++) {
+    //   buttons[i].addEventListener("click", function() {
+    //     this.parentNode.style.display = 'none';
+    //   });
+    // }
+
+    //Not my solution
+    var buttons = document.querySelectorAll('#messages-container .remove-button');
+
+    for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+
+      button.onclick = function() {
+        var el = this.parentNode;
+        el.parentNode.removeChild(el);
+      };
+    }
+
+
+  </script>
+
+
+
+
+  <h3>Task 2.1.7: Карусель (Слайдер) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+
+
+  </pre>
+
+
+  <style>
+
+    .container {
+      max-width: 390px;
+      margin: 0 auto;
+      /* border: 1px solid red; */
+    }
+
+    .slider_wrap {
+      /* max-width: 100%; */
+      position: relative;
+      /* padding: 5px 10px; */
+      background-color: rgb(224, 224, 224);
+      border-radius: 10px;
+      overflow: hidden;
+      /* border: 1px solid green; */
+    }
+
+    .arrow {
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: calc(50% - 15px);
+      z-index: 99;
+    }
+
+    .arrow.next {
+      right: 5px;
+    }
+
+    .arrow.prev {
+      left: 5px;
+    }
+
+    .arrow:hover {
+      cursor: pointer;
+    }
+
+    .slider {
+      position: relative;
+      display: flex;
+      margin: 0 auto;
+      padding: 5px 10px;
+      list-style: none;
+      overflow: hidden;
+      transition: 0.5s;
+      /* max-width: 100%; */
+      /* border: 2px dotted black; */
+    }
+
+    .slider_item {
+      position: relative;
+      /* display: inline-block; */
+      /* border: 1px dotted blue; */
+    }
+
+    .slider_item img {
+      display: block;
+    }
+
+  </style>
+
+  <div class="container">
+    <div id="slider_wrap" class="slider_wrap">
+      <button class="arrow prev">⇦</button>
+      <button class="arrow next">⇨</button>
+
+      <ul class="slider">
+        <li class="slider_item"><img src="https://js.cx/carousel/1.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/2.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/3.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/4.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/5.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/6.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/7.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/8.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/9.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/10.png"></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function afterLoaded() {
+      // этот код помечает картинки цифрами, для удобства разработки
+      // его можно убрать, если не нужен
+      var lis = document.querySelectorAll('.slider li');
+      for (var i = 0; i < lis.length; i++) {
+        // lis[i].style.position = 'relative';
+        var span = document.createElement('span');
+        span.style.cssText = 'position:absolute;left:0;top:0';
+        span.innerHTML = i + 1;
+        lis[i].appendChild(span);
+      }
+
+      var amountItem = lis.length;
+      var sliderWrap = document.getElementById('slider_wrap');
+      var wSliderWrap = sliderWrap.clientWidth;
+
+      var wLi = lis[0].offsetWidth;
+      var sliders = document.getElementsByClassName('slider');
+      sliders[0].style.width = wLi * amountItem + 'px';
+
+      var buttonsNext = document.getElementsByClassName('next');
+      var buttonsPrev = document.getElementsByClassName('prev');
+      sliders[0].style.left = 0;
+
+      buttonsPrev[0].addEventListener("click", function() {
+        if ( parseInt(sliders[0].style.left) < 0 ) {
+          sliders[0].style.left = parseInt(sliders[0].style.left) + wLi + 'px';
+        }
+      });
+
+      buttonsNext[0].addEventListener("click", function() {
+        if ( parseInt(sliders[0].style.width) > Math.abs(parseInt(sliders[0].style.left) - wSliderWrap) ) {
+          sliders[0].style.left = parseInt(sliders[0].style.left) - wLi + 'px';
+        }
+      });
+
+    }
+
+    window.addEventListener('load', afterLoaded);
+
+  </script>
+
+
+
+  <!--**********
+  * Объект события
+  ************-->
+
+  <h1>2.3. Объект события </h1>
+  <h3>Task 2.3.1: Передвигать мяч по полю </h3>
+  <pre>
+    Сделайте так, что при клике по полю мяч перемещался на место клика.
+
+    Мяч после перелёта должен становиться центром ровно под курсор мыши, если это возможно без вылета за край поля.
+    CSS-анимация не обязательна, но желательна.
+    Мяч должен останавливаться у границ поля, ни в коем случае не вылетать за них.
+    При прокрутке страницы с полем ничего не должно ломаться.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    #field {
+      width: 200px;
+      height: 150px;
+      border: 10px groove black;
+      background-color: #00FF00;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #ball {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      transition: 1s;
+    }
+  </style>
+
+  Кликните на любое место поля, чтобы мяч перелетел туда.
+  <br> Мяч никогда не вылетит за границы поля.
+
+  <div id="field">
+    <img src="https://js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // находим элементы: поле и мяч
+    var field = document.getElementById('field');
+    var ball = document.getElementById('ball');
+
+    // для центрирования мяча добавляем марджины,
+    // чтоб его координаты х и у в дальнейшем были в центре
+    ball.style.marginTop = -ball.clientHeight / 2 + 'px';
+    ball.style.marginLeft = -ball.clientWidth / 2 + 'px';
+
+    // при клике запустить функцию
+    field.addEventListener("click", function(e) {
+      // Общие координаты поля относительно окна
+      var coordsField = field.getBoundingClientRect();
+
+      // координаты х и у мяча
+      var coordBall = {
+        top: e.clientY - (coordsField.top + field.clientTop),
+        left: e.clientX - (coordsField.left + field.clientLeft)
+      }
+
+      // предельные (граничные) координаты х и у мяча
+      var limitCoordBall = {
+        top: (field.clientHeight - ball.offsetHeight),
+        left: (field.clientWidth - ball.offsetWidth)
+      }
+
+      // сдвиг мяча, когда возле края, чтоб не вылезал, т.е анулируем марджины
+      var shiftY = -parseInt(getComputedStyle(ball).marginTop);
+      var shiftX = -parseInt(getComputedStyle(ball).marginLeft);
+
+      // Проверка на то, чтоб мяч не вылетал за края поля
+      // Это проверка верхней координаты Y
+      if ( coordBall.top < shiftY ) coordBall.top = shiftY;
+      //это проверка нижней координаты Y
+      else if ( coordBall.top > limitCoordBall.top ) coordBall.top = limitCoordBall.top + shiftY;
+
+      // Это проверка левой координаты Х
+      if (coordBall.left < shiftX ) coordBall.left = shiftX;
+      //это проверка правой координаты Х
+      else if ( coordBall.left > limitCoordBall.left ) coordBall.left = limitCoordBall.left + shiftX;
+
+      // Присваиваем координаты мячу
+      ball.style.top = coordBall.top  + 'px';
+      ball.style.left = coordBall.left + 'px';
+
+    });
+
+  </script>
+
+
+
+  <!--**********
+  * Всплытие и перехват
+  ************-->
+
+  <h1>2.4. Всплытие и перехват </h1>
+  <h3>Task 2.4.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style media="screen">
+    form {
+      background-color: green;
+      position: relative;
+      width: 150px;
+      height: 150px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    form  div {
+      background-color: blue;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 100px;
+      height: 100px;
+    }
+
+    form p {
+      background-color: red;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+    }
+    </style>
+
+  <form>FORM
+    <div>DIV
+      <p>P</p>
+    </div>
+  </form>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var elems = document.querySelectorAll('form,form div,div p');
+
+    for (let i = 0; i < elems.length; i++) {
+      //elems[i].addEventListener("click", highlightThis,true);
+
+      elems[i].addEventListener("click", function(event) {
+        console.log(event.eventPhase);
+
+        highlightThis(event);
+
+        // if (event.target == this) {
+        //   highlightThis(event);
+        // }
+        //event.stopPropagation();
+      } , false);
+    }
+
+    function highlightThis(event) {
+      event.currentTarget.style.backgroundColor = 'yellow';
+      alert(event.currentTarget.tagName);
+      event.currentTarget.style.backgroundColor = '';
+    }
+
+  </script>
+
+
+
+
+  <!--**********
+  * Делегирование событий
+  ************-->
+
+  <h1>2.5. Делегирование событий </h1>
+  <h3>Task 2.5.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      border: 1px solid #000;
+    }
+
+    #select td {
+      cursor: pointer;
+    }
+
+    .highlight {
+      background-color: rgb(255, 207, 228);
+    }
+
+  </style>
+
+  <table id="select">
+    <tr>
+      <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+    </tr>
+    <tr>
+      <td>...<strong>Northwest</strong>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...еще 2 строки такого же вида...</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...еще 2 строки такого же вида...</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </table>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var selectedTd;
+
+    var table = document.getElementById('select');
+
+    table.onclick = function(event) {
+      var target = event.target; // где был клик
+
+      // цикл двигается вверх от target к родителям до this = table
+      // while (target != this) {
+      //   if (target.tagName == 'TD') {
+      //     // нашли элемент, который нас интересует!
+      //     highlight(target);
+      //     return;
+      //   }
+      //   target = target.parentNode;
+      // }
+
+      var td = target.closest('td');
+      if (!td) return; // клик вне <td>, не интересует
+
+      // если клик на td, но вне этой таблицы (возможно при вложенных таблицах)
+      // то не интересует
+      if (!table.contains(td)) return;
+
+      // нашли элемент, который нас интересует!
+      highlight(td);
+
+      // возможна ситуация, когда клик был вне <td>
+      // если цикл дошёл до table и ничего не нашёл,
+      // то обработчик просто заканчивает работу
+    };
+
+    function highlight(node) {
+      if (selectedTd) {
+        selectedTd.classList.remove('highlight');
+      }
+      selectedTd = node;
+      selectedTd.classList.add('highlight');
+    }
+
+  </script>
+
+
+
+  <h3>Task 2.5.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div id="menu_1">
+    <button data-action="save">Сохранить</button>
+    <button data-action="load">Загрузить</button>
+    <button data-action="search">Поиск</button>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function Menu(elem) {
+      this.save = function() {
+        alert('Saving');
+      }
+
+      this.load = function() {
+        alert('Loading');
+      }
+
+      this.search = function() {
+        alert('Searching');
+      }
+
+      var self = this;
+
+      elem.onclick = function(e) {
+        var target = e.target;
+        var action = target.getAttribute('data-action');
+        if (action) {
+          self[action]();
+        }
+      }
+    }
+
+    new Menu(menu_1);
+
+  </script>
+
+
+
+  <h3>Task 2.5.3: Скрытие сообщения с помощью делегирования </h3>
+  <pre>
+    Дан список сообщений. Добавьте каждому сообщению кнопку для его удаления.
+    Используйте делегирование событий. Один обработчик для всего.
+    В результате, должно работать вот так(кликните на крестик):
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var div = document.getElementById('container-for-message');
+
+    div.onclick = function(e) {
+      var target = e.target;
+
+      if (!target.classList.contains("remove-button")) return;
+
+      this.removeChild(target.parentNode);
+    }
+  </pre>
+
+  <style media="screen">
+
+    .pane {
+      position: relative;
+    }
+
+    .remove-button {
+      position: absolute;
+      top: 0;
+      right: 10px;
+    }
+
+  </style>
+
+  <div id="container-for-message">
+    <div class="pane">
+      <button class="remove-button">[x]</button>
+      <h3>Лошадь</h3>
+      <p>Домашняя лошадь — животное семейства непарнокопытных, одомашненный и единственный сохранившийся подвид дикой лошади, вымершей в дикой природе, за исключением небольшой популяции лошади Пржевальского.</p>
+    </div>
+    <div class="pane">
+      <button class="remove-button">[x]</button>
+      <h3>Осёл</h3>
+      <p>Домашний осёл или ишак — одомашненный подвид дикого осла, сыгравший важную историческую роль в развитии хозяйства и культуры человека. Все одомашненные ослы относятся к африканским ослам.</p>
+    </div>
+    <div class="pane">
+      <button class="remove-button">[x]</button>
+      <h3>Корова, а также пара слов о диком быке, о волах и о тёлках. </h3>
+      <p>Коро́ва — самка домашнего быка, одомашненного подвида дикого быка, парнокопытного жвачного животного семейства полорогих. Самцы вида называются быками, молодняк — телятами, кастрированные самцы — волами. Молодых (до первой стельности) самок называют
+        тёлками.
+      </p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var div = document.getElementById('container-for-message');
+
+    div.onclick = function(e) {
+      var target = e.target;
+
+      if (!target.classList.contains("remove-button")) return;
+
+      this.removeChild(target.parentNode);
+    }
+
+  </script>
+
+
+
+  <h3>Task 2.5.4: Раскрывающееся дерево </h3>
+  <pre>
+    Создайте дерево, которое по клику на заголовок скрывает-показывает детей
+
+    Требования:
+
+    Использовать делегирование.
+    Клик вне текста заголовка (на пустом месте) ничего делать не должен.
+    При наведении на заголовок – он становится жирным, реализовать через CSS.
+
+    P.S. При необходимости HTML/CSS дерева можно изменить.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //No bad code
+    <b>My solution</b>
+    var ul = document.getElementsByClassName("tree");
+
+    for (var i = 0; i < ul.length; i++) {
+      ul[i].onclick = function(e) {
+        var target = e.target;
+
+        if ( target.closest("li > span") ) {
+          target.closest("li").classList.toggle("tree_unvisible");
+        }
+      }
+    }
+
+    <b>Not my solution</b>
+    var tree = document.getElementsByTagName('ul')[0];
+
+    var treeLis = tree.getElementsByTagName('li');
+
+    /* wrap all textNodes into spans */
+    for (var i = 0; i < treeLis.length; i++) {
+      var li = treeLis[i];
+
+      var span = document.createElement('span');
+      li.insertBefore(span, li.firstChild);
+      span.appendChild(span.nextSibling);
+    }
+
+    /* catch clicks on whole tree */
+    tree.onclick = function(event) {
+      var target = event.target;
+
+      if (target.tagName != 'SPAN') {
+        return;
+      }
+
+      /* now we know the SPAN is clicked */
+      var childrenContainer = target.parentNode.getElementsByTagName('ul')[0];
+      if (!childrenContainer) return; // no children
+
+      childrenContainer.hidden = !childrenContainer.hidden;
+    }
+  </pre>
+
+  <style>
+
+    /* .tree > li:not(ul li) {
+      font-weight: bold;
+    } */
+
+    * {
+      list-style: none;
+    }
+
+    .tree li {
+      position: relative;
+    }
+
+    .tree span:hover {
+      font-weight: bold;
+    }
+
+    .tree_unvisible ul {
+      display: none;
+    }
+
+    .tree span {
+      cursor: pointer;
+    }
+
+    .tree-plus::before {
+      position: absolute;
+      left: -30px;
+      content: "[+]";
+      font-weight: normal;
+      font-size: 0.8em;
+      cursor: pointer;
+    }
+
+  </style>
+
+  <ul class="tree">
+    <li><span>Животные</span>
+      <ul>
+        <li><span>Млекопитающие</span>
+          <ul>
+            <li>Коровы</li>
+            <li>Ослы</li>
+            <li>Собаки</li>
+            <li>Тигры</li>
+          </ul>
+        </li>
+        <li><span>Другие</span>
+          <ul>
+            <li>Змеи</li>
+            <li>Птицы</li>
+            <li>Ящерицы</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><span>Рыбы</span>
+      <ul>
+        <li><span>Аквариумные</span>
+          <ul>
+            <li>Гуппи</li>
+            <li>Скалярии</li>
+          </ul>
+
+        </li>
+        <li><span>Морские</span>
+          <ul>
+            <li>Морская форель</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var uls = document.getElementsByClassName("tree");
+
+    for (var i = 0; i < uls.length; i++) {
+      uls[i].onclick = function(e) {
+        var target = e.target;
+
+        if ( target.closest("li > span") ) {
+          //target.closest("li").classList.toggle("tree_unvisible");
+          var li = target.closest("li");
+          var ul = li.querySelector("ul");
+          ul.hidden = !ul.hidden;
+
+          var span = li.querySelector("span");
+          span.classList.toggle("tree-plus");
+        }
+      }
+    }
+
+  </script>
+
+
+
+  <h3>Task 2.5.5: Сортировка таблицы </h3>
+  <pre>
+    Сделать сортировку таблицы при клике на заголовок.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    #grid th {
+      cursor: pointer;
+    }
+
+    #grid th:hover {
+      background: yellow;
+    }
+  </style>
+
+  <table id="grid">
+    <thead>
+      <tr>
+        <th data-type="number">Возраст</th>
+        <th data-type="string">Имя</th>
+        <th data-type="string">Фамилия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>5</td>
+        <td>Вася</td>
+        <td>Петров</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Петя</td>
+        <td>Сдиров</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>Женя</td>
+        <td>Сидоров</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Маша</td>
+        <td>Хулова</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Илья</td>
+        <td>Пилов</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Илья</td>
+        <td>Кантор</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // MY SOLUTION - BAD CODE
+    // var table = document.getElementById('grid');
+    //
+    // table.onclick = function (e) {
+    //   var target = e.target;
+    //
+    //   if (!target.hasAttribute("data-type")) return;
+    //
+    //   if ( target.getAttribute("data-type") == "number" ) {
+    //     var tbody = this.querySelector("tbody");
+    //     this.removeChild(tbody);
+    //
+    //     var rows = [];
+    //     for (var i = 0; i < tbody.children.length; i++ ) {
+    //       var elem = tbody.children[i];
+    //       rows.push({
+    //         value: elem.firstElementChild.innerHTML, // значение первого td
+    //         elem: elem // весь tr
+    //       });
+    //     }
+    //
+    //     rows.sort(function(a,b) {
+    //       return a.value - b.value;
+    //     });
+    //
+    //     for (var i = 0; i < rows.length; i++) {
+    //       tbody.appendChild(rows[i].elem);
+    //     }
+    //
+    //     this.appendChild(tbody);
+    //   }
+    //
+    //
+    //   if ( target.getAttribute("data-type") == "string" ) {
+    //     var tbody = this.querySelector("tbody");
+    //     this.removeChild(tbody);
+    //
+    //     var rows = [];
+    //     for (var i = 0; i < tbody.children.length; i++ ) {
+    //       var elem = tbody.children[i];
+    //       rows.push({
+    //         value: elem.lastElementChild.innerHTML, // значение последнего td
+    //         elem: elem // весь tr
+    //       });
+    //     }
+    //
+    //     rows.sort(function(a,b) {
+    //       if (a.value < b.value) return -1;
+    //       if (a.value > b.value) return 1;
+    //     });
+    //
+    //     for (var i = 0; i < rows.length; i++) {
+    //       tbody.appendChild(rows[i].elem);
+    //     }
+    //
+    //     this.appendChild(tbody);
+    //   }
+    //
+    // };
+
+
+    // NOT MY solution
+    // сортировка таблицы
+    // использовать делегирование!
+    // должно быть масштабируемо:
+    // код работает без изменений при добавлении новых столбцов и строк
+
+    // var grid = document.getElementById('grid');
+    //
+    // grid.onclick = function(e) {
+    //   if (e.target.tagName != 'TH') return;
+    //
+    //   // Если TH -- сортируем
+    //   sortGrid(e.target.cellIndex, e.target.getAttribute('data-type'));
+    // };
+    //
+    // function sortGrid(colNum, type) {
+    //   var tbody = grid.getElementsByTagName('tbody')[0];
+    //
+    //   // Составить массив из TR
+    //   var rowsArray = [].slice.call(tbody.rows);
+    //
+    //   // определить функцию сравнения, в зависимости от типа
+    //   var compare;
+    //
+    //   switch (type) {
+    //     case 'number':
+    //       compare = function(rowA, rowB) {
+    //         return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+    //       };
+    //       break;
+    //     case 'string':
+    //       compare = function(rowA, rowB) {
+    //         return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML;
+    //       };
+    //       break;
+    //   }
+    //
+    //   // сортировать
+    //   rowsArray.sort(compare);
+    //
+    //   // Убрать tbody из большого DOM документа для лучшей производительности
+    //   grid.removeChild(tbody);
+    //
+    //   // добавить результат в нужном порядке в TBODY
+    //   // они автоматически будут убраны со старых мест и вставлены в правильном порядке
+    //   for (var i = 0; i < rowsArray.length; i++) {
+    //     tbody.appendChild(rowsArray[i]);
+    //   }
+    //
+    //   grid.appendChild(tbody);
+    //
+    // }
+
+
+    // My solution Edit
+    var grid = document.getElementById('grid');
+
+    grid.onclick = function(e) {
+      if (e.target.tagName != 'TH') return;
+
+      // Если TH -- сортируем
+      sortGrid(e.target.cellIndex, e.target.getAttribute('data-type'));
+    };
+
+    function sortGrid(colNum, type) {
+      var tbody = grid.querySelector('tbody');
+
+      // Составить массив из TR
+      var rowsArray = [].slice.call(tbody.rows);
+
+      // определить функцию сравнения, в зависимости от типа
+      var compare;
+
+      switch (type) {
+        case 'number':
+          compare = function(rowA, rowB) {
+            return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+          };
+          break;
+        case 'string':
+          compare = function(rowA, rowB) {
+            return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML;
+          };
+          break;
+      }
+
+      // сортировать
+      rowsArray.sort(compare);
+
+      // Убрать tbody из большого DOM документа для лучшей производительности
+      grid.removeChild(tbody);
+
+      // добавить результат в нужном порядке в TBODY
+      // они автоматически будут убраны со старых мест и вставлены в правильном порядке
+      for (var i = 0; i < rowsArray.length; i++) {
+        tbody.appendChild(rowsArray[i]);
+      }
+
+      grid.appendChild(tbody);
+
+    }
+
+  </script>
+
+
+
+  <!--**********
+  * Приём проектирования "поведение"
+  ************-->
+
+  <h1>2.6. Приём проектирования "поведение" </h1>
+  <h3>Task 2.6.1: Поведение "подсказка" </h3>
+  <pre>
+    При наведении мыши на элемент, на нём возникает
+    событие mouseover, при удалении мыши с элемента – событие mouseout.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution - better</b>
+    var showingTooltip;
+
+    document.onmouseover = function(e) {
+      if (!e.target.hasAttribute("data-tooltip")) return;
+
+      var target = e.target;
+
+      var text = target.getAttribute("data-tooltip");
+      var parent = target.parentNode;
+      var div = document.createElement("div");
+      div.innerHTML = text;
+      div.classList.add("tooltip");
+      parent.appendChild(div);
+
+      var rect = target.getBoundingClientRect();
+
+      var top = rect.top - div.offsetHeight - 5;
+      if (top < 0) top = rect.top + rect.height + 5;
+      div.style.top = top + "px";
+      var left = rect.left - Math.abs(rect.width - div.offsetWidth) / 2;
+      if (left < 0 ) left = 0;
+      div.style.left = left + "px";
+
+      showingTooltip = div;
+    }
+
+    document.onmouseout = function(e) {
+      if (showingTooltip) {
+        var target = e.target;
+        var parent = target.parentNode;
+        parent.removeChild(showingTooltip);
+        showingTooltip = null;
+      }
+    }
+  </pre>
+
+  <style>
+
+
+    .wrap1 button {
+      width: auto;
+    }
+
+    .tooltip {
+      /* position: fixed;
+      background-color: rgb(240, 240, 240);
+      border-radius: 5px;
+      border: 1px groove rgb(201, 201, 201);
+      padding: 5px 8px;
+      box-shadow: 2px 2px rgb(170, 170, 170);
+      font-style: italic;
+      font-weight: lighter;
+      text-align: center; */
+
+      position: fixed;
+      padding: 10px 20px;
+
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+
+    }
+
+  </style>
+
+  <div class="wrap1">
+    <button type="button" name="button">X</button>
+    <button data-tooltip="подсказка длиннее, чем элемент">Короткая кнопка</button>
+    <button data-tooltip="HTML<br>подсказка">Ещё кнопка</button>
+
+    <p>Прокрутите страницу, чтобы ссылки были вверху и проверьте,
+      правильно ли показываются подсказки.</p>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var showingTooltip;
+
+    document.onmouseover = function(e) {
+      if (!e.target.hasAttribute("data-tooltip")) return;
+
+      var target = e.target;
+
+      var text = target.getAttribute("data-tooltip");
+      var parent = target.parentNode;
+      var div = document.createElement("div");
+      div.innerHTML = text;
+      div.classList.add("tooltip");
+      parent.appendChild(div);
+
+      var rect = target.getBoundingClientRect();
+
+      var top = rect.top - div.offsetHeight - 5;
+      if (top < 0) top = rect.top + rect.height + 5;
+      div.style.top = top + "px";
+      var left = rect.left - Math.abs(rect.width - div.offsetWidth) / 2;
+      if (left < 0 ) left = 0;
+      div.style.left = left + "px";
+
+      showingTooltip = div;
+    }
+
+    document.onmouseout = function(e) {
+      if (showingTooltip) {
+        var target = e.target;
+        var parent = target.parentNode;
+        parent.removeChild(showingTooltip);
+        showingTooltip = null;
+      }
+    }
+
+  </script>
+
+
+
+
+  <!--**********
+  * Действия браузера по умолчанию
+  ************-->
+
+  <h1>2.7. Действия браузера по умолчанию </h1>
+  <h3>Task 2.7.1: Почему не работает return false? </h3>
+  <pre>
+    Почему в этом документе return false не работает?
+    По замыслу, переход на w3.org при клике должен отменяться. Однако, на самом деле он происходит.
+    В чём дело и как поправить?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <a href="http://w3.org" onclick="return handler()">w3.org</a>
+  <br>
+  <a href="http://w3.org" onclick="handler2(event)">w3.org</a>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function handler() {
+      alert( ".Hi.." );
+      return false;
+    }
+
+
+    function handler2(e) {
+      alert(".hello..");
+      e.preventDefault();
+    }
+
+
+  </script>
+
+
+
+
+
+
+  <h3>Task 2.7.2: Поймайте переход по ссылке </h3>
+  <pre>
+    Сделайте так, чтобы при клике на ссылки внутри элемента #contents пользователю выводился вопрос
+    Уйти на ?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Мое решение лучше, но принцип аналогичен
+    <b>My solution</b>
+    var contents = document.getElementById("contents");
+
+    contents.onclick = function(event) {
+      if (!event.target.closest("a")) return;
+
+      var target = event.target.closest("a");
+      var href = target.getAttribute("href");
+
+      var q = confirm("Уйти на " + href + " ?");
+
+      if (!q) return false;
+    }
+
+    <b>Not my solution</b>
+    document.getElementById('contents').onclick = function(event) {
+
+      function handleLink(href) {
+        var isLeaving = confirm('Уйти на ' + href + '?');
+        if (!isLeaving) return false;
+      }
+
+      var target = event.target;
+
+      while (target != this) {
+        if (target.nodeName == 'A') {
+          return handleLink(target.getAttribute('href'));
+        }
+        target = target.parentNode;
+      }
+    }
+  </pre>
+
+  <style>
+    #contents {
+      padding: 5px;
+      border: 1px green solid;
+    }
+  </style>
+
+  <fieldset id="contents">
+    <legend>#contents</legend>
+    <p>
+      Как насчет почитать
+      <a href="http://wikipedia.org">Википедию</a>, или посетить <a href="http://w3.org">
+        <i>W3.org</i>
+      </a> и узнать про современные стандарты?
+    </p>
+  </fieldset>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var contents = document.getElementById("contents");
+
+    contents.oncontextmenu = function(event) {
+      if (!event.target.closest("a")) return;
+
+      var target = event.target.closest("a");
+      var href = target.getAttribute("href");
+
+      var q = confirm("Уйти на " + href + " ?");
+
+      if (!q) return false;
+      //event.preventDefault();
+    }
+  </script>
+
+
+
+
+  <h3>Task 2.7.3: Галерея изображений </h3>
+  <pre>
+    Создайте галерею изображений, в которой основное изображение изменяется при клике на уменьшенный вариант.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+
+    #thumbs ul {
+      padding-left: 0;
+    }
+
+    #thumbs li {
+      display: inline-block;
+    }
+
+    #thumbs img, #largeImg {
+      display: inline-block;
+    }
+
+    #thumbs img, #largeImg {
+      border: 1px solid rgb(198, 198, 198);
+      padding: 3px;
+    }
+
+    #thumbs img:hover {
+      border: 1px solid rgb(196, 0, 255);
+    }
+
+  </style>
+
+  <p><img id="largeImg" src="https://js.cx/gallery/img1-lg.jpg" alt="Large image"></p>
+
+  <div id="thumbs">
+    <!-- При наведении на изображение показывается встроенная подсказка браузера (title) -->
+    <!-- <a href="https://js.cx/gallery/img1-lg.jpg" title="Image 1"><img src="https://js.cx/gallery/img1-thumb.jpg"></a> -->
+    <ul>
+      <li>
+        <a href="https://js.cx/gallery/img2-lg.jpg" title="Image 2"><img src="https://js.cx/gallery/img2-thumb.jpg"></a>
+      </li>
+      <li>
+        <a href="https://js.cx/gallery/img3-lg.jpg" title="Image 3"><img src="https://js.cx/gallery/img3-thumb.jpg"></a>
+      </li>
+      <li>
+        <a href="https://js.cx/gallery/img4-lg.jpg" title="Image 4"><img src="https://js.cx/gallery/img4-thumb.jpg"></a>
+      </li>
+      <li>
+        <a href="https://js.cx/gallery/img5-lg.jpg" title="Image 5"><img src="https://js.cx/gallery/img5-thumb.jpg"></a>
+      </li>
+      <li>
+        <a href="https://js.cx/gallery/img6-lg.jpg" title="Image 6"><img src="https://js.cx/gallery/img6-thumb.jpg"></a>
+      </li>
+    </ul>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var thumbs = document.getElementById("thumbs");
+    var largeImg = document.getElementById("largeImg");
+
+    thumbs.onclick = function(event) {
+      var target = event.target.closest("a");
+      console.log(target);
+      if (!target) return;
+
+      var href = target.getAttribute("href");
+      var title = target.title;
+
+      largeImg.src = href;
+      largeImg.alt = title;
+
+      event.preventDefault();
+    }
+
+    /* предзагрузка */
+   var imgs = thumbs.getElementsByTagName('img');
+   for (var i = 0; i < imgs.length; i++) {
+     var url = imgs[i].parentNode.href;
+     var img = document.createElement('img');
+     img.src = url;
+   }
+ </script>
+
+
+
+
+ <!--**********
+ * Генерация событий на элементах
+ ************-->
+
+ <h1>2.8. Генерация событий на элементах  </h1>
+ <h3>Task 2.8.1: Генерация событий на элементах </h3>
+ <pre>
+
+ </pre>
+ <h3>Решение</h3>
+ <pre>
+
+ </pre>
+
+  <button type="button" id="elem1" onclick="document.write('Click...')">Autoclick</button>
+
+ <script type="text/javascript">
+   'use strict';
+
+    var event1 = new Event("click");
+    elem1.dispatchEvent(event1);
+
+ </script>
+
+
+
+ <h3>Task 2.8.2:  </h3>
+ <pre>
+
+ </pre>
+ <h3>Решение</h3>
+ <pre>
+
+ </pre>
+
+ <pre id="rabbit">
+   |\   /|
+    \|_|/
+    /. .\
+   =\_Y_/=
+    {>o<}
+  </pre>
+
+ <script type="text/javascript">
+   'use strict';
+
+   function hide() {
+     var event = new Event("hide", {
+       cancelable: true
+     });
+     if (!rabbit.dispatchEvent(event)) {
+       alert( 'действие отменено обработчиком' );
+     } else {
+       rabbit.hidden = true;
+     }
+   }
+
+   rabbit.addEventListener('hide', function(event) {
+     if (confirm("Вызвать preventDefault?")) {
+       event.preventDefault();
+     }
+   });
+
+   // прячемся через 2 секунды
+   //setTimeout(hide, 2000);
+
+ </script>
+
+
+
+
+
+
+ <h3>Task 2.8.3:  </h3>
+ <pre>
+
+ </pre>
+ <h3>Решение</h3>
+ <pre>
+
+ </pre>
+
+ <h1 id="elem2">Привет от скрипта!</h1>
+
+ <script type="text/javascript">
+   'use strict';
+
+   document.addEventListener("hello", function(event) { // (1)
+    document.write("Привет");
+    event.preventDefault();  // (2)
+    document.write("<br> После привет");
+  }, false);
+
+  var event = new Event("hello", {bubbles: true, cancelable: true}); // (3)
+  if (elem.dispatchEvent(event) === false) {
+    document.write('<br> Событие было отменено preventDefault <br>');
+  }
+ </script>
+
+
+
+
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+</body>
+</html>

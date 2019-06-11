@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_9.6_9.8</title>
+</head>
+<body>
+  <!--**********
+  * Проверка класса: "instanceof"
+  ************-->
+
+
+  <h1>9.6. Проверка класса: "instanceof"  </h1>
+  <h3>Task 9.6.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function Rabbit() {}
+
+    // создаём объект
+    var rabbit = new Rabbit();
+
+    // проверяем -- этот объект создан Rabbit?
+    document.write( rabbit instanceof Rabbit ); // true, верно
+    document.write("< br>");
+
+    // изменили prototype...
+    Rabbit.prototype = {};
+
+    // ...instanceof перестал работать!
+    document.write( rabbit instanceof Rabbit ); // false
+    document.write("< br>");
+
+    Rabbit.prototype.constructor = Rabbit;
+    // ...instanceof все равно не работает!
+    document.write( rabbit instanceof Rabbit ); // false
+    document.write("< br>");
+
+
+    // создаём новый объект
+    var rabbit2 = new Rabbit();
+
+    document.write( rabbit2 instanceof Rabbit ); // true
+    //PS т.е нужно напмсать: Rabbit.prototype.constructor = Rabbit;
+    // до создания объекта, т.е сразу после затирания, после функции-конструктор
+    document.write("< br>");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Rabbit() {}
+
+    // создаём объект
+    var rabbit = new Rabbit();
+
+    // проверяем -- этот объект создан Rabbit?
+    document.write( rabbit instanceof Rabbit ); // true, верно
+    document.write("<br>");
+
+    // изменили prototype...
+    Rabbit.prototype = {};
+
+    // ...instanceof перестал работать!
+    document.write( rabbit instanceof Rabbit ); // false
+    document.write("<br>");
+
+    Rabbit.prototype.constructor = Rabbit;
+    // ...instanceof все равно не работает!
+    document.write( rabbit instanceof Rabbit ); // false
+    document.write("<br>");
+
+
+    // создаём новый объект
+    var rabbit2 = new Rabbit();
+
+    document.write( rabbit2 instanceof Rabbit ); // true
+    //PS т.е нужно напмсать: Rabbit.prototype.constructor = Rabbit;
+    // до создания объекта, т.е сразу после затирания, после функции-конструктор
+    document.write("<br>");
+
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 9.6.2: Странное поведение instanceof </h3>
+  <pre>
+    Почему instanceof в коде ниже возвращает true, ведь объект a явно создан не B()?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function A() {}
+
+    function B() {}
+
+    document.write(A.prototype.constructor);
+    document.write("< br>");
+    document.write("Все ключи объекта A.prototype = " + Object.getOwnPropertyNames(A.prototype)); //constructor
+    document.write("< br>");
+
+    A.prototype = B.prototype = {};
+
+    document.write("< br>");
+    document.write("Все ключи объекта A.prototype = " + Object.getOwnPropertyNames(A.prototype) + ' Обнулились'); // пусто
+    document.write("< br>");
+
+    for (var key in A.prototype ) {
+      document.write(key + " : " + A.prototype[key]);
+      document.write("< br>");
+    }
+
+
+    var a = new A();
+    // A.prototype = B.prototype = {}; // если эту строчку разкоментировать, то
+    // a instanceof B будет false
+
+    var b = new B();
+
+    document.write( a instanceof B ); // true
+    document.write("< br>");
+    document.write( b instanceof B ); // true
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function A() {}
+
+    function B() {}
+
+    document.write(A.prototype.constructor);
+    document.write("<br>");
+    document.write("Все ключи объекта A.prototype = " + Object.getOwnPropertyNames(A.prototype)); //constructor
+    document.write("<br>");
+
+    A.prototype = B.prototype = {};
+
+    document.write("<br>");
+    document.write("Все ключи объекта A.prototype = " + Object.getOwnPropertyNames(A.prototype) + ' // Обнулились'); // пусто
+    document.write("<br>");
+
+    for (var key in A.prototype ) {
+      document.write(key + " : " + A.prototype[key]);
+      document.write("<br>");
+    }
+
+
+    var a = new A();
+    // A.prototype = B.prototype = {}; // если эту строчку разкоментировать, то
+    // a instanceof B будет false
+
+    var b = new B();
+
+    document.write( a instanceof B ); // true
+    document.write("<br>");
+    document.write( b instanceof B ); // true
+
+  </script>
+
+
+
+
+  <h3>Task 9.6.3: Что выведет instanceof? </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Он проверяет наследование с учётом цепочки прототипов.
+
+    function Animal() {}
+
+    function Rabbit() {}
+    Rabbit.prototype = Object.create(Animal.prototype);
+
+    var rabbit = new Rabbit();
+
+    document.write( rabbit instanceof Rabbit ); // true
+    document.write("< br>");
+    document.write( rabbit instanceof Animal ); // true
+    document.write("< br>");
+    document.write( rabbit instanceof Object ); // true
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Animal() {}
+
+    function Rabbit() {}
+    Rabbit.prototype = Object.create(Animal.prototype);
+
+    var rabbit = new Rabbit();
+
+    document.write( rabbit instanceof Rabbit ); // true
+    document.write("<br>");
+    document.write( rabbit instanceof Animal ); // true
+    document.write("<br>");
+    document.write( rabbit instanceof Object ); // true
+
+  </script>
+
+
+  <!--**********
+  * Свои ошибки, наследование от Error
+  ************-->
+
+
+  <h1>9.7. Свои ошибки, наследование от Error </h1>
+  <h3>Task 9.7.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // Объявление
+    function PropertyError(property) {
+      this.name = "PropertyError";
+
+      this.property = property;
+      this.message = "Ошибка в свойстве " + property;
+
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, PropertyError);
+        console.log("this = " + this + ' | ');
+      } else {
+        this.stack = (new Error()).stack;
+      }
+
+    }
+
+    PropertyError.prototype = Object.create(Error.prototype);
+
+    // Генерация ошибки
+    function readUser(data) {
+
+      var user = JSON.parse(data);
+
+      if (!user.age) {
+        throw new PropertyError("age");
+      }
+
+      if (!user.name) {
+        throw new PropertyError("name");
+      }
+
+      return user;
+    }
+
+    // Запуск и try..catch
+
+    try {
+      var user = readUser('{ "age": 25 }');
+    } catch (err) {
+      if (err instanceof PropertyError) {
+        if (err.property == 'name') {
+          // если в данном месте кода возможны анонимы, то всё нормально
+          document.write( "Здравствуйте, Аноним!" );
+        } else {
+          document.write( err.message ); // Ошибка в свойстве ...
+        }
+      } else if (err instanceof SyntaxError) {
+        document.write( "Ошибка в синтаксисе данных: " + err.message );
+      } else {
+        throw err; // неизвестная ошибка, не знаю что с ней делать
+      }
+    }
+
+  </script>
+
+
+
+  <h3>Task 9.7.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    if (!!Error.captureStackTrace) {
+    document.write("Да есть");
+    document.write('<br>');
+    }
+
+    // общего вида "наша" ошибка
+    function CustomError(message) {
+      this.name = "CustomError";
+      this.message = message;
+
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, this.constructor);
+      } else {
+        console.log(this.constructor);
+        this.stack = (new Error()).stack;
+      }
+
+    }
+
+    CustomError.prototype = Object.create(Error.prototype);
+    CustomError.prototype.constructor = CustomError;
+
+    // наследник
+    function PropertyError(property) {
+      CustomError.call(this, "Ошибка в свойстве " + property)
+      this.name = "PropertyError";
+
+      this.property = property;
+    }
+
+    PropertyError.prototype = Object.create(CustomError.prototype);
+    PropertyError.prototype.constructor = PropertyError;
+
+    // и ещё уровень
+    function PropertyRequiredError(property) {
+      PropertyError.call(this, property);
+      this.name = 'PropertyRequiredError';
+      this.message = 'Отсутствует свойство ' + property;
+    }
+
+    PropertyRequiredError.prototype = Object.create(PropertyError.prototype);
+    PropertyRequiredError.prototype.constructor = PropertyRequiredError;
+
+    // использование
+    var err = new PropertyRequiredError("age");
+    // пройдёт проверку
+    document.write( err instanceof PropertyRequiredError ); // true
+    document.write('<br>');
+    document.write( err instanceof PropertyError ); // true
+    document.write('<br>');
+    document.write( err instanceof CustomError ); // true
+    document.write('<br>');
+    document.write( err instanceof Error ); // true
+
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 9.7.3: Унаследуйте от SyntaxError </h3>
+  <pre>
+    Создайте ошибку FormatError, которая будет наследовать от встроенного класса SyntaxError.
+    Синтаксис для её создания – такой же, как обычно:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar
+    <b>My solution</b>
+    function FormatError(message) {
+      this.message = message;
+      this.name = "FormatError";
+
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, this.constructor);
+      } else {
+        this.stack = (new Error()).stack;
+      }
+    }
+
+    FormatError.prototype = Object.create(SyntaxError.prototype);
+    FormatError.prototype.constructor = FormatError;
+
+    var err = new FormatError("ошибка форматирования");
+
+    document.write( err.message ); // ошибка форматирования
+    document.write('< br>');
+    document.write( err.name ); // FormatError
+    document.write('< br>');
+    document.write( err.stack ); // стек на момент генерации ошибки
+    document.write('< br>');
+    document.write( err instanceof SyntaxError ); // true
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function FormatError(message) {
+      this.message = message;
+      this.name = "FormatError";
+
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, this.constructor);
+      } else {
+        this.stack = (new Error()).stack;
+      }
+    }
+
+    FormatError.prototype = Object.create(SyntaxError.prototype);
+    FormatError.prototype.constructor = FormatError;
+
+    var err = new FormatError("ошибка форматирования");
+
+    document.write( err.message ); // ошибка форматирования
+    document.write('<br>');
+    document.write( err.name ); // FormatError
+    document.write('<br>');
+    document.write( err.stack ); // стек на момент генерации ошибки
+    document.write('<br>');
+    document.write( err instanceof SyntaxError ); // true
+
+  </script>
+
+
+
+  <!--**********
+  * Проверка класса: "instanceof"
+  ************-->
+
+
+  <h1>9.8. Примеси </h1>
+  <h3>Task 9.8.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+      var eventMixin = {
+
+      /**
+       * Подписка на событие
+       * Использование:
+       *  menu.on('select', function(item) { ... }
+       */
+      on: function(eventName, handler) {
+        if (!this._eventHandlers) this._eventHandlers = {};
+        if (!this._eventHandlers[eventName]) {
+          this._eventHandlers[eventName] = [];
+        }
+        this._eventHandlers[eventName].push(handler);
+      },
+
+      /**
+       * Прекращение подписки
+       *  menu.off('select',  handler)
+       */
+      off: function(eventName, handler) {
+        var handlers = this._eventHandlers && this._eventHandlers[eventName];
+        if (!handlers) return;
+        for(var i=0; i<handlers.length; i++) {
+          if (handlers[i] == handler) {
+            handlers.splice(i--, 1);
+          }
+        }
+      },
+
+      /**
+       * Генерация события с передачей данных
+       *  this.trigger('select', item);
+       */
+      trigger: function(eventName /*, ... */) {
+
+        if (!this._eventHandlers || !this._eventHandlers[eventName]) {
+          return; // обработчиков для события нет
+        }
+
+        // вызвать обработчики
+        var handlers = this._eventHandlers[eventName];
+        for (var i = 0; i < handlers.length; i++) {
+          handlers[i].apply(this, [].slice.call(arguments, 1));
+        }
+
+      }
+    };
+
+
+
+    // Класс Menu с примесью eventMixin
+    function Menu() {
+      // ...
+    }
+
+    for(var key in eventMixin) {
+      Menu.prototype[key] = eventMixin[key];
+    }
+
+    // Генерирует событие select при выборе значения
+    Menu.prototype.choose = function(value) {
+      this.trigger("select", value);
+    }
+
+    // Создадим меню
+    var menu = new Menu();
+
+    // При наступлении события select вызвать эту функцию
+    menu.on("select", function(value) {
+      document.write("Выбрано значение " + value);
+      document.write('<br>');
+    });
+
+    // Запускаем выбор (событие select вызовет обработчики)
+    menu.choose("123");
+
+    var mixin = {
+
+      Mixin: function(str) {
+        document.write(str);
+        document.write('<br>');
+        document.write(Object.getOwnPropertyNames(this));
+        document.write('<br>');
+        console.log(this);
+        document.write('<br>');
+        document.write(Object.getOwnPropertyNames(this.__proto__));
+        document.write('<br>');
+      }
+
+    }
+
+    for (var key in mixin) {
+      Menu.prototype[key] = mixin[key];
+    }
+
+    menu.Mixin('Hello');
+
+  </script>
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Фильтрует анаграммы</title>
+</head>
+<body>
+  <script type="text/javascript">
+    function aclean(arr) {
+      // этот объект будем использовать для уникальности
+      var obj = {};
+      for (var i = 0; i < arr.length; i++) {
+        // разбить строку на буквы, отсортировать и слить обратно
+        var sorted = arr[i].toLowerCase().split('').sort().join(''); // (*)
+
+        obj[sorted] = arr[i]; // сохраняет только одно значение с таким ключом
+      }
+
+      var result = [];
+      // теперь в obj находится для каждого ключа ровно одно значение
+      for (var key in obj) result.push(obj[key]);
+
+      return result;
+    }
+
+    var arr = [];
+    var textInPrompt = 'Анаграммы – слова, состоящие из одинакового количества одинаковых букв, но в разном порядке.' +
+    '\n Например: воз - зов - ЗОВ;  корсет - костер - сектор; Улыбок тебе дед Макар - Ракам дед ебет кобылу' + '\n Введите анаграмму:'
+    var str;
+
+    do {
+      str = prompt(textInPrompt, '');
+
+      if (str == null) break;
+
+      str = str.trim();
+
+      if (!!str) {
+        arr.push(str);
+        console.log(arr);
+      } else  {
+        alert('Вы ничего не ввели!')
+      }
+    } while (true)
+
+
+
+    if (arr != null) {
+      document.write('<b>Все введенные вами слова: </b>' + arr);
+      document.write('<br /> <br />  <b> А это отфильтрованные: </b>');
+      document.write( aclean(arr) );
+    }
+
+
+  </script>
+</body>
+</html>

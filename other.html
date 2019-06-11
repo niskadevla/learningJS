@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Other</title>
+</head>
+<body>
+  <!--
+  <script type="text/javascript">
+    var a = "fgr" + 5 + 4;
+    var res = a;
+    document.write(res);
+
+  </script>
+  <br>
+  <script type="text/javascript">
+    var myStr="FirstLine\n\t\\SecondLine\nThirdLine"; // \n new line, \t - tab, \\ - backslash
+    document.write('Look in the console (Press F12)');
+    console.log(myStr);
+  </script>
+-->
+
+  <h1>Скорость загрузки...</h1>
+  <!-- <img src="img/image_532809112343138053950.jpg" alt="leopard" width="400">
+  <img src="http://www.nakrutka24.com/krasivaya_dolina_1920x1200.jpg" alt="leopard" width="400">
+  <img src="https://99px.ru/sstorage/53/2015/10/tmb_145031_8640.jpg" alt="leopard" width="400">
+  <img src="https://bugaga.ru/uploads/posts/2010-12/1291695551_foto-prirody-49.jpg" alt="leopard" width="400">
+  <script async="false" src="js/loading.js"> </script> -->
+
+  <h2>Проверим на скорость два решения последней задачи в 4.11 </h2>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var time = new Date(new Date - 86400 * 1000);
+
+    function bench(f) {
+      //var date = new Date();
+      //var date = Date.now(); // Эквивалентно выше записи
+      var date = performance.now(); // Эквивалентно выше записи
+      for (var i = 0; i < 1000; i++) f(time);
+      //return new Date() - date;
+      return performance.now() - date; // Эквивалентно выше записи
+    }
+
+    // bench для каждого теста запустим много раз, чередуя
+    var timeIn = 0,
+        timeLength = 0;
+    for (var i = 0; i < 100; i++) {
+      timeIn += bench(formatDate_2);
+      timeLength += bench(formatDate);
+    }
+
+//********************
+    function formatterDate(date) {
+
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+
+      var yy = date.getFullYear() % 100;
+      if (yy < 10) yy = '0' + yy;
+
+      var hh = date.getHours();
+      if (hh < 10) hh = '0' + hh;
+
+      var mimi = date.getMinutes();
+      if (mimi < 10) mimi = '0' + mimi;
+
+      return dd + '.' + mm + '.' + yy + ' ' + hh + ':' + mimi;
+    }
+
+    function formatDate(date) {
+      var d = Date.now();
+      var dif = d - date;
+      if (dif < 1000) return "только что";
+      else if (dif < 60 * 1000) return (Math.floor(dif/1000) + " сек. назад");
+      else if (dif < 60 * 60 * 1000) return (Math.floor( dif/(60 * 1000) ) + " мин. назад");
+      else if (dif >= 86400 * 1000) {
+        return formatterDate(date);
+      }
+
+    }
+//*******************
+  function formatDate_2(date) {
+    var diff = new Date() - date; // разница в миллисекундах
+
+    if (diff < 1000) { // прошло менее 1 секунды
+      return 'только что';
+    }
+
+    var sec = Math.floor(diff / 1000); // округлить diff до секунд
+
+    if (sec < 60) {
+      return sec + ' сек. назад';
+    }
+
+    var min = Math.floor(diff / 60000); // округлить diff до минут
+    if (min < 60) {
+      return min + ' мин. назад';
+    }
+
+    // форматировать дату, с учетом того, что месяцы начинаются с 0
+    var d = date;
+    d = [
+      '0' + d.getDate(),
+      '0' + (d.getMonth() + 1),
+      '' + d.getFullYear(),
+      '0' + d.getHours(),
+      '0' + d.getMinutes()
+    ];
+
+    for (var i = 0; i < d.length; i++) {
+      d[i] = d[i].slice(-2);
+    }
+
+    return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
+  }
+
+
+
+
+
+    document.write( 'Время Not my solution: ' + timeIn + 'мс' );
+    document.write("<br>");
+    document.write( 'Время My solution: ' + timeLength + 'мс' );
+
+
+  </script>
+
+    <hr>
+
+
+  <script type="text/javascript">
+
+  // if (function f(){ return 2 + 3}) {
+  //   alert(f());
+  // }
+  </script>
+
+
+  <br>
+  <hr>
+
+  <style>
+    input::-moz-placeholder {
+      color: red;
+      font-style: italic;
+    }
+  </style>
+
+  <p>Формы элементов</p>
+
+  <form>
+    <input type="text" name="surname" placeholder="Tekst">
+  </form>
+
+  <script>
+    var form1 = document.forms[0];
+
+    var elem = form1.elements.surname;
+
+    document.write("elem.form == form1 : " + (elem.form == form1)); // true
+  </script>
+
+
+  <br>
+  <hr>
+
+
+  <select id="select1">
+
+    <option value="Rock">Рок</option>
+    <!-- <option value="Pop" selected>Pop</option> -->
+    <option value="Blues" selected>Блюз</option>
+  </select>
+
+  <script>
+    var select = document.getElementById("select1");
+
+    // 1)
+    var selectedOption = select.options[select.selectedIndex];
+    alert( selectedOption.value  + " - " + selectedOption.text );
+    console.log(selectedOption);
+
+    // // 2)
+    // var newOption = new Option("Classic", "Классика");
+    // select.appendChild(newOption);
+    //
+    // // 3)
+    // newOption.selected = true;
+  </script>
+
+
+<br>
+<br>
+<br>
+</body>
+</html>

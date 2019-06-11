@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Некоторые другие возможности</title>
+  <style>
+    div {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <!--**********
+  * Запуск кода из строки: eval
+  ************-->
+
+  <h1>7.4. Запуск кода из строки: eval </h1>
+  <h3>Task 7.4.1: Как из функции обратиться к глобальной переменной </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 1;
+    (function f() {
+      var a = 5;
+      document.write("Локальная а = " + a);
+      document.write("< br>");
+      document.write("Глобальная a= " + window.a);
+    })();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var a = 1;
+
+    (function() {
+      var a = 5;
+      document.write("Локальная а = " + a);
+      document.write("<br>");
+      document.write("Глобальная a= " + window.a);
+    })();
+  </script>
+
+
+
+  <h3>Task 7.4.2: Использование eval </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Загляни в консоль
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var b = 1;
+
+    function f() {
+
+
+      eval( 'var b = 5; console.log(" Локальная в eval b = " + b)' );
+
+      console.log(" Глобальная b = " + b); // 1
+    };
+
+    document.write("Переменная объявленная в eval не попадет на ружу, она будет локальная в самом eval");
+
+    setTimeout(f, 1000);
+
+  </script>
+
+
+  <h3>Task 7.4.3: Запуск скрипта из eval в глобальной области  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Загляни в консоль
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var k = 3;
+
+    (function f() {
+      var k = 25;
+
+      window.eval( ' console.log(" Глобальная k = " + k)' ); // 3
+
+      console.log(" Локальная в функции k = " + k);
+    })();
+
+  </script>
+
+
+  <h3>Task 7.4.4: Внешние данные через new Function  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var a1 = 25,
+      b1 = 3;
+
+    // вместо обращения к a,b через eval
+    // будем принимать их как аргументы динамически созданной функции
+    var mul = new Function('a, b', 'return a*b;');
+
+    document.write( mul(a1, b1) ); // 75
+
+  </script>
+
+
+  <hr>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Pictor_A_composite.jpg/220px-Pictor_A_composite.jpg" alt="">
+
+  <h3>Task 7.4.5: Eval-калькулятор </h3>
+  <pre>
+    Напишите интерфейс, который принимает математическое выражение (prompt) и
+    возвращает его результат.
+    Проверять выражение на корректность не требуется.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    //var str = prompt('Введите математическое выражени', '2 + 3');
+    var str = '2 + 3';
+
+    document.write( str + " = " + eval(str) );
+
+  </script>
+
+
+  <!--**********
+  * Перехват ошибок, "try..catch"
+  ************-->
+
+  <h1>7.5. Перехват ошибок, "try..catch" </h1>
+  <h3>Task 7.5.1: Пример try..catch </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    try {
+      document.write('Start block try <br>');
+
+      lalala; // ошибка, переменная не определена!
+
+      document.write('Finish block try');
+    } catch(err) {
+
+      document.write('Error - ' + err.name + ": " + err.message + "<br>" + err.stack);
+
+    }
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+  <h3>Task 7.5.2: Пример try..catch в JSON </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var data = "Has Error"; // // в данных ошибка
+
+    try {
+
+      var user = JSON.parse(data); //<-- ошибка при выполнении
+      document.write(user.name); // не сработает
+
+    } catch(e) {
+      // ...выполнится catch
+      document.write("Извините, в данных ошибка, мы попробуем получить их ещё раз <br>");
+      document.write( e.name );
+      document.write("<br>");
+      document.write( e.message );
+      document.write("<br>");
+
+    }
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+
+  <h3>Task 7.5.3: Генерация своих ошибок (оператор throw) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var data = '{"age": 30}'; // данные неполны
+
+    try {
+
+      var user = JSON.parse(data); //<--  выполнится без ошибок
+
+      if (!user.name) {
+        throw new SyntaxError("Данные некорректны");
+      }
+
+      alert(user.name);
+
+    } catch(e) {
+      // ...выполнится catch
+      document.write("Извините, в данных ошибка <br>");
+      document.write( e.name );
+      document.write("<br>");
+      document.write( e.message );
+      document.write("<br>");
+      document.write(e.stack);
+
+    }
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+  <h3>Task 7.5.4: Проброс исключения </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function readData() {
+      var data = '{ "name": "Вася", "age": 30 }'; // данные корректны
+
+      try {
+
+        var user = JSON.parse(data); //<--  выполнится без ошибок
+
+        if (!user.name) {
+          throw new SyntaxError("Ошибка в данных"); // это не сработает
+        }
+
+        blabla(); // произошла непредусмотренная ошибка
+        alert(user.name); // это не выведется
+
+      } catch(e) {
+          if (e.name == "SyntaxError") {
+            alert( "Извините, в данных ошибка" );
+          } else {
+            throw e; // перебросится во внешний код,
+            //если там нет try...catch, то выведет в консоль с остановкой скрипта
+        }
+
+        document.write( e.name );
+        document.write("<br>");
+        document.write( e.message );
+        document.write("<br>");
+        document.write(e.stack);
+
+      }
+    }
+
+
+    try {
+      readData();
+    } catch (e) {
+        document.write("Поймал во внешнем catch: " + e); //ловим
+    }
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+  <h3>Task 7.5.5: Оборачивание исключений </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function ReadError2(message, cause) {
+      this.message = message;
+      this.cause = cause;
+      this.name = 'ReadError';
+      this.stack = cause.stack;
+    }
+
+    function readData2() {
+      var data = '{ bad data }';
+
+      try {
+        // ...
+        JSON.parse(data);
+        // ...
+      } catch (e) {
+        // ...
+        if (e.name == 'URIError') {
+          throw new ReadError2("Ошибка в URI", e);
+        } else if (e.name == 'SyntaxError') {
+          throw new ReadError2("Синтаксическая ошибка в данных", e);
+        } else {
+          throw e; // пробрасываем
+        }
+      }
+    }
+
+    try {
+      readData2();
+    } catch (e) {
+      if (e.name == 'ReadError') {
+        alert( e.message );
+        alert( e.cause + " | " + e.stack ); // оригинальная ошибка-причина
+      } else {
+        throw e;
+      }
+    }
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+  <h3>Task 7.5.6: Секция finally </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function sum(n) {
+      return n ? (n + sum(n - 1)) : 0;
+    }
+
+    var n = 300;
+
+    var start = new Date();
+
+    try {
+      var result = sum(n);
+    } catch (e) {
+      result = 0;
+    } finally {
+      var diff = new Date() - start;
+    }
+
+    document.write( result ? result : 'была ошибка' );
+    document.write("<br>");
+    document.write( "Выполнение заняло " + diff );
+
+    document.write("<br> Потом код продолжит выполнение...");
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 7.5.7: Eval-калькулятор с ошибками </h3>
+  <pre>
+    Напишите интерфейс, который принимает математическое выражение
+    (в prompt) и выводит результат его вычисления через eval.
+    При ошибке нужно выводить сообщение и просить переввести выражение.
+
+    Ошибкой считается не только некорректное выражение, такое как 2+, но и
+    выражение, возвращающее NaN, например 0/0.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Мое решение больше охватывает, но не понятно чье лучше
+    <b>My solution</b>
+      function getDate() {
+        try {
+          var expr = prompt('Введите математическое выражение', '3 + 5');
+
+          if (expr === null) {
+            throw new SyntaxError( "Ввод отменен" );
+          } else if ( expr.trim() == '') {
+            throw new SyntaxError( "Вы ничего не ввели" );
+          }
+
+          var res = eval(expr);
+
+          if ( res != res || typeof res !== 'number' ) { //можно написать isNaN(res) - так правильней
+            throw new SyntaxError( "Вы ввели код (не правильное значение)" );;
+          }
+
+          document.write( 'expr = ' + eval(expr) );
+          document.write("< br />");
+        } catch (e) {
+            alert('Ошибка ' + e.name + ': ' + e.message + ' Введите заново');
+            getDate();
+        }
+      }
+
+
+      getDate();
+
+    <b>Not my solution</b>
+      var expr, res;
+
+      while (true) {
+      expr = prompt("Введите выражение?", '2-');
+      if (expr == null) break;
+
+      try {
+        res = eval(expr);
+        if (isNaN(res)) {
+          throw new Error("Результат неопределён");
+        }
+
+        break;
+      } catch (e) {
+        alert( "Ошибка: " + e.message + ", повторите ввод" );
+      }
+      }
+
+      alert( res );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getDate() {
+      try {
+        var expr = prompt('Введите математическое выражение', '3 + 5');
+
+        if (expr === null) {
+          throw new SyntaxError( "Ввод отменен" );
+        } else if ( expr.trim() == '') {
+          throw new SyntaxError( "Вы ничего не ввели" );
+        }
+
+        var res = eval(expr);
+
+        if ( res != res || typeof res !== 'number' ) { //можно написать isNaN(res) - так правильней
+          throw new SyntaxError( "Вы ввели код (не правильное значение)" );;
+        }
+
+        document.write( 'expr = ' + eval(expr) );
+        document.write("<br />");
+      } catch (e) {
+          alert('Ошибка ' + e.name + ': ' + e.message + ' Введите заново');
+          getDate();
+      }
+    }
+
+
+    getDate();
+
+
+  </script>
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

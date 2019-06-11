@@ -1,0 +1,12 @@
+{
+  "name": "scss",
+  "version": "1.0.0",
+  "description": "my project",
+  "main": "main.js",
+  "scripts": {
+    "test": "Hello!!!",
+    "scss": "node-sass -watch scss -o css"
+  },
+  "author": "Denis",
+  "license": "ISC"
+}

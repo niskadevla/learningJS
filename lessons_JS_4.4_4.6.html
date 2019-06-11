@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Learning JS 4.4 - 4.6</title>
+</head>
+<body>
+
+  <!--***********
+  *   Объекты
+  ************** -->
+
+  <h1>4.4. Объекты как ассоциативные массивы</h1>
+  <h3>Task 4.4.1: Доступ через квадратные скобки </h3>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var person = {};
+
+    person['name'] = 'Денис'; // то же что и person.name = 'Денис'
+
+    person['любимый стиль музыки'] = 'Джаз';
+    // person.любимый стиль музык = 'Джаз'; // Error
+    person.любимая = 'Джаз';
+
+    document.write(person['любимый стиль музыки']);
+    document.write("<br />");
+    document.write(person['name']);
+    document.write("<br />");
+    document.write(person.любимая);
+    document.write("<br />");
+  </script>
+
+
+  <h3>Task 4.4.2: Доступ к свойству через переменную </h3>
+
+  <script type="text/javascript">
+    var person = {};
+    person.age = 25;
+    var key = 'age';
+
+    document.write( person[key] );
+    document.write("<br />");
+    document.write( person.key );
+  </script>
+
+
+  <h3>Task 4.4.3: Первый объект </h3>
+  <pre>
+    Мини-задача на синтаксис объектов. Напишите код, по строке на каждое действие.
+
+    Создайте пустой объект user.
+    Добавьте свойство name со значением Вася.
+    Добавьте свойство surname со значением Петров.
+    Поменяйте значение name на Сергей.
+    Удалите свойство name из объекта.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    user = {};
+    user.name = 'Вася';
+    document.write(user.name);
+    document.write("< br />");
+    user.surname = 'Петров';
+    user.name = 'Сергей';
+    document.write(user.name);
+    document.write("< br />");
+    delete user.name;
+    document.write(user.name);
+    document.write("< br />");
+
+
+    var arr = [1, 2, 3];
+    delete arr[0];
+    document.write("< br>");
+    document.write(arr[0]);
+    document.write("< br>");
+    document.write(arr);
+    if (0 in arr) {
+      document.write("0 in arr");  //не сработает
+    }
+    document.write("< br>");
+    arr[1] = undefined;
+    if (1 in arr) {
+      document.write("1 in arr"); // сработает
+    }
+    document.write("< br>");
+    document.write(arr);
+  </pre>
+  <script type="text/javascript">
+    user = {};
+    user.name = 'Вася';
+    document.write(user.name);
+    document.write("<br />");
+    user.surname = 'Петров';
+    user.name = 'Сергей';
+    document.write(user.name);
+    document.write("<br />");
+    delete user.name;
+    document.write(user.name);
+    document.write("<br />");
+
+
+    var arr = [1, 2, 3];
+    delete arr[0];
+    document.write("<br>");
+    document.write(arr[0]);
+    document.write("<br>");
+    document.write(arr);
+    if (0 in arr) {
+      document.write("0 in arr");  //не сработает
+    }
+    document.write("<br>");
+    arr[1] = undefined;
+    if (1 in arr) {
+      document.write("1 in arr"); // сработает
+    }
+    document.write("<br>");
+    document.write(arr);
+  </script>
+
+
+
+  <h1>4.5. Объекты: перебор свойств</h1>
+  <h3>Task 4.5.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var codes = {
+      "+7": "Россия",
+      "+38": "Украина",
+      "+1": "США"
+    };
+
+    for (var key in codes) {
+      var val = codes[key];
+      key = +key; // ..если нам нужно именно число, преобразуем: "+7" -> 7
+
+      document.write( key + ": " + val + "<br />");
+    }
+
+  </script>
+
+
+
+  <h3>Task 4.5.2: Определите, пуст ли объект </h3>
+  <pre>
+    Создайте функцию isEmpty(obj), которая возвращает true, если в объекте нет свойств и
+    false – если хоть одно свойство есть.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function isEmpty(obj) {
+      var count = 0;
+
+      for (var key in obj) {
+        count++;
+      }
+      if (count > 0) return false;
+      else return true;
+    }
+
+    var schedule = {};
+    document.write( isEmpty(schedule) ); // true
+
+    document.write("< br />");
+
+    schedule["8:30"] = "подъём";
+    document.write( isEmpty(schedule) ); // false
+
+    <b>Not my solution</b>
+    function isEmpty(obj) {
+      for (var key in obj) {
+        return false;
+      }
+      return true;
+    }
+
+    var schedule = {};
+
+    alert( isEmpty(schedule) ); // true
+
+    schedule["8:30"] = "подъём";
+
+    alert( isEmpty(schedule) ); // false
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function isEmpty(obj) {
+      var count = 0;
+
+      for (var key in obj) {
+        count++;
+      }
+      if (count > 0) return false;
+      else return true;
+    }
+
+    var schedule = {};
+    document.write( isEmpty(schedule) ); // true
+
+    document.write("<br />");
+
+    schedule["8:30"] = "подъём";
+    document.write( isEmpty(schedule) ); // false
+  </script>
+
+
+
+  <h3>Task 4.5.3: Сумма свойств </h3>
+  <pre>
+    Есть объект salaries с зарплатами. Напишите код, который выведет сумму всех зарплат.
+    Если объект пустой, то результат должен быть 0.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    var salaries = {
+      "Вася" : 100,
+      "Петя": 300,
+      "Даша": 250
+    };
+
+    function sumSalaries(obj) {
+      var sum = 0;
+
+      for (var salary in obj) {
+        sum += obj[salary];
+      }
+      return sum;
+    }
+
+    document.write( "Total salaries: " + sumSalaries(salaries) );
+
+    <b>Not my solution</b>
+    "use strict";
+
+    var salaries = {
+      "Вася": 100,
+      "Петя": 300,
+      "Даша": 250
+    };
+
+    var sum = 0;
+    for (var name in salaries) {
+      sum += salaries[name];
+    }
+
+    alert( sum );
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var salaries = {
+      "Вася" : 100,
+      "Петя": 300,
+      "Даша": 250
+    };
+
+    function sumSalaries(obj) {
+      var sum = 0;
+
+      for (var salary in obj) {  // Желательно сменить salary на name
+        sum += obj[salary];
+      }
+      return sum;
+    }
+
+    document.write( "Total salaries: " + sumSalaries(salaries) );
+  </script>
+
+
+
+  <h3>Task 4.5.4: Свойство с наибольшим значением </h3>
+  <pre>
+    Есть объект salaries с зарплатами. Напишите код, который выведет имя сотрудника, у которого самая большая зарплата.
+
+    Если объект пустой, то пусть он выводит «нет сотрудников».
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    // У меня плохой код
+    var salaries = {
+      "Вася" : 100,
+      "Петя": 3000,
+      "Даша": 250,
+      "Ксюша": 500
+    };
+
+    function maxSalary(obj) {
+      var i = -1;
+      var salariesNumber = {};
+
+      for (var name in obj) {
+        i++;
+        salariesNumber[i] = obj[name];
+      }
+
+      var max = salariesNumber[0];
+      for (var j = 0; j < i; j++) {
+        if ( salariesNumber[j] <= salariesNumber[j+1] && salariesNumber[j+1] > max) {
+          max = salariesNumber[j+1];
+        }
+
+      }
+
+      for (var name in obj) {
+        if (obj[name] == max) return name;
+      }
+
+      return  "нет сотрудников";
+    }
+
+    document.write( maxSalary(salaries) );
+
+    <b>Not my solution</b>
+    "use strict";
+
+    var salaries = {
+      "Вася": 100,
+      "Петя": 300,
+      "Даша": 250
+    };
+
+    var max = 0;
+    var maxName = "";
+    for (var name in salaries) {
+      if (max < salaries[name]) {
+        max = salaries[name];
+        maxName = name;
+      }
+    }
+
+    alert( maxName || "нет сотрудников" );
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // У меня плохой код
+    var salaries = {
+      "Вася" : 100,
+      "Петя": 3000,
+      "Даша": 250,
+      "Ксюша": 500
+    };
+
+    function maxSalary(obj) {
+      var i = -1;
+      var salariesNumber = {};
+
+      for (var name in obj) {
+        i++;
+        salariesNumber[i] = obj[name];
+      }
+
+      var max = salariesNumber[0];
+      for (var j = 0; j < i; j++) {
+        if ( salariesNumber[j] <= salariesNumber[j+1] && salariesNumber[j+1] > max) {
+          max = salariesNumber[j+1];
+        }
+
+      }
+
+      for (var name in obj) {
+        if (obj[name] == max) return name;
+      }
+
+      return  "нет сотрудников";
+    }
+
+    document.write( maxSalary(salaries) );
+
+  </script>
+
+
+
+  <h3>Task 4.5.5: Умножьте численные свойства на 2 </h3>
+  <pre>
+    Создайте функцию multiplyNumeric, которая получает объект и умножает все численные свойства на 2. Например:
+
+    // до вызова
+    var menu = {
+      width: 200,
+      height: 300,
+      title: "My menu"
+    };
+
+    multiplyNumeric(menu);
+
+    // после вызова
+    menu = {
+      width: 400,
+      height: 600,
+      title: "My menu"
+    };
+
+    P.S. Для проверки на число используйте функцию:
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n)
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+
+
+    <b>Not my solution</b>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    var menu = {
+      width: 200,
+      height: 300,
+      title: "My menu"
+    };
+
+    function multiplyNumeric(obj) {
+      for (var prop in obj) {
+        if ( isNumeric(obj[prop]) ) {
+          obj[prop] *= 2;
+        }
+      }
+    }
+
+    multiplyNumeric(menu)
+    document.write( "width = " + menu.width + " height = " + menu.height + " title = " + menu.title);
+
+  </script>
+
+
+
+  <h1>4.6. Объекты: передача по ссылке </h1>
+  <h3>Task 4.6.1:  </h3>
+  <pre>
+    Посмотри в консоль
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var time = {
+      year: 20119,
+      month: 11,
+      day: 10
+    };
+
+    var val = time;
+    val.day = 11;
+
+    document.write(val);
+    console.log(val);
+    console.log(time);
+
+  </script>
+
+
+
+  <h3>Task 4.6.2:  </h3>
+  <pre>
+    В консоли ошибка при раскрытии объекта (баг JS)
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var time = {
+      year: 2019,
+      month: 11,
+      day: 10,
+      hour: 11,
+      minute: 12,
+      second: 13,
+      microsecond: 125653
+    };
+
+    console.log(time);
+    document.write(time);
+    time.microsecond++;
+
+    console.log(time);
+    time.microsecond++;
+
+    console.log(time);
+
+  </script>
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+</body>
+</html>

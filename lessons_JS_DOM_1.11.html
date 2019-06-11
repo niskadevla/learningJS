@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons JS DOM_1.11</title>
+</head>
+<body>
+
+  <!--**********
+  * Добавление и удаление узлов
+  ************-->
+
+  <h1>1.11. Добавление и удаление узлов  </h1>
+  <h3>Task 1.11.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    .alert {
+      padding: 15px;
+      border: 1px solid #d6e9c6;
+      border-radius: 4px;
+      color: #3c763d;
+      background-color: #dff0d8;
+      margin: 10px auto;
+      width: 30%;
+      text-align: center;
+      position: relative;
+    }
+
+    .invis {
+      transition: 1s;
+      opacity: 0;
+      transform: scale(0.1);
+      /*transform: matrix(0,1,1,1,0,-1);*/
+    }
+
+    .scale {
+      transition: 0.5s;
+      transform: scale(1.5);
+    }
+
+  </style>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var div = document.createElement('div');
+    div.className = 'alert alert-success';
+    var textElem = document.createTextNode('Вы прочитали это сообщение');
+    div.innerHTML = '<b> Ура! </b> ' + textElem.data;
+
+    var parent = document.body;
+
+    parent.appendChild(div); // Это вставит в конец документа
+
+    // Это вставит (перенесет) в начало документа
+    setTimeout(function() {
+      parent.insertBefore(div, document.body.firstChild);
+      //Плавно увеличивается
+      setTimeout(function() {
+        div.classList.add('scale');
+        // И плавно исчезнет
+        setTimeout(function() {
+          div.classList.remove('scale');
+          div.classList.add('invis');
+          setTimeout(function() {
+            // Удаляем элемент, не работает в IE11-
+            div.remove();
+          },1000); // Удаляем элемент, после исчезновения (время должно совпадать с transition в css)
+        },2000); // И плавно исчезнет
+      } ,500); //Плавно увеличивается
+
+
+    },1000); // Это вставит (перенесет) в начало документа
+
+    var div2 = div.cloneNode(true);
+    div2.querySelector('b').innerHTML = 'Супер!';
+    div.parentNode.insertBefore(div2, div.nextSibling);
+
+    setTimeout(function() {
+      // Удаляем элемент, кроссбраузерно
+      div2.parentNode.removeChild(div2);
+    } ,1500);
+
+
+    var text = prompt('Введите тескт', '<b> здесь текст  </b>');
+    // вставится именно как текст, без HTML-обработки
+    if (!!text) {
+      div.appendChild( document.createTextNode(text) );
+    }
+
+
+    var ol = document.createElement('ol');
+    var li = document.createElement('li');
+
+    document.body.appendChild(ol);
+
+    li.innerHTML = 'текст № 1';
+    ol.appendChild(li);
+
+    var li2 = li.cloneNode(false);
+    li2.innerHTML = 'текст № 2';
+    ol.appendChild(li2);
+
+    var li3 = li.cloneNode(false);
+    li3.innerHTML = 'текст № 3';
+    //ol.appendChild(li3);
+
+    function changeOrderLi() {
+      ol.replaceChild(li3, li2);
+      console.log(li3);
+    }
+
+  </script>
+
+  <br>
+  <button type="button" name="button" onclick="changeOrderLi()" >Change</button>
+
+
+
+  <br>
+  <hr>
+
+
+
+  <h3>Task 1.11.3: Удаление элементов (полифил) </h3>
+  <pre>
+    Напишите полифилл для метода remove для старых браузеров.
+
+    Вызов elem.remove():
+
+    Если у elem нет родителя – ничего не делает.
+    Если есть – удаляет элемент из родителя.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+     // Similar solution
+    <b>My solution</b>
+      if (Element.prototype.remove_1 === undefined) {
+        Element.prototype.remove_1 = function() {
+          if (this.parentNode === undefined || this.parentNode === null) return;
+
+          this.parentNode.removeChild(this);
+        }
+      }
+
+      var d = document.querySelector('.div_remove');
+
+      setTimeout(function() {
+        d.remove_1();
+      } , 1000);
+
+    // function remove() - не нужно писать, т.к. это получается Named Function Expression
+    <b>Not my solution</b>
+    if (!Element.prototype.remove) {
+      Element.prototype.remove = function remove() {
+        if (this.parentNode) {
+          this.parentNode.removeChild(this);
+        }
+      };
+      }
+  </pre>
+
+  <div class="div_remove">
+    Text
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    if (Element.prototype.remove_1 === undefined) {
+      Element.prototype.remove_1 = function() {
+        if (this.parentNode === undefined || this.parentNode === null) return;
+
+        this.parentNode.removeChild(this);
+      }
+    }
+
+    var d = document.querySelector('.div_remove');
+
+    setTimeout(function() {
+      d.remove_1();
+    } , 1000);
+
+  </script>
+
+
+
+  <h3>Task 1.11.4: insertAfter </h3>
+  <pre>
+    Напишите функцию insertAfter(elem, refElem), которая
+    добавит elem после узла refElem.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+    function insertAfter(elem, refElem) {
+      var nextElem;
+      if (!refElem.nextSibling) nextElem = null;
+      else nextElem = refElem.nextSibling;
+
+      refElem.parentNode.insertBefore(elem, nextElem);
+    }
+
+    <b>Not my solution</b>
+    function insertAfter(elem, refElem) {
+      return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
+    }
+
+  </pre>
+
+  <div class="insertAfter_1">
+    <p>Это </p>
+    <p>текст</p>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var elem = document.createElement('p');
+    elem.innerHTML = '<b>Новый элемент</b>';
+
+    function insertAfter(elem, refElem) {
+      var nextElem;
+      if (!refElem.nextSibling) nextElem = null;
+      else nextElem = refElem.nextSibling;
+
+      refElem.parentNode.insertBefore(elem, nextElem);
+    }
+
+    // function insertAfter(elem, refElem) {
+    //   return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
+    // }
+
+    var bodyDiv = document.body.querySelector('.insertAfter_1');
+
+    // вставить elem после первого элемента
+    insertAfter(elem, bodyDiv.firstElementChild); // <--- должно работать
+    console.log(bodyDiv.firstChild);
+    // вставить elem за последним элементом
+    //insertAfter(elem, bodyDiv.lastChild); // <--- должно работать
+
+  </script>
+
+
+
+
+  <h3>Task 1.11.5: removeChildren </h3>
+  <pre>
+    Напишите функцию removeChildren, которая удаляет всех потомков элемента.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution, у меня код длиннее
+    <b>My solution</b>
+    function removeChildren(elem) {
+      if (!!elem.firstChild) {
+        for (var i = elem.childNodes.length - 1; i >= 0 ; i--) {
+          elem.removeChild(elem.childNodes[i]);
+        }
+      }
+    }
+
+    <b>Not my solution</b>
+    function removeChildren(elem) {
+      while (elem.lastChild) {
+        elem.removeChild(elem.lastChild);
+      }
+    }
+
+    //Альтернатива через innerHTML
+    function removeChildren(elem) {
+      elem.innerHTML = '';
+    }
+
+    //Кросс-браузерное решение
+    function removeChildren(elem) {
+      try {
+        elem.innerHTML = '';
+      } catch (e) {
+        while (elem.firstChild) {
+          elem.removeChild(elem.firstChild);
+        }
+      }
+    }
+  </pre>
+
+  <table id="table">
+  <tr>
+    <td>Это</td>
+    <td>Все</td>
+    <td>Элементы DOM</td>
+  </tr>
+  </table>
+
+  <ul id="ul">
+    <li>Вася</li>
+    <li>Петя</li>
+    <li>Маша</li>
+    <li>Даша</li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+
+    function removeChildren(elem) {
+      if (!!elem.firstChild) {
+        for (var i = elem.childNodes.length - 1; i >= 0 ; i--) {
+          elem.removeChild(elem.childNodes[i]);
+        }
+      }
+    }
+
+    removeChildren(table); // очищает таблицу
+    //removeChildren(ul); // очищает список
+
+
+  </script>
+
+
+
+
+  <h3>Task 1.11.6: Создать список </h3>
+  <pre>
+    Напишите интерфейс для создания списка.
+    Для каждого пункта:
+        Запрашивайте содержимое пункта у пользователя с помощью prompt.
+        Создавайте пункт и добавляйте его к UL.
+        Процесс прерывается, когда пользователь нажимает ESC или вводит пустую строку.
+    Все элементы должны создаваться динамически.
+    Если посетитель вводит теги – пусть в списке они показываются как обычный текст.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+    var ul = document.createElement('ul');
+    document.body.querySelector('.create_li').appendChild(ul);
+
+    do {
+      var text = prompt('Enter your text', 'Text');
+      if (!text) break;
+
+      var li = document.createElement('li');
+      ul.appendChild(li);
+
+      li.appendChild(document.createTextNode(text));
+
+    } while (text);
+
+    <b>Not my solution</b>
+    var ul = document.createElement('ul');
+    document.body.appendChild(ul);
+
+    while (true) {
+      var data = prompt("Введите текст для пункта списка", "");
+
+      if (!data) {
+        break;
+      }
+
+      var li = document.createElement('li');
+      li.appendChild(document.createTextNode(data));
+      ul.appendChild(li);
+    }
+  </pre>
+
+  <div class="create_li"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var ul = document.createElement('ul');
+    document.body.querySelector('.create_li').appendChild(ul);
+
+    do {
+      var text = prompt('Enter your text', 'Text');
+      if (!text) break;
+
+      var li = document.createElement('li');
+      ul.appendChild(li);
+
+      li.appendChild(document.createTextNode(text));
+
+    } while (text);
+
+
+  </script>
+
+
+
+  <h3>Task 1.11.7: Создайте дерево из объекта </h3>
+  <pre>
+    Напишите функцию, которая создаёт вложенный список UL/LI (дерево) из объекта.
+
+    1. Создать строку, а затем присвоить через container.innerHTML.
+    2. Создавать узлы через методы DOM.
+
+    Если получится – сделайте оба.
+
+    P.S. Желательно, чтобы в дереве не было лишних элементов,
+    в частности – пустых < ul></ ul> на нижнем уровне.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //РЕЗУЛЬТАТ ОДИНАКОВЫЙ
+    <b>My solution</b>
+    var data = {
+      "Рыбы": {
+        "Форель": {},
+        "Щука": {}
+      },
+
+      "Деревья": {
+        "Хвойные": {
+          "Лиственница": {},
+          "Ель": {}
+        },
+        "Цветковые": {
+          "Берёза": {},
+          "Тополь": {},
+          "Дуб": {}
+        }
+      },
+
+      "Кусты": {
+        "Шиповник": {},
+        "Сирень": {}
+      }
+    };
+
+    // 1 способ
+    function createTree(container, data) {
+      //var ul = document.createElement('ul');
+      //container = container.appendChild(ul);
+
+      var str = '< ul>';
+      //var li = document.createElement('li');
+
+      (function f(data) {
+
+        for (var key in data) {
+          str += '< li>' + key + '</ li>';
+
+          if ((typeof data[key] === 'object') && (Object.keys(data[key]).length > 0) ) {
+            var obj = data[key];
+
+            str += '< ul>';
+
+            f(obj);
+          }
+        }
+
+        str += '</ ul>';
+
+      })(data);
+
+      str += '</ ul>';
+
+      return container.innerHTML = str;
+    }
+
+
+    //2 способ
+    function createTree_2(container, data) {
+      var ul = document.createElement('ul');
+      var container = container.appendChild(ul);
+
+      (function f(parent,data) {
+
+        for (var key in data) {
+          var li = document.createElement('li');
+          var text = document.createTextNode(key);
+
+          parent.appendChild(li);
+          li.appendChild(text);
+
+          if ((typeof data[key] === 'object') && (Object.keys(data[key]).length > 0) ) {
+            var obj = data[key];
+
+            var newUl = document.createElement('ul');;
+            var newParent = li;
+            newParent.appendChild(newUl);
+            newParent = newUl;
+
+            f(newParent,obj);
+          }
+        }
+      })(container,data);
+    }
+
+
+    var container = document.getElementById('container');
+    createTree_2(container, data); // создаёт
+
+    <b>Not my solution</b>
+    // 1
+    function createTree(container, obj) {
+      container.innerHTML = createTreeText(obj);
+    }
+
+    function createTreeText(obj) { // отдельная рекурсивная функция
+      var li = '';
+      for (var k ey in obj) {
+        li += '< li>' + key + createTreeText(obj[key]) + '</ li>';
+      }
+      if (li) {
+        var ul = '< ul>' + li + '</ ul>'
+      }
+      return ul || '';
+    }
+
+    // 2
+    function createTree(container, obj) {
+      container.appendChild(createTreeDom(obj));
+    }
+
+    function createTreeDom(obj) {
+      // если нет детей, то рекурсивный вызов ничего не возвращает
+      // так что вложенный UL не будет создан
+      if (isObjectEmpty(obj)) return;
+
+      var ul = document.createElement('ul');
+
+      for (var key in obj) {
+        var li = document.createElement('li');
+        li.innerHTML = key;
+
+        var childrenUl = createTreeDom(obj[key]);
+        if (childrenUl) li.appendChild(childrenUl);
+
+        ul.appendChild(li);
+      }
+
+      return ul;
+    }
+
+
+    function isObjectEmpty(obj) {
+      for (var key in obj) {
+        return false;
+      }
+      return true;
+    }
+
+  </pre>
+
+  <div id="container"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var data = {
+      "Рыбы": {
+        "Форель": {},
+        "Щука": {}
+      },
+
+      "Деревья": {
+        "Хвойные": {
+          "Лиственница": {},
+          "Ель": {}
+        },
+        "Цветковые": {
+          "Берёза": {},
+          "Тополь": {},
+          "Дуб": {}
+        }
+      },
+
+      "Кусты": {
+        "Шиповник": {},
+        "Сирень": {}
+      }
+    };
+
+    // 1 способ
+    function createTree(container, data) {
+
+      var str = '<ul>';
+
+      (function f(data) {
+
+        for (var key in data) {
+          str += '<li>' + key + '</li>';
+
+          if ((typeof data[key] === 'object') && (Object.keys(data[key]).length > 0) ) {
+            var obj = data[key];
+
+            str += '<ul>';
+
+            f(obj);
+          }
+        }
+
+        str += '</ul>';
+
+      })(data);
+
+      str += '</ul>';
+
+      return container.innerHTML = str;
+    }
+
+
+    //2 способ
+    function createTree_2(container, data) {
+      var ul = document.createElement('ul');
+      var container = container.appendChild(ul);
+
+      (function f(parent,data) {
+
+        for (var key in data) {
+          var li = document.createElement('li');
+          var text = document.createTextNode(key);
+
+          parent.appendChild(li);
+          li.appendChild(text);
+
+          if ((typeof data[key] === 'object') && (Object.keys(data[key]).length > 0) ) {
+            var obj = data[key];
+
+            var newUl = document.createElement('ul');;
+            var newParent = li;
+            newParent.appendChild(newUl);
+            newParent = newUl;
+
+            f(newParent,obj);
+          }
+        }
+      })(container,data);
+    }
+
+
+    var container = document.getElementById('container');
+    createTree_2(container, data); // создаёт
+
+  </script>
+
+
+
+  <h3>Task 1.11.8: Дерево </h3>
+  <pre>
+    Есть дерево, организованное в виде вложенных списков < ul>/< li>.
+
+    Напишите код, который добавит каждому элементу списка < li> количество вложенных
+    в него элементов. Узлы нижнего уровня, без детей – пропускайте.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Bad code
+    <b>My solution</b>
+    function countTree_1(container) {
+
+
+      var ul = container.children; // ul главная
+      console.log('ul = ', ul);
+
+      // рекурсивная функция
+      (function f(ul) {
+
+        for (var i = 0; i < ul.length; i++) {
+          if ( ul[i].firstElementChild ) {
+            var obj = ul[i].children;
+
+            if (ul[i].nodeName === 'LI') {
+              var count = ul[i].firstElementChild.querySelectorAll('li').length;
+              ul[i].firstChild.data += '[' + count + ']';
+            }
+
+            f(obj); //т.е. следующий цикл ul == obj
+
+          }
+        }
+
+      })(ul);
+
+    }
+
+
+    var container = document.getElementById('tree'); // div контейнер
+    countTree_1(container);
+
+    <b>Not my solution</b>
+    var lis = document.getElementsByTagName('li');
+
+    for (i = 0; i < lis.length; i++) {
+      // получить количество детей
+      var childCount = lis[i].getElementsByTagName('li').length;
+      if (!childCount) continue;
+
+      // добавить кол-во детей к текстовому узлу
+      lis[i].firstChild.data += ' [' + childCount + ']';
+
+    }
+
+  </pre>
+
+  <div id="tree">
+    <ul>
+
+      <li>Животные  <!-- 9  -->
+        <ul>
+          <li>Млекопитающие <!-- 4  -->
+            <ul>
+              <li>Коровы</li>
+              <li>Ослы</li>
+              <li>Собаки</li>
+              <li>Тигры</li>
+            </ul>
+          </li>
+          <li>Другие
+            <ul>
+              <li>Змеи</li>
+              <li>Птицы</li>
+              <li>Ящерицы</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <li>Рыбы
+        <ul>
+          <li>Аквариумные
+            <ul>
+              <li>Гуппи</li>
+              <li>Скалярии</li>
+            </ul>
+
+          </li>
+          <li>Морские
+            <ul>
+              <li>Морская форель</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+
+    function countTree_1(container) {
+
+
+      var ul = container.children; // ul главная
+      console.log('ul = ', ul);
+
+      // рекурсивная функция
+      (function f(ul) {
+
+        for (var i = 0; i < ul.length; i++) {
+          if ( ul[i].firstElementChild ) {
+            var obj = ul[i].children;
+
+            if (ul[i].nodeName === 'LI') {
+              var count = ul[i].firstElementChild.querySelectorAll('li').length;
+              ul[i].firstChild.data += '[' + count + ']';
+            }
+
+            f(obj); //т.е. следующий цикл ul == obj
+
+          }
+        }
+
+      })(ul);
+
+    }
+
+
+    var container = document.getElementById('tree'); // div контейнер
+    countTree_1(container); //
+
+  </script>
+
+
+  <br>
+  <br>
+
+
+
+  <h3>Task 1.11.9: Создать календарь в виде таблицы </h3>
+  <pre>
+    Напишите функцию, которая умеет генерировать календарь для заданной пары (месяц, год).
+    Календарь должен быть таблицей, где каждый день – это TD.
+    У таблицы должен быть заголовок с названиями дней недели, каждый день – TH.
+    Синтаксис: createCalendar(id, year, month).
+    Такой вызов должен генерировать текст для календаря месяца month в году year,
+    а затем помещать его внутрь элемента с указанным id.
+    Например: createCalendar("cal", 2012, 9) сгенерирует в < div id=„cal“></ div> следующий календарь:
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function createCalendar(id, year, month) {
+      // создаем объект месяца, который нам нужен
+      var date = new Date(year, month - 1);
+      //количество дней в месяце
+      var amountDay = (new Date(year, month, 0)).getDate();
+
+      // находим div, в котором будет таблица
+      var wrapper = document.getElementById(id);
+      // создаем таблицу и вставляем ее в документ
+      var table = document.createElement('table');
+      wrapper.appendChild(table);
+
+      // создаем назваие таблицы
+      var monthStr = ['Январьчик','Февральчик','Мартик','Апрельчик','Маёк','Июньчик','Июльчик','Августик','Сентябрёк','Октябрёк','Ноябрёк','Декабрик'];
+      var caption = document.createElement('caption');
+      caption.textContent = monthStr[month - 1] + ' ' + year;
+      table.appendChild(caption);
+
+      //создаем строку таблицы и вставляем в таблицу
+      var tr = document.createElement('tr');
+      table.appendChild(tr);
+
+      //Сделаем подсветку сегодняшней даты
+      var dateToday = new Date;
+      var yearToday = dateToday.getFullYear();
+      var monthToday = dateToday.getMonth() + 1;
+      var dayNow = dateToday.getDate();
+
+      // отрисовка заглавной строки с днями неделей
+      for (var i = 0; i < 7; i++) {
+        var th = document.createElement('th');
+        var weekDay = ['пн','вт','ср','чт','пт','сб','вс'];
+
+        th.textContent = weekDay[i];
+        tr.appendChild(th);
+      }
+
+      // day - число месяца
+      var day = '';
+      // Узнаем день недели в заданном месяце
+      var firstDay = (date.getDay());
+      if (firstDay == 0) firstDay = 7;
+
+      //создадим строки таблицы и ячейки
+      var i = 0
+      do {
+          var tr = document.createElement('tr');
+          table.appendChild(tr);
+
+          // c пн == 1 до вс == 7
+          for (var j = 1; j <= 7; j++) {
+            if ( j == firstDay && i == 0 ) {
+              day = 1;
+            }
+
+            var td = document.createElement('td');
+
+            td.textContent = day;
+            tr.appendChild(td);
+
+            //Сделаем подсветку сегодняшней даты
+            if ( (year == yearToday) && (month == monthToday) && (dayNow == day) ) {
+              td.classList.add('today');
+            }
+
+            // Если дни закончились, то дорисовываем пустые ячейки
+            if ( day && (day < amountDay) ) day++;
+            else day = '';
+          }
+
+        i++
+      } while (day);
+
+    }
+
+    createCalendar("cal", 2018, 4); // Например, апрель 2018 или февраль 2021.
+  </pre>
+
+  <style>
+
+    #cal table {
+      border-spacing: 0;
+      box-sizing: border-box;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    #cal table caption {
+      padding: 10px;
+      font-weight: bold;
+    }
+
+    #cal table td, #cal table th{
+      border: 1px solid #000;
+      padding: 4px;
+      border-spacing: 0;
+    }
+
+    #cal table th {
+      background-color: rgb(217, 217, 217);
+    }
+
+    .today {
+      background-color: rgba(205, 90, 254, 1);
+    }
+
+  </style>
+
+  <div id="cal"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function createCalendar(id, year, month) {
+      // создаем объект месяца, который нам нужен
+      var date = new Date(year, month - 1);
+      //количество дней в месяце
+      var amountDay = (new Date(year, month, 0)).getDate();
+
+      // находим div, в котором будет таблица
+      var wrapper = document.getElementById(id);
+      // создаем таблицу и вставляем ее в документ
+      var table = document.createElement('table');
+      wrapper.appendChild(table);
+
+      // создаем назваие таблицы
+      var monthStr = ['Январьчик','Февральчик','Мартик','Апрельчик','Маёк','Июньчик','Июльчик','Августик','Сентябрёк','Октябрёк','Ноябрёк','Декабрик'];
+      var caption = document.createElement('caption');
+      caption.textContent = monthStr[month - 1] + ' ' + year;
+      table.appendChild(caption);
+
+      //создаем строку таблицы и вставляем в таблицу
+      var tr = document.createElement('tr');
+      table.appendChild(tr);
+
+      //Сделаем подсветку сегодняшней даты
+      var dateToday = new Date;
+      var yearToday = dateToday.getFullYear();
+      var monthToday = dateToday.getMonth() + 1;
+      var dayNow = dateToday.getDate();
+
+      // отрисовка заглавной строки с днями неделей
+      for (var i = 0; i < 7; i++) {
+        var th = document.createElement('th');
+        var weekDay = ['пн','вт','ср','чт','пт','сб','вс'];
+
+        th.textContent = weekDay[i];
+        tr.appendChild(th);
+      }
+
+      // day - число месяца
+      var day = '';
+      // Узнаем день недели в заданном месяце
+      var firstDay = (date.getDay());
+      if (firstDay == 0) firstDay = 7;
+
+      //создадим строки таблицы и ячейки
+      var i = 0
+      do {
+          var tr = document.createElement('tr');
+          table.appendChild(tr);
+
+          // c пн == 1 до вс == 7
+          for (var j = 1; j <= 7; j++) {
+            if ( j == firstDay && i == 0 ) {
+              day = 1;
+            }
+
+            var td = document.createElement('td');
+
+            td.textContent = day;
+            tr.appendChild(td);
+
+            //Сделаем подсветку сегодняшней даты
+            if ( (year == yearToday) && (month == monthToday) && (dayNow == day) ) {
+              td.classList.add('today');
+            }
+
+            // Если дни закончились, то дорисовываем пустые ячейки
+            if ( day && (day < amountDay) ) day++;
+            else day = '';
+          }
+
+        i++
+      } while (day);
+
+    }
+
+    createCalendar("cal", 2019, 2); // Например, апрель 2018 или февраль 2021.
+
+  </script>
+
+
+
+  <br>
+  <br> <br>
+
+
+  <h3>Task 1.11.10: Часики с использованием "setInterval" </h3>
+  <pre>
+    Создайте цветные часики как в примере ниже:
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function time() {
+      var date = new Date;
+
+      var hh = date.getHours(),
+          mm = date.getMinutes(),
+          ss = date.getSeconds();
+
+      if (hh < 10) {
+        hh = '0'+hh;
+      }
+      if (mm < 10) {
+        mm = '0'+mm;
+      }
+      if (ss < 10) {
+        ss = '0'+ss;
+      }
+
+      var clock = document.getElementById('clock');
+
+      clock.innerHTML = '< span hh="">' + hh + '</ span>' + ':' + '< span mm="">' + mm + '</ span>' + ':' + '< span ss="">' + ss + '</ span>';
+    }
+
+    time();
+    setInterval(function() {
+      time();
+      clock.classList.add('clock');
+    },1000);
+  </pre>
+
+  <style>
+    [hh] {
+      color: red;
+    }
+
+    [mm] {
+      color: green;
+    }
+
+    [ss] {
+      color: blue;
+    }
+
+    .clock {
+      transition: 5s;
+      transform: scale(3);
+      background-color: rgb(253, 255, 168);
+      text-align: center;
+      width: 5%;
+      margin: 0 auto;
+      padding: 10px;
+      border: 2px solid rgb(255, 162, 77);
+      border-radius: 5px;
+
+    }
+
+  </style>
+
+  <div id="clock"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function time() {
+      var date = new Date;
+
+      var hh = date.getHours(),
+          mm = date.getMinutes(),
+          ss = date.getSeconds();
+
+      if (hh < 10) {
+        hh = '0'+hh;
+      }
+      if (mm < 10) {
+        mm = '0'+mm;
+      }
+      if (ss < 10) {
+        ss = '0'+ss;
+      }
+
+      var clock = document.getElementById('clock');
+
+      clock.innerHTML = '<span hh="">' + hh + '</span>' + ':' + '<span mm="">' + mm + '</span>' + ':' + '<span ss="">' + ss + '</span>';
+    }
+
+    time();
+    setInterval(function() {
+      time();
+      clock.classList.add('clock');
+    },1000);
+
+  </script>
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

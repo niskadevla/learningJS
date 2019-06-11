@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Числа фибоначи</title>
+</head>
+<body>
+    <script type="text/javascript">
+      var timeStart = performance.now();
+
+      function fib(n) {
+        return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+      }
+
+      fib(45);
+
+      var timeFinish = performance.now();
+      var timeDif = timeFinish - timeStart;
+      document.write(Math.round(timeDif / 1000) + " сек");
+    </script>
+
+</body>
+</html>

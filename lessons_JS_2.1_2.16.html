@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Learning JavaScript</title>
+  <script src="js/lessons_JS.js">
+  </script>
+</head>
+<body>
+  <strong> defer подождет пока весь документ загрузится, потом по порядку выполниться </strong>
+  <p>Подключили внешний файл в head: <'script defer src="main.js">
+  <'/script> Первый загрузиться </p>
+  <p>Подключили внешний файл: <'script defer src="main.js">
+  <'/script> Второй загрузиться </p>
+  <hr>
+  <p>Подключили внешний файл в head: <'script src="main.js">
+  <'/script> Первый загрузиться </p>
+  <p>Подключили внешний файл в head: <'script src="main.js">
+  <'/script> Второй загрузиться </p>
+  <hr>
+  <p>Подключили внешний файл в head: <'script async src="main.js">
+  <'/script>Все загрузиться параллельно</p>
+  <p>Подключили внешний файл в head: <'script async src="main.js">
+  <'/script> Все загрузиться параллельно</p>
+  <hr>
+  Если в body, то по умолчанию ассинхронно
+  <p>Подключили внешний файл: <'script src="main.js">
+  <'/script>Все загрузиться параллельно</p>
+  <p>Подключили внешний файл: <'script src="main.js">
+  <'/script> Все загрузиться параллельно</p>
+  <hr>
+  <hr>
+
+  <h2>5. Переменные</h2>
+  <script type="text/javascript">
+    /* Константа
+    Все большие буквы с _
+     */
+    var COLOR_RED = "red";
+    document.write('КОНСТАНТА можно менять, но так неделают var COLOR_RED = "red"'+"<br>");
+
+    var admin, name = "Vasiliy";
+    admin = name;
+    document.write ("var admin, name = 'Vasiliy'; admin = name; <br>" + admin);
+    document.write('<br>');
+    var planetName = 'Earth';
+    var userName = 'Petya';
+
+
+  </script>
+  <hr>
+  <hr>
+
+  <h2>7. Шесть типов данных, typeof</h2>
+  <script type="text/javascript">
+  document.write( "нечисло * 2 = " + "нечисло" * 2 );
+  document.write("<br>");
+  // alert( 1 / 0 );
+  var a = typeof null;
+  document.write("typeof 'null' = " + a);
+  document.write("<br>");
+  document.write('0 == "" это ' + (0 == ""));
+  document.write("<br>");
+  document.write('0 == " " это ' + (0 == " "));
+  document.write("<br>");
+  document.write(' "" == " " это ' + ("" == " "));
+  document.write("<br>");
+  document.write('"" < " " это ' + ("" < " "));
+  document.write("<br>");
+  var a = typeof "";
+  document.write('typeof  = " " ' + a);
+  document.write("<br>");
+  var a = typeof /123/;
+  document.write('typeof  = /123/ ' + a);
+  document.write("<br>");
+  var a = typeof 123;
+  document.write('typeof  = 123 ' + a);
+  </script>
+  <hr>
+  <hr>
+
+  <h2>8. Основные операторы</h2>
+  <script type="text/javascript">
+    var a = '2';
+    var b = '3';
+    document.write(" '2' + '3' = (+a + +b) = " + (+a + +b));
+    document.write("<br>");
+    document.write(" '2' + '3' = (a + b) = " + (a + b));
+    document.write("<br>");
+    a = 5;
+    b = 3;
+    c = a % b;
+    document.write("5 % 3 = " + c);
+    document.write("<br>");
+    var i = 2;
+    var a = i++;
+    document.write(a + " " + i);
+    document.write("<br>");
+    a = (65, 78);
+    document.write(a);
+    document.write("<br>");
+
+
+    document.write("<br>");
+  </script>
+  <hr>
+  <hr>
+
+  <h2>11. Взаимодействие с пользователем: alert, prompt, confirm</h2>
+  <script type="text/javascript">
+    // var userName = prompt('Как вас зовут?',"");
+    // document.write("Приветствую Вас: " + userName);
+    // var conf = confirm("Вы уверены: " + userName + "?");
+
+  </script>
+
+  <h2>12. Условные операторы: if, '?'</h2>
+  <script type="text/javascript">
+    // if ('0') {
+    //   alert( 'Привет' );
+    // }
+
+    /*
+    var a = prompt("Каково «официальное» название JavaScript?", "");
+    if (a == "ECMAScript") {
+      alert("Верно!")
+    }
+    else {
+      alert("Не знаете?");
+      alert("ECMAScript!");
+    }
+    */
+
+    // var val = prompt("Enter your number");
+    // if (val > 0) {
+    //   alert("1");
+    // }
+    // else if (val < 0) {
+    //   alert("-1");
+    // }
+    // else
+    //   alert ("0");
+
+/*
+    var login = prompt("Enter your login: ", "");
+    if (login === "admin") {
+      var pas = prompt("Enter your password: ", "");
+      if (pas === "Чёрный Властелин") {
+        alert("Welcome!");
+      }
+      else if (pas === null) {
+        alert("Enter is cancel!");
+      }
+      else {
+        alert("Password is not correct!");
+      }
+    }
+    else if (login == null) {
+      alert("Enter is cancel!");
+    }
+    else {
+      alert("I don't now you!");
+    }
+*/
+  </script>
+  <hr>
+
+
+  <h2>13. Логические операторы</h2>
+  <script type="text/javascript">
+    var aa = 2, bb;
+    var res = bb || aa;
+
+    document.write(res + "<br>");
+    // alert( undefined || 1 || false || 0 );
+    // alert( !true );
+    document.write( !0 );
+  </script>
+
+
+<br>
+<hr>
+<hr>
+<hr>
+
+  <h1>12. Условные операторы: if, '?'</h1>
+  <h3>Task 1: </h3>
+  <pre>
+  Перепишите if с использованием оператора '?':
+
+    if (a + b < 4) {
+      result = 'Мало';
+    } else {
+      result = 'Много';
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 2, b = 3;
+    var result = (a+b < 4) ? 'few' : 'lot of';
+    document.write("Ответ: " + result);
+  </pre>
+  <script type="text/javascript">
+    var a = 2, b = 3;
+    var result = (a+b < 4) ? 'few' : 'lot of';
+    document.write("Ответ: " + result);
+  </script>
+
+
+  <h3>Task 2: </h3>
+  <pre>
+    Перепишите if..else с использованием нескольких операторов '?'.
+
+  Для читаемости – оформляйте код в несколько строк.
+
+  var message;
+
+  if (login == 'Вася') {
+    message = 'Привет';
+  } else if (login == 'Директор') {
+    message = 'Здравствуйте';
+  } else if (login == '') {
+    message = 'Нет логина';
+  } else {
+    message = 'Your name is not in the database';
+  }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var message;
+    // var login = prompt('What is your name', 'Vasya');
+    var login = 'Vas';
+    message = (login == 'Vasya') ? 'Hello Vasya' :
+    (login == "Director") ? 'Good morning Director' :
+    (login == '') ? 'login is empty' :
+    'Your name is not in the database';
+    document.write("Ответ: " + message);
+  </pre>
+  <script type="text/javascript">
+    var message;
+    // var login = prompt('What is your name', 'Vasya');
+    var login = 'Vas';
+    message = (login == 'Vasya') ? 'Hello Vasya' :
+    (login == "Director") ? 'Good morning Director' :
+    (login == '') ? 'login is empty' :
+    'Your name is not in the database';
+    document.write("Ответ: " + message);
+  </script>
+
+
+  <h1>13. Логические операторы</h1>
+  <h3>Task 1: </h3>
+  <pre>
+    Что выведет код ниже?
+    document.write( null || 2 || undefined );
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    document.write("Ответ: " + (null || 2 || undefined));
+  </pre>
+  <script type="text/javascript">
+    document.write("Ответ: " + (null || 2 || undefined));
+  </script>
+
+
+  <h3>Task 2: </h3>
+  <pre>
+    Что выведет код ниже?
+    alert( alert(1) || 2 || alert(3) );
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    document.write("Ответ: " + (alert( alert(1) || 2 || alert(3) )));
+    1 потом 2
+  </pre>
+  <script type="text/javascript">
+    // document.write("Ответ: " + (alert( alert(1) || 2 || alert(3) )));
+  </script>
+
+
+  <h3>Task 3: </h3>
+  <pre>
+    Проверка if внутри диапазона
+    Напишите условие if для проверки того факта, что переменная age находится между 14 и 90 включительно.
+    «Включительно» означает, что концы промежутка включены, то есть age может быть равна 14 или 90.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var age = 21;
+    if (age >= 14 && age <= 90) {
+      document.write("Variable is greater than or equal to 14 and less than or equal to 90");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+  </pre>
+  <script type="text/javascript">
+    var age = 21;
+    if (age >= 14 && age <= 90) {
+      document.write("Variable is greater than or equal to 14 and less than or equal to 90");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+  </script>
+
+
+  <h3>Task 4: Проверка if вне диапазона </h3>
+  <pre>
+
+    Напишите условие if для проверки того факта, что age НЕ находится между 14 и 90 включительно.
+    Сделайте два варианта условия: первый с использованием оператора НЕ !, второй – без этого оператора.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var age = 102;
+    if (!(age >= 14 && age <= 90)) {
+      document.write("Variable is greater than to 90 and less than to 14 <br/>");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+
+    var age = 1;
+    if (age < 14 || age > 90) {
+      document.write("Variable is greater than to 90 and less than to 14 <br/>");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+  </pre>
+  <script type="text/javascript">
+    var age = 102;
+    if (!(age >= 14 && age <= 90)) {
+      document.write("Variable is greater than to 90 and less than to 14 <br/>");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+
+    var age = 1;
+    if (age < 14 || age > 90) {
+      document.write("Variable is greater than to 90 and less than to 14 <br/>");
+    }
+    else {
+      document.write('Variable = ' + age);
+    }
+  </script>
+
+
+  <h1>14. Преобразование типов для примитивов</h1>
+  <h3>Task 1: </h3>
+  <pre>
+      Проверить является ли числом переменная?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var str = +"12j";
+    if (Number.isNaN(str)) {
+      document.write('Answer: ' + str + ' - You entered not a number! <br>');
+    }
+    else {
+      document.write('Answer: ' + str + ' - You enterde a number. Good! <br>');
+    }
+  </pre>
+  <script type="text/javascript">
+    var str = +"12j";
+    if (Number.isNaN(str)) {
+      document.write('Answer: ' + str + ' - You entered not a number! <br>');
+    }
+    else {
+      document.write('Answer: ' + str + ' - You enterde a number. Good! <br>');
+    }
+  </script>
+
+
+  <h3>Task 2: </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    "" + 1 + 0 = "10" // (1)
+    "" - 1 + 0 = -1 // (2)
+    true + false = 1
+    6 / "3" = 2
+    "2" * "3" = 6
+    4 + 5 + "px" = "9px"
+    "$" + 4 + 5
+     = "$45"
+    "4" - 2
+     = 2
+    "4px" - 2
+     = NaN
+    7 / 0
+     = Infinity
+    " -9\n" + 5 = " -9\n5"
+    " -9\n" - 5 = -14
+    5 && 2
+     = 2
+    2 && 5
+     = 5
+    5 || 0
+     = 5
+    0 || 5 = 5
+    null + 1 = 1 // (3)
+    undefined + 1 = NaN // (4)
+    null == "\n0\n" = false // (5)
+    +null == +"\n0\n" = true // (6)
+  </pre>
+  <script type="text/javascript">
+    document.write('<hr>');
+    document.write('undefined == NaN это ');
+    document.write(undefined == NaN );
+    document.write('<br>');
+    if (0 == "\n0\n") {
+      document.write('if (0 == "\n0\n")');
+      document.write( "<br> true, совсем не как 0! <br>");
+    }
+    document.write("undefined + 1 = ");
+    document.write(undefined + 1);
+    document.write("<br>");
+    var comparison = +"1";
+    if (!comparison) {
+      alert("0");
+    }
+
+    document.write("NaN == NaN - " + (NaN == NaN));
+    document.write('<br>');
+    document.write("undefined == undefined - " + (undefined == undefined));
+    document.write('<br>');
+    document.write("undefined == null - " + (undefined == null));
+    document.write("<br>");
+    document.write("null >= null - " + (null >= null));
+    document.write("<br>");
+    document.write("null == null - " + (null == null));
+    document.write("<br>");
+    document.write("null >= 0 - " + (null >= 0));
+    document.write("<br>");
+    document.write("null == 0 - " + (null == 0));
+    document.write("<br>");
+    document.write("null > 0 - " + (null > 0));
+    document.write("<br>");
+    document.write("undefined >= 0 - " + (undefined >= 0));
+    document.write("<br>");
+    document.write("undefined == 0 - " + (undefined == 0));
+    document.write("<br>");
+    document.write("undefined > 0 - " + (undefined > 0));
+    document.write('<hr>');
+
+  </script>
+
+
+  <h1>15. Циклы while, for</h1>
+  <h3>Task 15.1: </h3>
+  <pre>
+    Какое последнее значение выведет этот код? Почему?
+    var i = 3;
+    while (i) {
+      alert( i-- );
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var i = 3;
+    while(i) {
+      document.write(i-- + '< br/>');
+    }
+  </pre>
+  <script type="text/javascript">
+    var i = 3;
+    while(i) {
+      document.write(i-- + "<br>");
+    }
+  </script>
+
+
+  <h3>Task 15.2: </h3>
+  <pre>
+    Для каждого цикла запишите, какие значения он выведет. Потом сравните с ответом.
+
+    Префиксный вариант
+
+    var i = 0;
+    while (++i < 5) alert( i );
+
+    Постфиксный вариант
+
+    var i = 0;
+    while (i++ < 5) alert( i );
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var i = 0;
+    while(++i < 5) {
+      document.write(i + "< br>");
+    }
+    document.write('< br>');
+
+    var i = 0;
+    while(i++ < 5) {
+      document.write(i + "< br>");
+    }
+  </pre>
+  <script type="text/javascript">
+    var i = 0;
+    while(++i < 5) {
+      document.write(i + "<br>");
+    }
+    document.write('<br>');
+
+    var i = 0;
+    while(i++ < 5) {
+      document.write(i + "<br>");
+    }
+  </script>
+
+
+  <h3>Task 15.3: </h3>
+  <pre>
+    Для каждого цикла запишите, какие значения он выведет. Потом сравните с ответом.
+    Постфиксная форма:
+    for (var i = 0; i < 5; i++) alert( i );
+
+    Префиксная форма:
+    for (var i = 0; i < 5; ++i) alert( i );
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    for (var i = 0; i < 5; i++) {
+      document.write(i + "< br>");
+    }
+    document.write('< br>');
+
+    for (var i = 0; i < 5; ++i) {
+      document.write(i + "< br>")
+    }
+  </pre>
+  <script type="text/javascript">
+    for (var i = 0; i < 5; i++) {
+      document.write(i + "<br>");
+    }
+    document.write('<br>');
+
+    for (var i = 0; i < 5; ++i) {
+      document.write(i + "<br>")
+    }
+
+  </script>
+
+
+  <h3>Task 15.4: </h3>
+  <pre>
+    При помощи цикла for выведите чётные числа от 2 до 10.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    for (var i = 2; i <= 10; i++) {
+      if ((i % 2) == 0) {
+        document.write(i + ", ");
+      }
+    }
+  </pre>
+  <script type="text/javascript">
+    for (var i = 2; i <= 10; i++) {
+      if ((i % 2) == 0) {
+        document.write(i + ", ");
+      }
+    }
+  </script>
+
+
+  <h3>Task 15.5: </h3>
+  <pre>
+    Перепишите код, заменив цикл for на while, без изменения поведения цикла.
+
+    for (var i = 0; i < 3; i++) {
+    alert( "номер " + i + "!" );
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var i = 0;
+    while (i < 3) {
+      document.write("Номер " + i + "!");
+      i++;
+    }
+  </pre>
+  <script type="text/javascript">
+    var i = 0;
+    while (i < 3) {
+      document.write("Номер " + i + "!");
+      i++;
+    }
+  </script>
+
+
+  <h3>Task 15.6: </h3>
+  <pre>
+    Повторять цикл, пока ввод неверен.
+    Напишите цикл, который предлагает prompt ввести число, большее 100. Если посетитель ввёл другое число – попросить ввести ещё раз, и так далее.
+    Цикл должен спрашивать число пока либо посетитель не введёт число, большее 100, либо не нажмёт кнопку Cancel (ESC).
+    Предполагается, что посетитель вводит только числа. Предусматривать обработку нечисловых строк в этой задаче необязательно.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //My solution:
+    while (true) {
+      var num = prompt("Enter number more than 100", "");
+      if (num > 100 || num == null ) break;
+    }
+
+    // It's not a my solution
+    var num;
+    do {
+      num = prompt("Enter number more than 100", 0);
+    } while (num <= 100 && num != null);
+  </pre>
+  <script type="text/javascript">
+
+    while (true) {
+      var num = prompt("Enter number more than 100", "");
+      if (num > 100 || num == null ) break;
+    }
+
+    // var num;
+    // do {
+    //   num = prompt("Enter number more than 100", 0);
+    // } while (num <= 100 && num != null);
+  </script>
+
+
+
+  <h3>Task 15.7: </h3>
+  <pre>
+    Вывести простые числа
+    Натуральное число, большее 1, называется простым, если оно ни на что не делится, кроме себя и 1.
+    Другими словами, n>1 – простое, если при делении на любое число от 2 до n-1 есть остаток.
+    Создайте код, который выводит все простые числа из интервала от 2 до 10. Результат должен быть: 2,3,5,7.
+
+    P.S. Код также должен легко модифицироваться для любых других интервалов.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var finishNum = 100;
+    var resu = 2;
+    out:
+    for (var n = 2; n <= finishNum; n++) {
+      for (var y = 2; y < n; y++) {
+        if (n % y == 0) continue out;
+        else resu = n;
+      }
+      document.write(resu + " | ");
+    }
+  </pre>
+  <script type="text/javascript">
+    var finishNum = 100;
+    var resu = 2;
+    out:
+    for (var n = 2; n <= finishNum; n++) {
+      for (var y = 2; y < n; y++) {
+        if (n % y == 0) continue out;
+        else resu = n;
+      }
+      document.write(resu + " | ");
+    }
+  </script>
+
+
+  <h1>16. Конструкция switch</h1>
+  <h3>Task 16.1: </h3>
+  <pre>
+    Напишите "if", аналогичный "switch"
+    Напишите if..else, соответствующий следующему switch:
+
+    switch (browser) {
+      case 'IE':
+        alert( 'О, да у вас IE!' );
+        break;
+
+      case 'Chrome':
+      case 'Firefox':
+      case 'Safari':
+      case 'Opera':
+        alert( 'Да, и эти браузеры мы поддерживаем' );
+        break;
+
+      default:
+        alert( 'Мы надеемся, что и в вашем браузере все ок!' );
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var browser = 'IE';
+    if (browser === 'IE') {
+      document.write('Oh, yes you have IE');
+    }
+    else if (browser === 'Chtome' || browser === 'Firefox' || browser === 'Safari' || browser === 'Opera') {
+      document.write('Yes, this browsers is supported');
+    }
+    else {
+      document.write('We hope, that  in your browser it\'s ok');
+    }
+  </pre>
+  <script type="text/javascript">
+    var browser = 'IE';
+    if (browser === 'IE') {
+      document.write('Oh, yes you have IE');
+    }
+    else if (browser === 'Chtome' || browser === 'Firefox' || browser === 'Safari' || browser === 'Opera') {
+      document.write('Yes, this browsers is supported');
+    }
+    else {
+      document.write('We hope, that  in your browser it\'s ok');
+    }
+  </script>
+
+
+  <h3>Task 16.2: </h3>
+  <pre>
+    Переписать if'ы в switch
+    Перепишите код с использованием одной конструкции switch:
+
+    var a = +prompt('a?', '');
+
+    if (a == 0) {
+      alert( 0 );
+    }
+    if (a == 1) {
+      alert( 1 );
+    }
+
+    if (a == 2 || a == 3) {
+      alert( '2,3' );
+    }
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var a = 2;
+    switch (a) {
+      case 0: document.write('0'); break;
+      case 1: document.write('1'); break;
+      case 2:
+      case 3: document.write('2,3'); break;
+    }
+  </pre>
+  <script type="text/javascript">
+    var a = 2;
+    switch (a) {
+      case 0: document.write('0'); break;
+      case 1: document.write('1'); break;
+      case 2:
+      case 3: document.write('2,3'); break;
+    }
+  </script>
+
+
+
+
+<br>
+<br>
+<br>
+</body>
+</html>

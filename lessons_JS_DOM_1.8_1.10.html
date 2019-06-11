@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons JS DOM_1.8_</title>
+
+  <style media="screen">
+    span {
+      color: red;
+    }
+
+    .external {
+      background-color: yellow;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!--**********
+  * Современный DOM: полифиллы
+  ************-->
+
+  <h1>1.8. Современный DOM: полифиллы  </h1>
+  <h3>Task 1.8.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    console.log('HTMLDocument = ', HTMLDocument);
+    console.log('document = ', document);
+    console.log('document.documentElement = ', document.documentElement);
+    console.log('HTMLElement = ', HTMLElement);
+
+    document.write('HTMLDocument = ', HTMLDocument);
+    document.write('<br>');
+    document.write('document = ', document);
+    document.write('<br>');
+    document.write( ' {}.toString.call(document) = ', {}.toString.call(document) ); // [object HTMLDocument]
+    document.write('<br>');
+    document.write('document.documentElement = ', document.documentElement);
+    document.write('<br>');
+    document.write('HTMLElement = ', HTMLElement);
+    document.write('<br>');
+    document.write('document.body = ', document.body);
+    document.write('<br>');
+    document.write('HTMLBodyElement = ', HTMLBodyElement);
+    document.write('<br>');
+    document.write('Text = ', Text);
+    document.write('<br>');
+    document.write('<br>');
+
+    document.write('<b>');
+    document.write('document.__proto__ = ', document.__proto__);
+    document.write('</b>');
+    document.write('<br>');
+    document.write('document.__proto__.__proto__ = ', document.__proto__.__proto__);
+    document.write('<br>');
+    document.write('document.__proto__.__proto__.__proto__ = ', document.__proto__.__proto__.__proto__);
+    document.write('<br>');
+    document.write('document.__proto__.__proto__.__proto__.__proto__ = ', document.__proto__.__proto__.__proto__.__proto__);
+    document.write('<br>');
+    document.write('<br>');
+
+    document.write('<b>');
+    document.write('HTMLDocument.prototype = ', HTMLDocument.prototype);
+    document.write('</b>');
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write('window = ', window);
+    document.write('<br>');
+    document.write('window.__proto__ = ', window.__proto__);
+    document.write('<br>');
+    document.write('Window = ', Window);
+    document.write('<br>');
+    document.write('<br>');
+
+  </script>
+
+
+
+
+  <h3>Task 1.8.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    if (document.documentElement.firstElementChild === undefined) { // (1)
+
+      Object.defineProperty(Element.prototype, 'firstElementChild', { // (2)
+        get: function() {
+          var el = this.firstChild;
+          do {
+            if (el.nodeType === 1) {
+              return el;
+            }
+            el = el.nextSibling;
+          } while (el);
+
+          return null;
+        }
+      });
+    }
+
+    document.write( document.documentElement.firstElementChild );
+
+  </script>
+
+
+
+  <hr>
+
+
+  <span id="span_text">Text</span>
+
+  <h3>Task 1.8.3:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У меня хуже, но короче, а также нужно сделать самовызывающую функцию
+    <b>My solution</b>
+      //Сравнение селектора
+      if (document.documentElement.matches_1 === undefined) {
+        Element.prototype.matches_1 = function(css) {
+            return ( this === document.querySelector(css) );
+          }
+
+      }
+
+      document.write( document.getElementById('span_text').matches_1('span[id*="spa"]') );
+
+    <b>Not my solution</b>
+      (function() {
+
+        // проверяем поддержку
+        if (!Element.prototype.matches) {
+
+          // определяем свойство
+          Element.prototype.matches = Element.prototype.matchesSelector ||
+            Element.prototype.webkitMatchesSelector ||
+            Element.prototype.mozMatchesSelector ||
+            Element.prototype.msMatchesSelector;
+
+        }
+
+        })();
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // Сравнение свойств и значений селктора
+    // if (document.documentElement.matches_1 === undefined) {
+    //   Element.prototype.matches_1 = function(css) {
+    //
+    //       var elems = this;
+    //       for (var i = 0; i < elems.length; i++) {
+    //         if ( (elems[i] === 1) ) {
+    //           var elemStyle = elems[i].style;
+    //           for (var key in elemStyle) {
+    //             if ( ~elemStyle[key].indexOf(css) ) return true;
+    //           }
+    //         }
+    //       }
+    //
+    //       return false;
+    //     }
+    //
+    // }
+
+
+    //Сравнение селектора
+    if (document.documentElement.matches_1 === undefined) {
+      Element.prototype.matches_1 = function(css) {
+          return ( this === document.querySelector(css) );
+        }
+
+    }
+
+    document.write( document.getElementById('span_text').matches_1('span[id*="spa"]') );
+
+  </script>
+
+
+  <br>
+  <hr>
+
+  <div>
+    <div class="div-lorem">
+        <span>Lorem ipsum dolor sit amet.</span>
+        <span class="span-lorem">Ullam culpa hic enim, optio.</span>
+        <span>Itaque minima ipsum harum vel?</span>
+    </div>
+  </div>
+
+
+  <h3>Task 1.8.4: Полифилл для closest </h3>
+  <pre>
+    Метод elem.closest(css) для поиска ближайшего родителя, удовлетворяющего селектору css,
+    не поддерживается некоторыми браузерами, например IE11-.
+    Создайте для него полифилл.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    (function() {
+
+      if (!document.documentElement.closest_1) {
+        Element.prototype.closest_1 = function(css) {
+          var elem = this;
+
+          while (elem) {
+            if (  elem.matches(css) ) {
+              return elem;
+            }
+
+            elem = elem.previousElementSibling || elem.parentElement;
+          }
+          return null;
+        };
+      }
+
+    })();
+
+
+    document.write( document.querySelector('.span-lorem').closest('span').tagName.toLowerCase() ); //
+    document.write( '< br>' );
+    document.write( document.querySelector('.span-lorem').closest('span').className.toLowerCase() ); //
+    document.write( '< br>' );
+    document.write( document.querySelector('.span-lorem').closest_1('span').tagName.toLowerCase() ); //
+    document.write( '< br>' );
+    document.write( document.querySelector('.span-lorem').closest_1('span').className.toLowerCase() ); //
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    (function() {
+
+      if (!document.documentElement.closest_1) {
+        Element.prototype.closest_1 = function(css) {
+          var elem = this;
+
+          while (elem) {
+            if (  elem.matches(css) ) {
+              return elem;
+            }
+
+            elem = elem.previousElementSibling || elem.parentElement;
+          }
+          return null;
+        };
+      }
+
+    })();
+
+
+    document.write( document.querySelector('.span-lorem').closest('span').tagName.toLowerCase() ); //
+    document.write( '<br>' );
+    document.write( document.querySelector('.span-lorem').closest('span').className.toLowerCase() ); //
+    document.write( '<br>' );
+    document.write( document.querySelector('.span-lorem').closest_1('span').tagName.toLowerCase() ); //
+    document.write( '<br>' );
+    document.write( document.querySelector('.span-lorem').closest_1('span').className.toLowerCase() ); //
+
+  </script>
+
+
+
+  <br>
+  <hr>
+
+
+  <div id="text-lorem_2">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, ratione!
+  </div>
+
+
+  <h3>Task 1.8.5: Полифилл для textContent </h3>
+  <pre>
+    Свойство textContent не поддерживается IE8. Однако, там есть свойство innerText.
+    Создаёте полифилл, который проверяет поддержку свойства textContent, и если её нет – создаёт его, используя innerText.
+    Получится, что в IE8 «новое» свойство textContent будет «псевдонимом» для innerText.
+
+    Хотя свойство innerText и работает по-иному, нежели textContent, но в некоторых
+    ситуациях они могут быть взаимозаменимы. Именно на них направлен полифилл.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    (function() {
+
+      if (!Element.prototype.textContent_1) {
+        Object.defineProperty(Element.prototype, 'textContent_1', {
+          get: function() {
+            return this.innerText;
+          },
+
+          set: function(val) {
+            this.innerText = val;
+          }
+        });
+      }
+
+    })();
+
+
+    document.write( 'document.querySelector("#text-lorem_2").innerText = ', document.querySelector('#text-lorem_2').innerText);
+    document.write( '<br>' );
+    document.write( document.querySelector('#text-lorem_2').textContent);
+    document.write( '<br>' );
+    document.write( document.querySelector('#text-lorem_2').textContent_1 );
+
+  </script>
+
+  <br>
+  <hr>
+  <br>
+
+
+  <!--**********
+  * Атрибуты и DOM-свойства
+  ************-->
+
+  <h1>1.9. Атрибуты и DOM-свойства </h1>
+  <h3>Task 1.9.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <a id="a" href="#"></a>
+  <p><u> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde suscipit, possimus iste eum? Rem, nam.</u></p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    a.href = '/'; // по id нашли, но так лучше не делать, а лучше getElementById
+
+    document.write( 'атрибут: ' + a.getAttribute('href') ); // '/'
+    document.write('<br>');
+    document.write( 'свойство: ' + a.href );  // полный URL
+
+    document.getElementById('a').nextElementSibling.setAttribute('Denis', 'Hello');
+
+  </script>
+
+
+
+  <hr>
+
+
+  <h3>Task 1.9.2: Получите пользовательский атрибут </h3>
+  <pre>
+
+    Получите div в переменную.
+    Получите значение атрибута "data-widget-name" в переменную.
+    Выведите его.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+      var widget = document.getElementById('widget');
+      var dataWidgetName = widget.getAttribute('data-widget-name');
+      document.write(dataWidgetName);
+
+    <b>Not my solution</b>
+      var div = document.getElementById('widget');
+
+      var widgetName = div.getAttribute('data-widget-name');
+      // или так, кроме IE10-
+      var widgetName = div.dataset.widgetName;
+
+      alert( widgetName ); // "menu"
+  </pre>
+
+  <div id="widget" data-widget-name="menu">Выберите жанр</div>
+
+  <br>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var widget = document.getElementById('widget');
+    var dataWidgetName = widget.getAttribute('data-widget-name');
+    document.write(dataWidgetName);
+
+  </script>
+
+
+
+
+
+  <h3>Task 1.9.3: Поставьте класс ссылкам </h3>
+  <pre>
+    Сделайте желтыми внешние ссылки, добавив им класс external.
+    Все ссылки без href, без протокола и начинающиеся с http://infolio.top считаются внутренними.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      var anchors = document.querySelectorAll('a[href*="://"]')
+
+      for (var i = 0; i < anchors.length; i++) {
+        if ( !(~anchors[i].getAttribute('href').indexOf('http://infolio.top')) ) {
+          anchors[i].className = "external";
+        }
+      }
+
+    <b>Not my solution</b>
+      // ищем все ссылки, у которых в href есть протокол,
+      // но адрес начинается не с http://internal.com
+      var css = 'a[href*="://"]:not([href^="http://internal.com"])';
+      var links = document.querySelectorAll(css);
+
+      for (var i = 0; i < links.length; i++) {
+      links[i].classList.add('external');
+      }
+  </pre>
+
+  <a name="list">список</a>
+  <ul>
+    <li><a href="http://google.com">http://google.com</a></li>
+    <li><a href="/tutorial">/tutorial.html</a></li>
+    <li><a href="local/path">local/path</a></li>
+    <li><a href="ftp://ftp.com/my.zip">ftp://ftp.com/my.zip</a></li>
+    <li><a href="http://nodejs.org">http://nodejs.org</a></li>
+    <li><a href="http://infolio.top//lessons_JS_DOM_1.6_1.7.html">http://infolio.top/lessons_JS_DOM_1.6_1.7.html</a></li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // без ссылок, в которых нет href
+    // с сылками, в которых есть ://
+    var anchors = document.querySelectorAll('a[href*="://"]')
+
+    for (var i = 0; i < anchors.length; i++) {
+      // Без ссылок в которых есть: http://infolio.top
+      if ( !(~anchors[i].getAttribute('href').indexOf('http://infolio.top'))  ) {
+        anchors[i].className = "external";
+      }
+    }
+
+  </script>
+
+
+
+
+  <!--**********
+  *  Методы contains и compareDocumentPosition
+  ************-->
+
+
+  <h1>1.9. Методы contains и compareDocumentPosition  </h1>
+  <h3>Task 1.9.1: Методы contain </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <p class="p">.Возвращает true, если parent содержит child или parent == child...</p>
+  <ul>
+    <li>1.1</li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var parent = document.querySelector('p.p').nextElementSibling;
+    var child = document.body.lastElementChild.previousElementSibling.children[0];
+
+    document.write('parent = ', parent);
+    document.write('<br />');
+    document.write('child = ', child);
+    document.write('<br />');
+
+    var result = parent.contains(child);
+
+    document.write('parent содержит child: ' + result);
+
+  </script>
+
+
+
+  <h3>Task 1.9.2: Метод compareDocumentPosition для порядка узлов </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <p class="p2">.Возвращает true, если parent содержит child или parent == child...</p>
+  <ul>
+    <li>1.1</li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+
+    var p = document.querySelector('p.p2');
+    var ul = document.querySelector('p.p').nextElementSibling;
+    var li = ul.children[0];
+    var body = document.body;
+
+    // 1. <ul> находится после <p>
+    document.write( ul.compareDocumentPosition(p) ); // 2 = 10
+    document.write('<br />');
+
+    // 2. <p> находится до <ul>
+    document.write( p.compareDocumentPosition(ul) ); // 4 = 100
+    document.write('<br />');
+
+    // 3. <ul> родитель <li>
+    document.write( ul.compareDocumentPosition(li) ); // 20 = 10100
+    document.write('<br />');
+
+    // 4. <ul> потомок <body>
+    document.write( ul.compareDocumentPosition(document.body) ); // 10 = 1010
+    document.write('<br />');
+
+    // body содержит li
+    if (body.compareDocumentPosition(li) & 16) {
+      document.write( body + ' содержит ' + li );
+      document.write('<br />');
+      document.write('body.compareDocumentPosition(li) = ', body.compareDocumentPosition(li));
+      document.write('<br />');
+    }
+
+
+    for (var i = 0; i <= 20; i++) {
+      if (i > 0 && (i % 5) == 0) {
+        document.write('<br />');
+      }
+
+      var iToStr = i.toString(2);
+      var iStr = i.toString(10);
+
+      if (iToStr.length == 1) {
+        iToStr = '0000' + iToStr;
+      }
+      if (iToStr.length == 2) {
+        iToStr = '000' + iToStr;
+      }
+      if (iToStr.length == 3) {
+        iToStr = '00' + iToStr;
+      }
+      if (iToStr.length == 4) {
+        iToStr = '0' + iToStr;
+      }
+
+      if (iStr.length == 1) {
+        iStr = '0' + iStr;
+      }
+
+      document.write( iStr + ' = ' + iToStr  + " | ");
+    }
+
+    //alert(1 & 5);
+
+  </script>
+
+
+
+
+  <br>
+  <br>
+  <br>
+
+</body>
+</html>

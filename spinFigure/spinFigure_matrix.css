@@ -1,0 +1,32 @@
+html {
+    font-size: 11px;
+}
+.wrapper {
+  padding: 30px;
+}
+
+.figure {
+  padding: 20px;
+  text-align: center;
+ 
+}
+
+.figure img {
+  z-index: -1;
+  width: 130px;
+  display: block;
+  opacity: 0.7;
+  -webkit-transition: 3s ease 0.1s;
+  -moz-transition: 3s ease 0.1s;
+  -o-transition: 3s ease 0.1s;
+  transition: 3s ease 0.1s;
+}
+
+.figure_img:hover {
+  -webkit-transition: 3s ease 0.1s;
+  -moz-transition: 3s ease 0.1s;
+  -o-transition: 3s ease 0.1s;
+  transition: 3s ease 0.1s;
+  transform: none;
+  cursor: pointer;
+}

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Даты</title>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">  -->
+</head>
+<body>
+
+  <!--**********
+  *  Даты
+  ************-->
+  Время загрузки страницы до кода:
+  <script type="text/javascript">
+      document.write( performance.now() + " мс" );
+  </script>
+
+  <h1>4.11.Дата и Время </h1>
+  <h3>Task 4.11.1:Бенчмаркинг  </h3>
+  <pre>
+    Проведем тест какая функция быстрей
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr = [];
+    for (var i = 0; i < 5; i++) arr[i] = 0;
+
+    function walkIn(arr) {
+      for (var key in arr) arr[key]++;
+    }
+
+    function walkLength(arr) {
+      for (var i = 0; i < arr.length; i++) arr[i]++;
+    }
+
+    function bench(f) {
+      //var date = new Date();
+      //var date = Date.now(); // Эквивалентно выше записи
+      var date = performance.now(); // Эквивалентно выше записи
+      for (var i = 0; i < 1000; i++) f(arr);
+      //return new Date() - date;
+      return performance.now() - date; // Эквивалентно выше записи
+    }
+
+    // bench для каждого теста запустим много раз, чередуя
+    var timeIn = 0,
+        timeLength = 0;
+    for (var i = 0; i < 100; i++) {
+      timeIn += bench(walkIn);
+      timeLength += bench(walkLength);
+    }
+
+    document.write( 'Время walkIn: ' + timeIn + 'мс' );
+    document.write("<br>");
+    document.write( 'Время walkLength: ' + timeLength + 'мс' );
+
+  </script>
+
+
+
+  <h3>Task 4.11.2:Бенчмаркинг console.time(метка) и console.timeEnd(метка) </h3>
+  <pre>
+    Проведем тест какая функция быстрей
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Откройте консоль
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr = [];
+    for (var i = 0; i < 5; i++) arr[i] = 0;
+
+    function walkIn(arr) {
+      for (var key in arr) arr[key]++;
+    }
+
+    function walkLength(arr) {
+      for (var i = 0; i < arr.length; i++) arr[i]++;
+    }
+
+    function bench(f) {
+      for (var i = 0; i < 10000; i++) f(arr);
+    }
+
+    console.time("All Benchmarks");
+
+    console.time("walkIn");
+    bench(walkIn);
+    console.timeEnd("walkIn");
+
+    console.time("walkLength");
+    bench(walkLength);
+    console.timeEnd("walkLength");
+
+    console.timeEnd("All Benchmarks");
+
+
+    var d = new Date();
+    document.write("<br>");
+    document.write(d);
+    document.write("<br>");
+    document.write( d.toString() );
+    document.write("<br>");
+    document.write( d.toISOString() );
+    document.write("<br>");
+    document.write( "d.toLocalString(): " + d.toLocaleString() );
+
+
+    document.write("<br> **** <br>");
+
+    var ms = Date.parse('Sat Nov 17 2018 21:24:21 GMT+0200');
+    document.write("<br>");
+    document.write(ms);
+
+    var msNow = Date.parse(d);
+    document.write("<br>");
+    document.write('Прошло с 1970 года: ' + msNow + "мс");
+
+
+
+    var msMyBD = Date.parse("1985-01-13T07:00:00");
+    document.write("<br>");
+    document.write("<br>");
+    document.write('<span style="color: red;"><b> Прошло с моего дня рождения: </b></span>' + ( (msNow - msMyBD)/1000).toLocaleString() + " с");
+    document.write("<br>");
+    document.write('<span style="color: red;"><b> Прошло с моего дня рождения: </b></span>' + Math.round( (msNow - msMyBD)/1000/3600/24) + " дня(ей)");
+    document.write("<br>");
+    document.write('<span style="color: red;"><b> Мне полных: </b></span>' + Math.floor( (msNow - msMyBD)/1000/3600/24/365) + " года(лет)");
+    document.write("<br>");
+
+  </script>
+
+
+
+
+  <h3>Task 4.11.3: Создайте дату </h3>
+  <pre>
+    Создайте объект Date для даты: 20 февраля 2012 года, 3 часа 12 минут.
+
+    Временная зона – местная. Выведите его на экран.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    'use strict';
+
+    var date = new Date(2012, 1, 20, 3, 12);
+    document.write( date );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var date = new Date(2012, 1, 20, 3, 12);
+    document.write( date );
+
+  </script>
+
+
+
+  <h3>Task 4.11.4: Имя дня недели </h3>
+  <pre>
+    Создайте функцию getWeekDay(date), которая выводит
+    текущий день недели в коротком формате „пн“, „вт“, … „вс“.
+    Например:
+      var date = new Date(2012,0,3);  // 3 января 2012
+      alert( getWeekDay(date) );      // Должно вывести 'вт'
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    function getWeekDay(date) {
+      var day =  date.getDay();
+      var days = ["вс","пн","вт","ср","чт","пт","сб"];
+      return days[day];
+    }
+
+    var date = new Date(2014, 0, 3);
+    document.write( getWeekDay(date) );
+
+    Работает только в современных браузерах
+    <b>Not my solution</b>
+    var date = new Date(2014, 0, 3); // 3 января 2014
+    alert( date.toLocaleString('ru', {weekday: 'short'}) ); // 'Пт'
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getWeekDay(date) {
+      var day =  date.getDay();
+      var days = ["вс","пн","вт","ср","чт","пт","сб"];
+      return days[day];
+    }
+
+    var date = new Date(2014, 0, 3);
+    document.write( getWeekDay(date) );
+
+  </script>
+
+
+
+  <h3>Task 4.11.5: День недели в европейской нумерации  </h3>
+  <pre>
+    Напишите функцию, getLocalDay(date) которая возвращает день недели для даты date.
+    День нужно возвратить в европейской нумерации, т.е. понедельник имеет номер 1,
+    вторник номер 2, …, воскресенье – номер 7.
+      var date = new Date(2012, 0, 3);  // 3 янв 2012
+      alert( getLocalDay(date) );       // вторник, выведет 2
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    function getLocalDay(date) {
+      var day = date.getDay();
+      var days = [7, 1, 2, 3, 4, 5, 6];
+      return days[day];
+    }
+
+    var date = new Date(2012, 0, 3);
+    document.write( getLocalDay(date) );
+
+    // Короче код
+    <b>Not my solution</b>
+    unction getLocalDay(date) {
+
+      var day = date.getDay();
+
+      if (day == 0) { // день 0 становится 7
+        day = 7;
+      }
+
+      return day;
+    }
+
+    alert( getLocalDay(new Date(2012, 0, 3)) ); // 2
+
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getLocalDay(date) {
+      var day = date.getDay();
+      var days = [7, 1, 2, 3, 4, 5, 6];
+      return days[day];
+    }
+
+    var date = new Date(2012, 0, 3);
+    document.write( getLocalDay(date) );
+
+  </script>
+
+
+
+  <h3>Task 4.11.6: День указанное количество дней назад </h3>
+  <pre>
+    Создайте функцию getDateAgo(date, days), которая возвращает число, которое было days дней назад от даты date.
+    Например, для 2 января 2015:
+      var date = new Date(2015, 0, 2);
+      alert( getDateAgo(date, 1) ); // 1, (1 января 2015)
+      alert( getDateAgo(date, 2) ); // 31, (31 декабря 2014)
+      alert( getDateAgo(date, 365) ); // 2, (2 января 2014)
+    P.S. Важная деталь: в процессе вычислений функция не должна менять переданный ей объект date.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У меня лучше, у автора не выдает полной даты
+    <b>My solution</b>
+    'use strict';
+
+    function getDateAgo(date, days) {
+      var newDate = new Date(date);
+      newDate.setDate(date.getDate() - days);
+      return newDate.getDate();
+    }
+
+    var date = new Date(2015, 0, 2);
+    document.write("< br />");
+    document.write( getDateAgo(date, 1) ); // 1, (1 января 2015)
+    document.write("< br />");
+    document.write( getDateAgo(date, 2) ); // 31, (31 декабря 2014)
+    document.write("< br />");
+    document.write( getDateAgo(date, 365) ); // 2, (2 января 2014)
+    document.write("< br />");
+
+    <b>Not my solution</b>
+    function getDateAgo(date, days) {
+      var dateCopy = new Date(date);
+
+      dateCopy.setDate(date.getDate() - days);
+      return dateCopy.getDate();
+    }
+
+    var date = new Date(2015, 0, 2);
+
+    alert( getDateAgo(date, 1) ); // 1, (1 января 2015)
+    alert( getDateAgo(date, 2) ); // 31, (31 декабря 2014)
+    alert( getDateAgo(date, 365) ); // 2, (2 января 2014)
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getDateAgo(date, days) {
+      var newDate = new Date(date);
+      newDate.setDate(date.getDate() - days);
+      return newDate.getDate();
+    }
+
+    var date = new Date(2015, 0, 2);
+    document.write("<br />");
+    document.write( getDateAgo(date, 1) ); // 1, (1 января 2015)
+    document.write("<br />");
+    document.write( getDateAgo(date, 2) ); // 31, (31 декабря 2014)
+    document.write("<br />");
+    document.write( getDateAgo(date, 365) ); // 2, (2 января 2014)
+    document.write("<br />");
+
+
+  </script>
+
+
+
+  <h3>Task 4.11.6: Последний день месяца? </h3>
+  <pre>
+    Напишите функцию getLastDayOfMonth(year, month), которая возвращает последний день месяца.
+    Параметры:
+
+      year – 4-значный год, например 2012.
+      month – месяц от 0 до 11.
+
+    Например, getLastDayOfMonth(2012, 1) = 29 (високосный год, февраль).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+    'use strict';
+
+    function getLastDayOfMonth(year, month) {
+      var date = new Date(year, month + 1, 0);
+      return date.getDate();
+    }
+
+    document.write( getLastDayOfMonth(2016, 1) );
+    document.write("<br />");
+    document.write( getLastDayOfMonth(2013, 1) );
+    document.write("<br />");
+    document.write( getLastDayOfMonth(2012, 0) );
+
+    <b>Not my solution</b>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getLastDayOfMonth(year, month) {
+      var date = new Date(year, month + 1, 0);
+      return date.getDate();
+    }
+
+    document.write( getLastDayOfMonth(2016, 1) );
+    document.write("<br />");
+    document.write( getLastDayOfMonth(2013, 1) );
+    document.write("<br />");
+    document.write( getLastDayOfMonth(2012, 0) );
+
+  </script>
+
+
+  <h3>Task 4.11.7: Сколько секунд уже прошло сегодня? </h3>
+  <pre>
+    Напишите функцию getSecondsToday() которая возвращает,
+    сколько секунд прошло с начала сегодняшнего дня.
+
+    Например, если сейчас 10:00 и не было перехода на зимнее/летнее время, то:
+
+    getSecondsToday() == 36000 // (3600 * 10)
+
+    Функция должна работать в любой день, т.е. в ней не должно быть
+    конкретного значения сегодняшней даты.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+    'use strict';
+
+    function getSecondsToday() {
+      var date = new Date();
+      return ( date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds() );
+    }
+
+    document.write( getSecondsToday() );
+    document.write("< br />");
+
+    <b>Not my solution</b>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getSecondsToday() {
+      var date = new Date();
+      return ( date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds() );
+    }
+
+    document.write( getSecondsToday() );
+    document.write("<br />");
+
+
+  </script>
+
+
+
+  <h3>Task 4.11.8: Сколько секунд - до завтра? </h3>
+  <pre>
+    Напишите функцию getSecondsToTomorrow() которая возвращает, сколько секунд осталось до завтра.
+    Например, если сейчас 23:00, то:
+      getSecondsToTomorrow() == 3600
+    P.S. Функция должна работать в любой день, т.е. в ней не должно быть конкретного значения сегодняшней даты.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Мое решение больше на матиматике строится
+    <b>My solution</b>
+    'use strict';
+    function getSecondsToTomorrow() {
+      var now = new Date();
+      return ( 24*3600 - (now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds() ) );
+    }
+
+    document.write( getSecondsToTomorrow() );
+    document.write("< br />");
+
+    <b>Not my solution</b>
+    function getSecondsToTomorrow() {
+      var now = new Date();
+
+      // создать объект из завтрашней даты, без часов-минут-секунд
+      var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+
+      var diff = tomorrow - now; // разница в миллисекундах
+      return Math.round(diff / 1000); // перевести в секунды
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function getSecondsToTomorrow() {
+      var now = new Date();
+      return ( 24*3600 - (now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds() ) );
+    }
+
+    document.write( getSecondsToTomorrow() );
+    document.write("<br />");
+
+
+  </script>
+
+
+
+  <h3>Task 4.11.9: Вывести дату в формате дд.мм.гг </h3>
+  <pre>
+    Напишите функцию formatDate(date), которая выводит дату date в формате дд.мм.гг:
+    Например:
+      var d = new Date(2014, 0, 30); // 30 января 2014
+      alert( formatDate(d) ); // '30.01.14'
+    P.S. Обратите внимание, ведущие нули должны присутствовать,
+    то есть 1 января 2001 должно быть 01.01.01, а не 1.1.1.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+      // 1й вариант продвинутей
+    <b>My solution</b>
+    'use strict';
+    // 1й вариант дальше нашел в темах
+    function formatDate(date) {
+      var d = new Date(date);
+      var formatter = new Intl.DateTimeFormat("ru");
+      return formatter.format(d);
+    }
+
+    var d = new Date(2014, 0, 30); // 30 января 2014
+    document.write( formatDate(d) );
+    document.write("< br />");
+
+    // 2й вариант дальше нашел в темах
+
+    function formatDate_2(date) {
+      var d = new Date(date);
+      var x = "", y = "", z = "";
+      if ( d.getDate() < 10 ) x = "0";
+      if ( (d.getMonth() + 1) < 10 ) y = "0";
+      if ( d.getFullYear() < 10 ) z = "0";
+      return ( x + d.getDate() + "." + y + (d.getMonth() + 1) + "." + z + (d.getFullYear()).toString().slice(-2) );
+    }
+
+    d = new Date(2014, 0, 30); // 30 января 2014
+    document.write( formatDate_2(d) );
+    document.write("< br />");
+    document.write( formatDate_2(new Date(2000, 0, 1)) ); // 1 января 2000
+    document.write("< br />");
+
+    // Не много лучше код
+    <b>Not my solution</b>
+    function formatDate(date) {
+
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+
+      var yy = date.getFullYear() % 100;
+      if (yy < 10) yy = '0' + yy;
+
+      return dd + '.' + mm + '.' + yy;
+    }
+
+    var d = new Date(2014, 0, 30); // 30 Янв 2014
+    alert( formatDate(d) ); // '30.01.14'
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+    // 1й вариант дальше нашел в темах
+    function formatDate(date) {
+      var d = new Date(date);
+      var formatter = new Intl.DateTimeFormat("ru");
+      return formatter.format(d);
+    }
+
+    var d = new Date(2014, 0, 30); // 30 января 2014
+    document.write( formatDate(d) );
+    document.write("<br />");
+
+    // 2й вариант дальше нашел в темах
+
+    function formatDate_2(date) {
+      var d = new Date(date);
+      var x = "", y = "", z = "";
+      if ( d.getDate() < 10 ) x = "0";
+      if ( (d.getMonth() + 1) < 10 ) y = "0";
+      if ( d.getFullYear() < 10 ) z = "0";
+      return ( x + d.getDate() + "." + y + (d.getMonth() + 1) + "." + z + (d.getFullYear()).toString().slice(-2) );
+    }
+
+    d = new Date(2014, 0, 30); // 30 января 2014
+    document.write( formatDate_2(d) );
+    document.write("<br />");
+    document.write( formatDate_2(new Date(2000, 0, 1)) ); // 1 января 2000
+    document.write("<br />");
+
+
+  </script>
+
+
+
+  <h3>Task 4.11.10: Относительное форматирование даты </h3>
+  <pre>
+    Напишите функцию formatDate(date), которая форматирует дату date так:
+
+    Если со времени date прошло менее секунды, то возвращает "только что".
+    Иначе если со времени date прошло менее минуты, то "n сек. назад".
+    Иначе если прошло меньше часа, то "m мин. назад".
+    Иначе полная дата в формате "дд.мм.гг чч:мм".
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    // Оба варианта верны, но мой примерно в 3 раза быстрей
+    <b>My solution</b>
+    'use strict';
+
+    function formatterDate(date) {
+
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+
+      var yy = date.getFullYear() % 100;
+      if (yy < 10) yy = '0' + yy;
+
+      var hh = date.getHours();
+      if (hh < 10) hh = '0' + hh;
+
+      var mimi = date.getMinutes();
+      if (mimi < 10) mimi = '0' + mimi;
+
+      return dd + '.' + mm + '.' + yy + ' ' + hh + ':' + mimi;
+    }
+
+    function formatDate(date) {
+      var d = Date.now();
+      var dif = d - date;
+      if (dif < 1000) return "только что";
+      else if (dif < 60 * 1000) return (Math.floor(dif/1000) + " сек. назад");
+      else if (dif < 60 * 60 * 1000) return (Math.floor( dif/(60 * 1000) ) + " мин. назад");
+      else if (dif >= 86400 * 1000) {
+        return formatterDate(date);
+      }
+
+    }
+
+    document.write( formatDate(new Date(new Date - 1)) ); //"только что"
+    document.write("< br />");
+    document.write(  formatDate(new Date(new Date - 30 * 1000)) ); // "30 сек. назад"
+    document.write("< br />");
+    document.write(  formatDate(new Date(new Date - 5 * 60 * 1000)) ); // "5 мин. назад"
+    document.write("< br />");
+    document.write(  formatDate(new Date(new Date - 86400 * 1000)) ); // вчерашняя дата в формате "дд.мм.гг чч:мм"
+
+    <b>Not my solution</b>
+    function formatDate(date) {
+      var diff = new Date() - date; // разница в миллисекундах
+
+      if (diff < 1000) { // прошло менее 1 секунды
+        return 'только что';
+      }
+
+      var sec = Math.floor(diff / 1000); // округлить diff до секунд
+
+      if (sec < 60) {
+        return sec + ' сек. назад';
+      }
+
+      var min = Math.floor(diff / 60000); // округлить diff до минут
+      if (min < 60) {
+        return min + ' мин. назад';
+      }
+
+      // форматировать дату, с учетом того, что месяцы начинаются с 0
+      var d = date;
+      d = [
+        '0' + d.getDate(),
+        '0' + (d.getMonth() + 1),
+        '' + d.getFullYear(),
+        '0' + d.getHours(),
+        '0' + d.getMinutes()
+      ];
+
+      for (var i = 0; i < d.length; i++) {
+        d[i] = d[i].slice(-2);
+      }
+
+      return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
+    }
+
+    alert( formatDate(new Date(new Date - 1)) ); // только что
+
+    alert( formatDate(new Date(new Date - 30 * 1000)) ); // 30 сек. назад
+
+    alert( formatDate(new Date(new Date - 5 * 60 * 1000)) ); // 5 мин. назад
+
+    alert( formatDate(new Date(new Date - 86400 * 1000)) ); // вчерашняя дата в формате "дд.мм.гг чч:мм"
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function formatterDate(date) {
+
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+
+      var yy = date.getFullYear() % 100;
+      if (yy < 10) yy = '0' + yy;
+
+      var hh = date.getHours();
+      if (hh < 10) hh = '0' + hh;
+
+      var mimi = date.getMinutes();
+      if (mimi < 10) mimi = '0' + mimi;
+
+      return dd + '.' + mm + '.' + yy + ' ' + hh + ':' + mimi;
+    }
+
+    function formatDate(date) {
+      var d = Date.now();
+      var dif = d - date;
+      if (dif < 1000) return "только что";
+      else if (dif < 60 * 1000) return (Math.floor(dif/1000) + " сек. назад");
+      else if (dif < 60 * 60 * 1000) return (Math.floor( dif/(60 * 1000) ) + " мин. назад");
+      else if (dif >= 86400 * 1000) {
+        return formatterDate(date);
+      }
+
+    }
+
+    document.write( formatDate(new Date(new Date - 1)) ); //"только что"
+    document.write("<br />");
+    document.write(  formatDate(new Date(new Date - 30 * 1000)) ); // "30 сек. назад"
+    document.write("<br />");
+    document.write(  formatDate(new Date(new Date - 5 * 60 * 1000)) ); // "5 мин. назад"
+    document.write("<br />");
+    document.write(  formatDate(new Date(new Date - 86400 * 1000)) ); // вчерашняя дата в формате "дд.мм.гг чч:мм"
+
+  </script>
+
+
+
+
+
+
+  <br>
+  <hr>
+  Время загрузки страницы после кода:
+  <script type="text/javascript">
+      document.write( performance.now() + " мс" );
+  </script>
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

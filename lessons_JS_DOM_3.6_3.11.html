@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_3.6 </title>
+</head>
+<body>
+
+  <!--**********
+  * Мышь: колёсико, событие wheel
+  ************-->
+
+  <h1>3.6. Мышь: колёсико, событие wheel </h1>
+  <h3>Task 3.6.1: Масштабирование колёсиком мыши </h3>
+  <pre>
+    Сделайте так, чтобы при прокрутке колёсиком мыши над элементом, он масштабировался.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Аналогичное решение, только у меня не  кроссбраузерное
+    <b>My solution</b>
+    var textScale = document.getElementById("textScale");
+
+    function scaleElem(elem) {
+      var delta = 0.05;
+      var scale = 1;
+
+      (function f() {
+        elem.onwheel = function(e) {
+          var deltaY = e.deltaY || e.detail || e.wheelDelta;
+
+          if (deltaY > 0) {
+            scale += delta;
+            this.style.transform = this.style.WebkitTransform = this.style.MsTransform = 'scale(' + scale + ')';
+          }
+
+          if (deltaY < 0) {
+            scale -= delta;
+            this.style.transform = this.style.WebkitTransform = this.style.MsTransform = 'scale(' + scale + ')';
+          }
+
+          // отменим прокрутку
+          e.preventDefault();
+        };
+      })();
+
+    }
+
+    scaleElem(textScale);
+    scaleElem(imgScale);
+
+    <b>Not my solution</b>
+    function addOnWheel(elem, handler) {
+      if (elem.addEventListener) {
+        if ('onwheel' in document) {
+          // IE9+, FF17+
+          elem.addEventListener("wheel", handler);
+        } else if ('onmousewheel' in document) {
+          // устаревший вариант события
+          elem.addEventListener("mousewheel", handler);
+        } else {
+          // 3.5 <= Firefox < 17, более старое событие DOMMouseScroll пропустим
+          elem.addEventListener("MozMousePixelScroll", handler);
+        }
+      } else { // IE8-
+        text.attachEvent("onmousewheel", handler);
+      }
+    }
+
+    var scale = 1;
+
+    addOnWheel(text, function(e) {
+
+      var delta = e.deltaY || e.detail || e.wheelDelta;
+
+      // отмасштабируем при помощи CSS
+      if (delta > 0) scale += 0.05;
+      else scale -= 0.05;
+
+      text.style.transform = text.style.WebkitTransform = text.style.MsTransform = 'scale(' + scale + ')';
+
+      // отменим прокрутку
+      e.preventDefault();
+    });
+  </pre>
+
+  <style media="screen">
+
+    #textScale {
+      width: 180px;
+      height: 57px;
+      border: 1px solid red;
+    }
+
+    #imgScale {
+      display: block;
+      margin: auto;
+    }
+
+  </style>
+
+  <div id="textScale">
+    При прокрутке колёсика мыши над этим элементом, он будет масштабироваться.
+  </div>
+
+  <p style="text-align: center;">На этой картинке прокрути скрол</p>
+  <img id="imgScale" src="img/dobryi-vecher-12.gif" alt="">
+
+  <script type="text/javascript">
+    'use strict';
+
+    var textScale = document.getElementById("textScale");
+
+    function scaleElem(elem) {
+      var delta = 0.05;
+      var scale = 1;
+
+      (function f() {
+        elem.onwheel = function(e) {
+          var deltaY = e.deltaY || e.detail || e.wheelDelta;
+
+          if (deltaY > 0) {
+            scale += delta;
+            this.style.transform = this.style.WebkitTransform = this.style.MsTransform = 'scale(' + scale + ')';
+          }
+
+          if (deltaY < 0) {
+            scale -= delta;
+            this.style.transform = this.style.WebkitTransform = this.style.MsTransform = 'scale(' + scale + ')';
+          }
+
+          // отменим прокрутку
+          e.preventDefault();
+        };
+      })();
+
+    }
+
+    scaleElem(textScale);
+    scaleElem(imgScale);
+
+  </script>
+
+
+  <br>
+
+
+
+  <h3>Task 3.6.2: Прокрутка без влияния на страницу </h3>
+  <pre>
+    Создать скрипт, который при подключении к документу исправлял бы
+    поведение всех textarea, чтобы при прокрутке они не трогали документ.
+    Направление прокрутки – только вверх или вниз.
+    Редактор прокручивает только мышкой или жестами (на мобильных устройствах),
+    прокрутку клавиатурой здесь рассматривать не нужно (хотя это и возможно).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Same solution
+    <b>My solution</b>
+    window.onwheel = function(e) {
+      var target = e.target;
+
+      while(target != null) {
+        if (target.tagName === "TEXTAREA") break;
+        target = target.parentNode;
+      }
+
+      if (!target) return;
+
+      var deltaY = e.deltaY || e.detail || e.wheelDelta;
+
+      if ( (target.scrollHeight - target.clientHeight) <= target.scrollTop && deltaY > 0 ) return false;
+      if ( target.scrollTop <= 0 && deltaY < 0) e.preventDefault();
+    }
+
+    <b>Not my solution</b>
+    document.onwheel = function(e) {
+      if (e.target.tagName != 'TEXTAREA') return;
+      var area = e.target;
+
+      var delta = e.deltaY || e.detail || e.wheelDelta;
+
+      if (delta < 0 && area.scrollTop == 0) {
+        e.preventDefault();
+      }
+
+      if (delta > 0 && area.scrollHeight - area.clientHeight - area.scrollTop <= 1) {
+        e.preventDefault();
+      }
+    };
+  </pre>
+
+  <div class="wrapper" style="position: relative">
+    <header>
+     <h2>Начало документа</h2>
+   </header>
+
+   <textarea cols="80" rows="10">
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+   </textarea>
+
+    <br>
+    <br>
+
+   <textarea cols="80" rows="10">
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+     прокрути меня
+   </textarea>
+
+   <footer style="position: absolute; bottom: 0">
+     Конец документа.
+   </footer>
+  </div>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    window.onwheel = function(e) {
+      var target = e.target;
+
+      while(target != null) {
+        if (target.tagName === "TEXTAREA") break;
+        target = target.parentNode;
+      }
+
+      if (!target) return;
+
+      var deltaY = e.deltaY || e.detail || e.wheelDelta;
+
+      if ( (target.scrollHeight - target.clientHeight) <= target.scrollTop && deltaY > 0 ) return false;
+      if ( target.scrollTop <= 0 && deltaY < 0) e.preventDefault();
+    }
+
+  </script>
+
+
+
+  <br>
+  <hr>
+
+
+  <!--**********
+  * Прокрутка: событие scroll
+  ************-->
+
+  <h1>3.8. Прокрутка: событие scroll </h1>
+  <h3>Task 3.8.1: Аватар наверху при прокрутке </h3>
+  <pre>
+    Сделайте так, чтобы при прокрутке ниже элемента #avatar (картинка с Винни-Пухом) –
+    он продолжал показываться в левом-верхнем углу.
+    При прокрутке вверх – должен возвращаться на обычное место.
+    Прокрутите вниз, чтобы увидеть
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Is too long code
+    <b>My solution</b>
+    var avatarElem = document.getElementById("avatar");
+    var avatarOld = {};
+
+    window.addEventListener("scroll", function(e) {
+      avatarScroll(avatarElem);
+    });
+
+    function avatarScroll(elem) {
+      if ( window.pageYOffset >= (elem.offsetTop + elem.offsetHeight) && !Object.keys(avatarOld).length ) {
+        avatarCreate(elem);
+      }
+
+      if (Object.keys(avatarOld).length) {
+        if (window.pageYOffset < avatarOld.pageY) {
+          elem.style.position = avatarOld.position;
+          elem.style.left = avatarOld.left;
+          elem.style.top = avatarOld.top;
+          avatarOld.parent.insertBefore(elem, avatarOld.sibling);
+
+          avatarOld = {};
+        }
+      }
+    }
+
+    function avatarCreate(elem) {
+      // Сохраняем старую позицию элемента
+      avatarOld.position = elem.style.position || "";
+      avatarOld.left = elem.style.left || "";
+      avatarOld.top = elem.style.top || "";
+      avatarOld.parent = elem.parentNode;
+      avatarOld.sibling = elem.nextElementSibling;
+      avatarOld.pageY = elem.offsetTop + elem.offsetHeight;
+
+      // Перемещаем элемент
+      elem.style.position = 'fixed';
+      elem.style.top = 0;
+      elem.style.left = 0;
+      document.body.appendChild(elem);
+    }
+
+    <b>Not my solution</b>
+    var avatarElem = document.getElementById('avatar');
+
+     var avatarSourceBottom = avatarElem.getBoundingClientRect().bottom + window.pageYOffset;
+
+     window.onscroll = function() {
+       if (avatarElem.classList.contains('fixed') && window.pageYOffset < avatarSourceBottom) {
+         avatarElem.classList.remove('fixed');
+       } else if (window.pageYOffset > avatarSourceBottom) {
+         avatarElem.classList.add('fixed');
+       }
+     };
+  </pre>
+
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    .column-left {
+      float: left;
+      width: 30%;
+      background: #aef;
+    }
+
+    .column-right {
+      margin-left: 30%;
+      width: 70%;
+      background: tan;
+      overflow: auto;
+      /* расшириться вниз захватить float'ы */
+    }
+
+    .header {
+      line-height: 60px;
+      background: yellow;
+    }
+
+    .inner {
+      margin: 1em;
+      font-size: 130%;
+    }
+
+    #avatar {
+      float: left;
+      margin: 0 1em .5em 0;
+      border: 1px solid black;
+      text-align: center;
+      background: white;
+    }
+
+    .fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  </style>
+
+  <div class="header">Шапка</div>
+
+  <div class="column-left">
+    <div class="inner">
+      <h3>Персонажи:</h3>
+      <ul>
+        <li>Винни-Пух</li>
+        <li>Ослик Иа</li>
+        <li>Сова</li>
+        <li>Кролик</li>
+      </ul>
+    </div>
+  </div>
+  <div class="column-right">
+    <div class="inner">
+
+      <h3>Винни-Пух</h3>
+
+      <div id="avatar">
+        <img src="https://js.cx/clipart/winnie-mult.jpg" width="200" height="150">
+        <div>Кадр из мультфильма</div>
+      </div>
+
+      <p>Ви́нни-Пу́х (англ. Winnie-the-Pooh) — плюшевый мишка, персонаж повестей и стихов Алана Александра Милна (цикл не имеет общего названия и обычно тоже называется «Винни-Пух», по первой книге). Один из самых известных героев детской литературы XX века.</p>
+
+      <p>В 1960-е—1970-е годы, благодаря пересказу Бориса Заходера «Винни-Пух и все-все-все», а затем и фильмам студии «Союзмультфильм», где мишку озвучивал Евгений Леонов, Винни-Пух стал очень популярен и в Советском Союзе.</p>
+
+      <p>Как и многие другие персонажи книги Милна, медвежонок Винни получил имя от одной из реальных игрушек Кристофера Робина (1920—1996), сына писателя. В свою очередь, плюшевый мишка Винни-Пух был назван по имени медведицы по кличке Виннипег (Винни),
+        содержавшейся в 1920-х в Лондонском зоопарке.</p>
+
+      <p>Медведица Виннипег (американский чёрный медведь) попала в Великобританию как живой талисман (маскот) Канадского армейского ветеринарного корпуса из Канады, а именно из окрестностей города Виннипега. Она оказалась в кавалерийском полку «Форт Гарри
+        Хорс» 24 августа 1914 года ещё будучи медвежонком (её купил у канадского охотника-траппера за двадцать долларов 27-летний полковой ветеринар лейтенант Гарри Колборн, заботившийся о ней и в дальнейшем). Уже в октябре того же года медвежонок был
+        привезён вместе с войсками в Британию, а так как полк должен был быть в ходе Первой мировой войны переправлен во Францию, то в декабре было принято решение оставить зверя до конца войны в Лондонском зоопарке. Медведица полюбилась лондонцам, и
+        военные не стали возражать против того, чтобы не забирать её из зоопарка и после войны[1]. До конца дней (она умерла 12 мая 1934 года) медведица находилась на довольствии ветеринарного корпуса, о чём в 1919 году на её клетке сделали соответствующую
+        надпись.
+      </p>
+
+      <p>«Винни-Пух» представляет собой дилогию, но каждая из двух книг Милна распадается на 10 рассказов (stories) с собственным сюжетом, которые могут читаться, экранизироваться и т. д. независимо друг от друга. В некоторых переводах деление на две части
+        не сохранено, в других не переведена вторая («Дом на Пуховой опушке»). Иногда первая и вторая книги выполнены разными переводчиками. Такова необычная судьба немецкого Винни-Пуха: первая книга вышла в немецком переводе в 1928 году, а вторая лишь
+        в 1954; между этими датами — ряд трагических событий германской истории.</p>
+
+
+      <p>Действие книг о Пухе происходит в 500-акровом лесу Эшдаун близ купленной Милнами в 1925 году фермы Кочфорд в графстве Восточный Сассекс, Англия, представленном в книге как Стоакровый лес (англ. The Hundred Acre Wood, в пересказе Заходера — Чудесный
+        лес). Реальными являются также Шесть сосен и ручеёк, у которого был найден Северный Полюс, а также упоминаемая в тексте растительность, в том числе колючий утёсник (gorse-bush, чертополох у Заходера), в который падает Пух[2]. Маленький Кристофер
+        Робин любил забираться в дупла деревьев и играть там с Пухом, поэтому многие персонажи книг живут в дуплах, и значительная часть действия происходит в таких жилищах или на ветвях деревьев[2]. Алан Милн, Кристофер Робин и Винни-Пух. Фотография
+        из Британской национальной портретной галереи</p>
+
+      <p>Действие «Винни-Пуха» разворачивается одновременно в трёх планах — это мир игрушек в детской, мир зверей «на своей территории» в Стоакровом лесу и мир персонажей в рассказах отца сыну (это наиболее чётко показано в самом начале)[4]. В дальнейшем
+        рассказчик исчезает из повествования, и сказочный мир начинает собственное существование, разрастаясь от главы к главе[6]. Отмечалось сходство пространства и мира персонажей «Винни-Пуха» с классическим античным и средневековым эпосом[6]. Многообещающие
+        эпические начинания персонажей (путешествия, подвиги, охоты, игры) оказываются комически малозначительными, в то время как настоящие события происходят во внутреннем мире героев (помощь в беде, гостеприимство, дружба)[6].</p>
+
+      <p>Книги Милна выросли из устных рассказов и игр с Кристофером Робином; устное происхождение характерно и для многих других знаменитых литературных сказок[6]. «Я, собственно, ничего не придумывал, мне оставалось только описывать», как говорил впоследствии
+        Милн[5]. Реальными игрушками Кристофера Робина были также Пятачок (подарок соседей), Иа-Иа без хвоста (ранний подарок родителей), Кенга с Крошкой Ру в сумке и Тигра (куплены родителями впоследствии специально для развития сюжета вечерних рассказов
+        сыну). В рассказах они появляются именно в таком порядке[2]. Сову и Кролика Милн придумал сам; на иллюстрациях Шепарда они выглядят не как игрушки, а как настоящие животные, Кролик говорит Сове: «Только у меня и тебя есть мозги. У остальных —
+        опилки». В процессе игры все эти персонажи получили индивидуальные повадки, привычки и манеру разговора[6]. На созданный Милном мир животных повлияла повесть Кеннета Грэма «Ветер в ивах», которой он восхищался и которую ранее иллюстрировал Шепард[5],
+        возможна также скрытая полемика с «Книгой джунглей» Киплинга[5]. Текст взят из Википедии.</p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // var avatarElem = document.getElementById("avatar");
+    // var avatarOld = {};
+    //
+    // window.addEventListener("scroll", function(e) {
+    //   avatarScroll(avatarElem);
+    // });
+    //
+    // function avatarScroll(elem) {
+    //   if ( window.pageYOffset >= (elem.offsetTop + elem.offsetHeight) && !Object.keys(avatarOld).length ) {
+    //     avatarCreate(elem);
+    //   }
+    //
+    //   if (Object.keys(avatarOld).length) {
+    //     if (window.pageYOffset < avatarOld.pageY) {
+    //       elem.style.position = avatarOld.position;
+    //       elem.style.left = avatarOld.left;
+    //       elem.style.top = avatarOld.top;
+    //       avatarOld.parent.insertBefore(elem, avatarOld.sibling);
+    //
+    //       avatarOld = {};
+    //     }
+    //   }
+    // }
+    //
+    // function avatarCreate(elem) {
+    //   // Сохраняем старую позицию элемента
+    //   avatarOld.position = elem.style.position || "";
+    //   avatarOld.left = elem.style.left || "";
+    //   avatarOld.top = elem.style.top || "";
+    //   avatarOld.parent = elem.parentNode;
+    //   avatarOld.sibling = elem.nextElementSibling;
+    //   avatarOld.pageY = elem.offsetTop + elem.offsetHeight;
+    //
+    //   // Перемещаем элемент
+    //   elem.style.position = 'fixed';
+    //   elem.style.top = 0;
+    //   elem.style.left = 0;
+    //   document.body.appendChild(elem);
+    // }
+
+
+
+    // Мой вариант улучшеный
+     var avatarElem1 = document.getElementById('avatar');
+
+     //var avatarSourceBottom = avatarElem1.getBoundingClientRect().bottom + window.pageYOffset;
+     var avatarSourceBottom = avatarElem1.offsetTop + avatarElem1.offsetHeight;
+
+     // window.onscroll = function() {
+     //   if (avatarElem1.classList.contains('fixed') && window.pageYOffset < avatarSourceBottom) {
+     //     avatarElem1.classList.remove('fixed');
+     //   } else if (window.pageYOffset > avatarSourceBottom) {
+     //     avatarElem1.classList.add('fixed');
+     //   }
+     // };
+
+     window.addEventListener('scroll', function() {
+       if (avatarElem1.classList.contains('fixed') && window.pageYOffset < avatarSourceBottom) {
+         avatarElem1.classList.remove('fixed');
+       } else if (window.pageYOffset > avatarSourceBottom) {
+         avatarElem1.classList.add('fixed');
+       }
+     });
+
+  </script>
+
+
+
+
+
+  <h3>Task 3.8.2: Кнопка вверх-вниз </h3>
+  <pre>
+    Создайте кнопку навигации, которая помогает при прокрутке страницы.
+
+    Работать должна следующим образом:
+
+        Пока страница промотана меньше чем на высоту экрана вниз – кнопка не видна.
+        При промотке страницы вниз больше, чем на высоту экрана, появляется кнопка «стрелка вверх».
+        При нажатии на нее страница прыгает вверх, но не только.
+        Дополнительно, кнопка меняется на «стрелка вниз» и при клике возвратит на старое место.
+        Если же в этом состоянии посетитель сам прокрутит вниз больше,
+        чем один экран, то она вновь изменится на «стрелка вверх».
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Ни тот ни тот котд не идеален
+    //Мой более универсален, если будет много подъебъектов
+    // У автора внутренний код лучше
+    <b>My solution</b>
+    var matrix = document.getElementById("matrix");
+
+    var arrow = document.createElement("div");
+    arrow.classList.add("arrow");
+    //arrow.classList.add("up");
+
+    var buttonIsClick = false;
+    var oldCoord;
+
+    window.addEventListener("scroll", arrowIsShow);
+    arrow.addEventListener("click", windowUpDown);
+
+    function arrowIsShow() {
+      if (window.pageYOffset > document.documentElement.clientHeight) {
+        arrow.innerHTML = "▲";
+        matrix.appendChild(arrow);
+        buttonIsClick = false;
+      } else if (!buttonIsClick) {
+        // matrix.removeChild(arrow);
+        arrow.innerHTML = "";
+      }
+    }
+
+    function windowUpDown(e) {
+      var target = e.target;
+      buttonIsClick = true;
+
+      while(target !== this) {
+        if (target === this) break;
+        target = target.parentNode;
+      }
+      if (target !== this) return;
+
+      if (window.pageYOffset > document.documentElement.clientHeight) {
+        oldCoord = window.pageYOffset;
+        window.scrollTo(0,0);
+        arrow.innerHTML = "▼";
+      } else {
+        window.scrollTo(0,oldCoord);
+        arrow.innerHTML = "▲";
+      }
+    }
+
+    <b>Not my solution</b>
+    var updownElem = document.getElementById('updown');
+
+    var pageYLabel = 0;
+
+    updownElem.onclick = function() {
+      var pageY = window.pageYOffset || document.documentElement.scrollTop;
+
+      switch (this.className) {
+        case 'up':
+          pageYLabel = pageY;
+          window.scrollTo(0, 0);
+          this.className = 'down';
+          break;
+
+        case 'down':
+          window.scrollTo(0, pageYLabel);
+          this.className = 'up';
+      }
+
+    }
+
+    window.onscroll = function() {
+      var pageY = window.pageYOffset || document.documentElement.scrollTop;
+      var innerHeight = document.documentElement.clientHeight;
+
+      switch (updownElem.className) {
+        case '':
+          if (pageY > innerHeight) {
+            updownElem.className = 'up';
+          }
+          break;
+
+        case 'up':
+          if (pageY < innerHeight) {
+            updownElem.className = '';
+          }
+          break;
+
+        case 'down':
+          if (pageY > innerHeight) {
+            updownElem.className = 'up';
+          }
+          break;
+
+      }
+    }
+  </pre>
+
+  <style media="screen">
+
+    #matrix {
+      width: 400px;
+      margin: auto;
+      overflow: auto;
+      text-align: justify;
+    }
+
+    .arrow {
+      color: green;
+      position: fixed;
+      top: 10px;
+      left: 100px;
+      /* z-index: 999; */
+      /* width: 20px;
+      height: 20px; */
+      cursor: pointer;
+    }
+
+    .arrow.up::before {
+      content: "▲";
+    }
+
+    .arrow.down::before {
+      content: "▼";
+    }
+
+  </style>
+
+  <div id="matrix">
+    <script>
+      for (var i = 0; i < 2000; i++) document.writeln(i)
+    </script>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var matrix = document.getElementById("matrix");
+
+    var arrow = document.createElement("div");
+    arrow.classList.add("arrow");
+    // arrow.classList.add("up");
+
+    var buttonIsClick = false;
+    var oldYCoord;
+
+    window.addEventListener("scroll", arrowIsShow);
+    arrow.addEventListener("click", windowUpDown);
+
+    function arrowIsShow() {
+      if (window.pageYOffset > document.documentElement.clientHeight) {
+        arrow.innerHTML = "▲";
+        matrix.appendChild(arrow);
+        buttonIsClick = false;
+      } else if (!buttonIsClick) {
+        // matrix.removeChild(arrow);
+        arrow.innerHTML = "";
+      }
+    }
+
+    function windowUpDown(e) {
+      var target = e.target;
+      buttonIsClick = true;
+
+      while(target !== this) {
+        if (target === this) break;
+        target = target.parentNode;
+      }
+      if (target !== this) return;
+
+      if (window.pageYOffset > document.documentElement.clientHeight) {
+        oldYCoord = window.pageYOffset;
+        window.scrollTo(0,0);
+        arrow.innerHTML = "▼";
+      } else {
+        window.scrollTo(0,oldYCoord);
+        arrow.innerHTML = "▲";
+      }
+    }
+
+  </script>
+
+
+  <!-- <br><br>
+
+  <style>
+    .anyclass1 {
+      color: red;
+    }
+
+    .show1 {
+      font-size: 24px;
+      text-align: center;
+    }
+  </style>
+
+  <div id="any1" class="anyclass1 show1">Proverka</div>
+
+  <script type="text/javascript">
+    if (any1.className === "anyclass1 show1") {
+      alert("hi")
+    }
+  </script> -->
+
+
+  <h3>Task 3.8.3: Загрузка видимых изображений </h3>
+  <pre>
+    Задача, которая описана ниже, демонстрирует результативный метод оптимизации страницы.
+    С целью экономии трафика и более быстрой загрузки страницы изображения на ней заменяются на «макеты».
+    То есть, как только изображение попало в видимую часть документа – в src нужно прописать правильный URL из realsrc.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Мой код хуже - не проверяет снизу картинки
+    <b>My solution</b>
+    function lazyImg() {
+      var imgs = document.getElementsByTagName("img");
+      var pageYOffset = window.pageYOffset || document.documentElement.scrollTop;
+
+      for (var i = 0; i < imgs.length; i++) {
+        if (imgs[i].hasAttribute('realsrc')) {
+          var realsrc = imgs[i].getAttribute('realsrc');
+          if (imgs[i].offsetTop >= pageYOffset && realsrc !== imgs[i].src) {
+            imgs[i].src = realsrc;
+            imgs[i].removeAttribute("realsrc");
+            //console.log(imgs[i]);
+          }
+        }
+      }
+    }
+
+    window.addEventListener("scroll", lazyImg);
+    lazyImg();
+
+    <b>Not my solution</b>
+    /**
+     * Проверяет элемент на попадание в видимую часть экрана.
+     * Для попадания достаточно, чтобы верхняя или нижняя границы элемента были видны.
+     */
+    function isVisible(elem) {
+
+      var coords = elem.getBoundingClientRect();
+
+      var windowHeight = document.documentElement.clientHeight;
+
+      // верхняя граница elem в пределах видимости ИЛИ нижняя граница видима
+      var topVisible = coords.top > 0 && coords.top < windowHeight;
+      var bottomVisible = coords.bottom < windowHeight && coords.bottom > 0;
+
+      return topVisible || bottomVisible;
+    }
+
+    /**
+    Вариант проверки, считающий элемент видимым,
+    если он не более чем -1 страница назад или +1 страница вперед
+
+    function isVisible(elem) {
+
+      var coords = elem.getBoundingClientRect();
+
+      var windowHeight = document.documentElement.clientHeight;
+
+      var extendedTop = -windowHeight;
+      var extendedBottom = 2 * windowHeight;
+
+      // top visible || bottom visible
+      var topVisible = coords.top > extendedTop && coords.top < extendedBottom;
+      var bottomVisible = coords.bottom < extendedBottom && coords.bottom > extendedTop;
+
+      return topVisible || bottomVisible;
+    }
+    */
+
+    function showVisible() {
+      var imgs = document.getElementsByTagName('img');
+      for (var i = 0; i < imgs.length; i++) {
+
+        var img = imgs[i];
+
+        var realsrc = img.getAttribute('realsrc');
+        if (!realsrc) continue;
+
+        if (isVisible(img)) {
+          img.src = realsrc;
+          img.setAttribute('realsrc', '');
+        }
+      }
+
+    }
+
+    window.onscroll = showVisible;
+    showVisible();
+  </pre>
+
+  <style>
+    .news-item {
+      width: 700px;
+      text-align: justify;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+
+    .news-item .title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
+
+  <p>Тексты и картинки взяты с сайта http://etoday.ru. </p>
+
+  <h3>Все изображения с realsrc загружаются, когда становятся видимыми.</h3>
+
+
+  <div class="news-item">
+    <div class="title">Космопорт Америка \ Architecture</div>
+
+    Будущее уже сейчас! Скоро фраза из фантастического фильма "флипнуть до космопорта" станет реальностью. По крайней мере вторую ее часть человечество обеспечило. В октябре состоялась официальная церемония открытия космопорта «Америка», первой в мире коммерческой
+    площадки для частных космических полетов. Космопорт открылся в пустыне штата Нью-Мексико. Проект был реализован английским бюро Foster and Partners. Космопорт включает в себя зал ожидания и подготовки к полетам, диспетчерский пункт и ангар. Также
+    обеспечена взлетно-посадочная полоса длиной в три километра.
+
+    <div class="illustrations">
+      <img src="https://js.cx/lazyimg/1.gif" width="200" height="140" realsrc="https://js.cx/lazyimg/1.jpg">
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Рокер и супермодель в Vogue Russia \ Celebrities</div>
+
+    Супермодель Анна Вялицына (Anne Vyalitsyna) и музыкант Адам Ливайн (Adam Levine) снялись в ноябрьском номере Vogue Russia. Снимал их Аликс Малка (Alix Malka). Анна и Адам примерили на себя рок-н-ролльные наряды от Alexander Wang, Louis Vuitton, Alexander
+    McQueen, Balmain, Yves Saint Laurent, подобранные для них Катериной Мухиной.
+    <div class="illustrations">
+      <img src="https://js.cx/lazyimg/1.gif" width="200" height="259" realsrc="https://js.cx/lazyimg/2-1.jpg">
+      <img src="https://js.cx/lazyimg/1.gif" width="200" height="260" realsrc="https://js.cx/lazyimg/2-2.jpg">
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Старость - не радость в Vogue Italia \ Fashion Photo</div>
+
+    Стивен Мейзел (Steven Meisel) снял фотосессию для октябрьского Vogue Italia. В съемках приняли участие: Карен Элсон (Karen Elson), Джиневер ван Синус (Guinevere van Seenus), Эмма Балфур (Emma Balfour), Эн Уст (An Oost), Коринна Ингенлеф (Corinna Ingenleuf),
+    Танга Моро (Tanga Moreau), Кордула Рейер (Cordula Reyer), Гейл о`Нил (Gail O'Neil), Эвелин Кун (Evelyn Kuhn), Каролин де Мэгрэ (Caroline de Maigret), Дэльфин Бафор (Delfine Bafort), Кирстен Оуэн (Kirsten Owen), Гунилла Линдблад (Gunilla Lindblad).
+    <div class="illustrations">
+      <img src="https://js.cx/lazyimg/1.gif" width="341" height="474" realsrc="https://js.cx/lazyimg/3-1.jpg">
+      <img src="https://js.cx/lazyimg/1.gif" width="338" height="474" realsrc="https://js.cx/lazyimg/3-2.jpg">
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">"Вышитый рентген" Matthew Cox \ Art</div>
+
+    Художник из Филадельфии Мэтью Кокс (Matthew Cox) создал серию работ, в которых объединены медицинский рентген и вышивка. Художник взял рентгенограммы и вышил их предполагаемое содержание частично со скелетными элементами. Получилось зловеще и интригующе.
+    Выставка "Вышитый рентген" будет демонстрироваться в галерее Packer/Schopf в Майами, в рамках Базельской Художественной Недели. Эта серия - только треть творческой продукции Кокса. Он также создает традиционные картины и иллюстрации.
+    <div class="illustrations"><img src="https://js.cx/lazyimg/1.gif" width="680" height="452" realsrc="https://js.cx/lazyimg/4.jpg"></div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Подарочный каталог Apple 1983 \ Creative</div>
+
+    Etoday предлагает полистать страницы подарочного каталога продукции Apple образца 1983 года. Кажется, это было так давно! Эта серия - только треть творческой продукции Кокса. Он также создает традиционные картины и иллюстрации.
+    <div class="illustrations"><img src="https://js.cx/lazyimg/1.gif" width="600" height="393" realsrc="https://js.cx/lazyimg/5.jpg"></div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Винтажные открытки к празднику Halloween \ Illustrations</div>
+
+    Занимательная коллекция старых почтовых открыток праздника Halloween. Открытки взяты из ньюйоркской публичной библиотеки и датируются примерно 1910 г.
+
+    <div class="illustrations"><img src="https://js.cx/lazyimg/1.gif" width="680" height="433" realsrc="https://js.cx/lazyimg/6.jpg"></div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Фотограф Emily Lee \ Photography</div>
+
+    Молодой фотограф Эмили Ли (Emily Lee) использует фотографию, чтобы выразить свои чувства. "Когда я смотрю на жизнь через камеру, вижу все более ясно, - пишет она на своем профиле Flickr. - Фотосъемка - это искусство наблюдения." Эмили Ли - обладательница
+    большого таланта и умения глубоко понимать искусство, хотя учится еще только в средней школе.
+
+    <div class="illustrations"><img src="https://js.cx/lazyimg/1.gif" width="680" height="453" realsrc="https://js.cx/lazyimg/7.jpg"></div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">Иконы моды в Fashimals \ Creative</div>
+
+    Fashimals - tumblr-блог, посвященный иконам моды, превращенным в животных. Здесь есть Анна Винтур, Карл Лагерфельд, Терри Ричардсон, а также много других их коллег.
+
+    <div class="illustrations"><img src="https://js.cx/lazyimg/1.gif" width="600" height="622" realsrc="https://js.cx/lazyimg/8.jpg"></div>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // function lazyImg() {
+    //   var imgs = document.getElementsByTagName("img");
+    //   var pageYOffset = window.pageYOffset || document.documentElement.scrollTop;
+    //
+    //   for (var i = 0; i < imgs.length; i++) {
+    //     if (imgs[i].hasAttribute('realsrc')) {
+    //       var realsrc = imgs[i].getAttribute('realsrc');
+    //       if ( (imgs[i].offsetTop - document.documentElement.clientHeight) <= pageYOffset && realsrc !== imgs[i].src ) {
+    //         imgs[i].src = realsrc;
+    //         imgs[i].removeAttribute("realsrc");
+    //         //console.log(imgs[i]);
+    //       }
+    //     }
+    //   }
+    // }
+    //
+    // window.addEventListener("scroll", lazyImg);
+    // lazyImg();
+
+
+    /**
+     * Проверяет элемент на попадание в видимую часть экрана.
+     * Для попадания достаточно, чтобы верхняя или нижняя границы элемента были видны.
+     */
+    function isVisible(elem) {
+
+      var coords = elem.getBoundingClientRect();
+
+      var windowHeight = document.documentElement.clientHeight;
+
+      // верхняя граница elem в пределах видимости ИЛИ нижняя граница видима
+      var topVisible = coords.top > 0 && coords.top < windowHeight;
+      var bottomVisible = coords.bottom < windowHeight && coords.bottom > 0;
+
+      return topVisible || bottomVisible;
+    }
+
+
+    // Вариант проверки, считающий элемент видимым,
+    // если он не более чем -1 страница назад или +1 страница вперед
+
+    // function isVisible(elem) {
+    //
+    //   var coords = elem.getBoundingClientRect();
+    //
+    //   var windowHeight = document.documentElement.clientHeight;
+    //
+    //   var extendedTop = -windowHeight;
+    //   var extendedBottom = 2 * windowHeight;
+    //
+    //   // top visible || bottom visible
+    //   var topVisible = coords.top > extendedTop && coords.top < extendedBottom;
+    //   var bottomVisible = coords.bottom < extendedBottom && coords.bottom > extendedTop;
+    //
+    //   return topVisible || bottomVisible;
+    // }
+
+
+    function showVisible() {
+      var imgs = document.getElementsByTagName('img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+
+        var realsrc = img.getAttribute('realsrc');
+        if (!realsrc) continue;
+
+        if (isVisible(img)) {
+          img.src = realsrc;
+          img.setAttribute('realsrc', '');
+        }
+      }
+
+    }
+
+    window.onscroll = showVisible;
+    showVisible();
+
+  </script>
+
+
+
+  <!--**********
+  *  Клавиатура: keyup, keydown, keypress
+  ************-->
+
+  <h1>3.9. Клавиатура: keyup, keydown, keypress </h1>
+  <h3>Task 3.9.1:  </h3>
+  <pre>
+
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <input type="text" id="cancelInput" value="">
+  <br>
+  <br>
+  <input type="text" id="input1" value="">
+  <span></span>
+  <br>
+  <br>
+  <input type="text" id="input2" value="">
+  <span></span>
+  <br>
+  <br>
+  <span>Покажет любой код</span>
+  <input type="text" id="input3" value="">
+  <span></span>
+  <span></span>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var cancelInput = document.getElementById("cancelInput");
+
+    cancelInput.onkeydown = function(e) {
+      if (e.keyCode === 8) return false;
+    };
+
+    var time1;
+    var time2;
+    var timeDif;
+
+    document.onkeydown = function(e) {
+      // if (e.keyCode === 73 && e.keyCode === 68 && e.keyCode === 75) {
+      //   alert("idk");
+      // }
+
+      if (e.keyCode === 73) {
+        time1 = new Date();
+      }
+
+      if (time1 && e.keyCode === 68) {
+        if (new Date() - time1 < 1000) {
+          alert("id");
+        }
+        time1 = null;
+      }
+
+      if (e.keyCode === 73 || e.keyCode === 68)  return;
+
+      time1 = null;
+
+    }
+
+
+    //*********
+    var input1 = document.getElementById("input1");
+
+    input1.onkeyup = function(e) {
+      // if (e.keyCode < 32) return;
+      // var char = String.fromCharCode(e.keyCode);
+      // this.nextElementSibling.innerHTML = (char).toUpperCase();
+
+      //return false;
+      this.nextElementSibling.innerHTML = this.value;
+    }
+
+    input2.onkeydown = function(e) {
+      if (e.keyCode < 32) return;
+      var char = String.fromCharCode(e.keyCode);
+      this.nextElementSibling.innerHTML += (char).toUpperCase();
+
+      return false;
+    }
+
+    //***************
+
+    document.addEventListener("keydown", function(e) {
+      if (e.keyCode !== 123) return;
+      e.preventDefault();
+    });
+
+
+    //*****
+    input3.onkeydown = function(e) {
+      // if (e.keyCode < 32) return;
+      if (e.keyCode) {
+        var keyCode = e.keyCode;
+        this.nextElementSibling.innerHTML = "keyCode = " + keyCode;
+        this.nextElementSibling.nextElementSibling.innerHTML = ""
+      }
+    }
+
+    input3.onkeypress = function(e) {
+      //e.repeat = false;
+      if (e.charCode) {
+        var charCode = e.charCode;
+        this.nextElementSibling.innerHTML = "";
+        this.nextElementSibling.nextElementSibling.innerHTML = "charCode = " + charCode;
+      }
+      console.log(e);
+    }
+
+
+  </script>
+
+
+
+  <h3>Task 3.9.2: Поле только для цифр </h3>
+  <pre>
+    При помощи событий клавиатуры сделайте так, чтобы в поле можно
+    было вводить только цифры. Пример ниже.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    var num = document.getElementById("only-number");
+
+    num.onkeypress = function(e) {
+      if ( e.charCode < 48 || e.charCode > 57 ) return false;
+    };
+
+    <b>Not my solution</b>
+    // event.type должен быть keypress
+    function getChar(event) {
+      if (event.which == null) { // IE
+        if (event.keyCode < 32) return null; // спец. символ
+        return String.fromCharCode(event.keyCode)
+      }
+
+      if (event.which != 0 && event.charCode != 0) { // все кроме IE
+        if (event.which < 32) return null; // спец. символ
+        return String.fromCharCode(event.which); // остальные
+      }
+
+      return null; // спец. символ
+    }
+
+    input.onkeypress = function(e) {
+      e = e || event;
+
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+      var chr = getChar(e);
+
+      // с null надо осторожно в неравенствах,
+      // т.к. например null >= '0' => true
+      // на всякий случай лучше вынести проверку chr == null отдельно
+      if (chr == null) return;
+
+      if (chr < '0' || chr > '9') {
+        return false;
+      }
+    }
+  </pre>
+
+  <br>
+  <p>Введите только цифры:</p>
+  <input type="text" id="only-number" value="">
+
+  <script type="text/javascript">
+    'use strict';
+
+    var num = document.getElementById("only-number");
+
+    num.onkeypress = function(e) {
+      if ( e.charCode < 48 || e.charCode > 57 ) return false;
+    };
+
+  </script>
+
+
+
+  <h3>Task 3.9.3: Отследить одновременное нажатие </h3>
+  <pre>
+    Создайте функцию runOnKeys(func, code1, code2, ... code_n), которая запускает
+    func при одновременном нажатии клавиш со скан-кодами code1, code2, …, code_n.
+
+    Например, код ниже выведет alert при одновременном нажатии клавиш "Q" и "W"
+    (в любом регистре, в любой раскладке)
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var pressed = {};
+
+    document.addEventListener("keydown", function(e) {
+      var e = e || window.event;
+      runOnKeys.call(e, function() { alert("Привет!") },
+      "Q".charCodeAt(0),
+      "W".charCodeAt(0)
+      );
+    });
+
+
+    document.addEventListener("keyup", function(e) {
+      // Если зажать одновременно например qs, потом отпустить только s и нажать w, то не сработает func();
+      // А у автора сработает
+      // Нужно только зажать две клавиши и отпустить обе
+      pressed = {};
+      // У автора так
+      // Если зажать одновременно например qs, потом отпустить только s и нажать w, то сработает! func();
+      //delete pressed[e.keyCode];
+    });
+
+
+    function runOnKeys(func) {
+      pressed["+" + this.keyCode] = true;
+
+      var arr = Object.keys(pressed);
+      for (var i = 0; i < arr.length; i++) {
+        if (parseInt(arr[i]) !== arguments[i + 1]) return;
+      }
+
+      if ( arr.length === arguments.length - 1 ) {
+        func();
+        //во время показа alert, если посетитель отпустит клавиши - не возникнет keyup
+        // при этом JavaScript "пропустит" факт отпускания клавиш, а pressed[keyCode] останется true
+        // чтобы избежать "залипания" клавиши -- обнуляем статус всех клавиш, пусть нажимает всё заново
+        pressed = {};
+      }
+    }
+
+
+  </script>
+
+
+
+  <!--**********
+  * Загрузка документа: DOMContentLoaded, load, beforeunload, unload
+  ************-->
+
+  <h1>3.10. Загрузка документа: DOMContentLoaded, load, beforeunload, unload </h1>
+  <h3>Task 3.10.1:  </h3>
+  <pre>
+
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function ready() {
+      alert( 'DOM готов' + "Размеры картинки: " + img1.offsetWidth + "x" + img1.offsetHeight );
+      alert( "Размеры картинки: " + img1.offsetWidth + "x" + img1.offsetHeight );
+    }
+
+    document.addEventListener("DOMContentLoaded", ready);
+
+    window.onbeforeunload = function() {
+      return "Are you sure?..."
+    }
+
+    window.onload = function() {
+      console.log("Размеры картинки: " + img2.offsetWidth + "x" + img2.offsetHeight);
+    }
+
+  </script>
+
+  <img id="img1" src="http://i.i.ua/photo/images/pic/4/3/4988534_50d0856c.jpg">
+  <img id="img2" src="https://www.mabierebox.fr/blog/wp-content/uploads/2018/07/vive-l%C3%A9t%C3%A9-1.jpg">
+
+  <br> <br> <br> <br> <br> <br>
+
+
+  <hr>
+  <br>
+
+
+  <!--**********
+  * Загрузка скриптов, картинок, фреймов: onload и onerror
+  ************-->
+
+  <h1>3.11. Загрузка скриптов, картинок, фреймов: onload и onerror  </h1>
+  <h3>Task 3.11.1: Красивый "ALT"  </h3>
+  <pre>
+    Реализуйте «красивый» (HTML) аналог alt при помощи CSS/JavaScript,
+    который затем будет заменён картинкой сразу же как только она загрузится. А если загрузка не состоится – то не заменён.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У автора лучше
+    <b>My solution</b>
+    function imgReplace() {
+      var divs = document.querySelectorAll(".img-replace");
+
+      for (let i = 0; i < divs.length; i++) {
+        var img = document.createElement("img");
+
+        img.src = arguments[i];
+        img.className = "img-replace";
+
+        img.onload = function() {
+          divs[i].parentNode.replaceChild(this, divs[i]);
+        };
+      }
+
+    }
+
+    imgReplace(
+      "https://js.cx/search/google.png",
+      "https://js.cx/search/yandex.png",
+      "https://js.cx/search/bing.png"
+    );
+
+    <b>Not my solution</b>
+    function replaceImg() {
+      var divs = document.querySelectorAll('div.img-replace');
+      for (var i = 0; i < divs.length; i++)(function(i) {
+        var img = document.createElement('img');
+        img.src = divs[i].getAttribute('data-src');
+        img.className = 'img-replace';
+
+        img.onload = function() {
+          divs[i].parentNode.replaceChild(img, divs[i]);
+        }
+
+      }(i))
+    }
+
+    setTimeout(replaceImg, 1000); // задержка на 1 сек для демонстрации
+
+  </pre>
+
+  <style>
+    .img-replace {
+      float: left;
+      border: 1px solid black;
+    }
+  </style>
+
+   <!-- Google -->
+
+   <div style="width:114px;height:40px;font-size:32px;letter-spacing:3px" class="img-replace">
+     <span style="color:#1A53F7">G</span><span style="color:#E42131">o</span><span style="color:#FEB819">o</span><span style="color:#164AF2">g</span><span style="color:#00a315">l</span><span style="color:#E42131">e</span>
+   </div>
+
+   <!-- Яндекс -->
+   <div style="width:101px;height:40px;font-size:32px" class="img-replace">
+     <span style="color:#F00">Я</span>ндекс
+   </div>
+
+   <!-- Bing -->
+   <div style="width:100;height:40px;font-size:32px;color:#006dd4;font-weight:bold;letter-spacing: 3px; font-family:sans-serif">bing</div>
+
+   <hr>
+   <!-- картинки (для bing картинки специально нет, чтобы протестировать случай "загрузка не удалась") -->
+
+   <!-- <img src="https://js.cx/search/yandex.png" width="114" height="40" alt="Яндекс">
+   <img src="https://js.cx/search/google.png" width="101" height="40" alt="Google">
+   <img src="https://js.cx/search/bing.png" width="101" height="40" alt="Файла нет (bing)"> -->
+
+  <script type="text/javascript">
+    'use strict';
+
+    function imgReplace() {
+      var divs = document.querySelectorAll(".img-replace");
+
+      for (let i = 0; i < divs.length; i++) {
+        var img = document.createElement("img");
+
+        img.src = arguments[i];
+        img.className = "img-replace";
+
+        img.onload = function() {
+          divs[i].parentNode.replaceChild(this, divs[i]);
+        };
+      }
+    }
+
+    imgReplace(
+      "https://js.cx/search/google.png",
+      "https://js.cx/search/yandex.png",
+      "https://js.cx/search/bing.png"
+    );
+
+  </script>
+
+
+
+  <br>
+
+
+
+
+
+  <h3>Task 3.11.2: Загрузить изображения с коллбэком </h3>
+  <pre>
+    Создайте функцию preloadImages(sources, callback),
+    которая предзагружает изображения из массива sources, и после загрузки вызывает функцию callback.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Same solution
+    <b>My solution</b>
+    function preloadImages(sources, callback) {
+      var count = 0;
+
+      function onLoad() {
+        count++;
+        if (count === sources.length) {
+          callback();
+        }
+      }
+
+      for (var i = 0; i < sources.length; i++) {
+        var img = document.createElement("img");
+        img.onload = img.onerror = onLoad;
+        img.src = sources[i];
+
+      }
+
+    }
+
+    // ---------- Проверка ----------
+
+    /* файлы для загрузки */
+    var sources = [
+      "https://js.cx/images-load/1.jpg",
+      "https://js.cx/images-load/2.jpg",
+      "https://js.cx/images-load/3.jpg"
+    ];
+    for (var i = 0; i < sources.length; i++) {
+      sources[i] += '?' + Math.random(); // добавляем параметр, чтобы без кеша (для теста)
+    }
+
+    /** если картинка загружена, то можно будет сразу получить её ширину
+     * создадим все картинки и проверим, есть ли у них ширина
+     */
+    function testLoaded() {
+      var widthSum = 0;
+      for (var i = 0; i < sources.length; i++) {
+        var img = document.createElement('img');
+        img.src = sources[i];
+        widthSum += img.width;
+      }
+      // каждое изображение 100x100, общая ширина должна быть 300px
+      console.log("widthSum = ", widthSum);
+    }
+
+    // до загрузки - выведет 0
+    testLoaded();
+
+    // после загрузки - выведет 300
+    preloadImages(sources, testLoaded);
+
+  </pre>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function preloadImages(sources, callback) {
+      var count = 0;
+
+      function onLoad() {
+        count++;
+        if (count === sources.length) {
+          callback();
+        }
+      }
+
+      for (var i = 0; i < sources.length; i++) {
+        var img = document.createElement("img");
+        img.onload = img.onerror = onLoad;
+        img.src = sources[i];
+
+      }
+
+    }
+
+    // ---------- Проверка ----------
+
+    /* файлы для загрузки */
+    var sources = [
+      "https://js.cx/images-load/1.jpg",
+      "https://js.cx/images-load/2.jpg",
+      "https://js.cx/images-load/3.jpg"
+    ];
+    for (var i = 0; i < sources.length; i++) {
+      sources[i] += '?' + Math.random(); // добавляем параметр, чтобы без кеша (для теста)
+    }
+
+    /** если картинка загружена, то можно будет сразу получить её ширину
+     * создадим все картинки и проверим, есть ли у них ширина
+     */
+    function testLoaded() {
+      var widthSum = 0;
+      for (var i = 0; i < sources.length; i++) {
+        var img = document.createElement('img');
+        img.src = sources[i];
+        widthSum += img.width;
+      }
+      // каждое изображение 100x100, общая ширина должна быть 300px
+      console.log("widthSum = ", widthSum);
+    }
+
+    // до загрузки - выведет 0
+    testLoaded();
+
+    // после загрузки - выведет 300
+    preloadImages(sources, testLoaded);
+
+  </script>
+
+
+
+
+  <h3>Task 3.11.3: Скрипт с коллбэком </h3>
+  <pre>
+    Создайте функцию addScript(src, callback), которая загружает скрипт с данным src,
+    и после его загрузки и выполнения вызывает функцию callback.
+
+    Скрипт может быть любым, работа функции не должна зависеть от его содержимого.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //У автора лучше - добавляется проверка на повторный вызов
+    <b>My solution</b>
+    function addScript(src, callback) {
+      var script = document.createElement("script");
+      script.src = src;
+      document.body.appendChild(script);
+      script.onload = callback;
+    }
+
+    addScript("js/go.js", function() {
+      go();
+    });
+
+    <b>Not my solution</b>
+    function addScript(src, callback) {
+      var script = document.createElement('script');
+      script.src = src;
+      var s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(script, s);
+
+      var loaded = false;
+
+      function onload() {
+        if (loaded) return; // повторный вызов
+        loaded = true;
+        callback();
+      }
+
+      script.onload = onload; // все браузеры, IE с версии 9
+
+      script.onreadystatechange = function() { // IE8-
+        if (this.readyState == 'loaded' || this.readyState == 'complete') {
+          setTimeout(onload, 0);
+        }
+      };
+
+    }
+
+    addScript("go.js", function() {
+      go();
+    });
+
+  </pre>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function addScript(src, callback) {
+      var script = document.createElement("script");
+      script.src = src;
+      document.body.appendChild(script);
+      script.onload = callback;
+    }
+
+    addScript("js/go.js", function() {
+      go();
+    });
+
+  </script>
+
+
+
+  <h3>Task 3.11.4: Скрипты с коллбэком </h3>
+  <pre>
+    Создайте функцию addScripts(scripts, callback), которая загружает скрипты из
+    массива scripts, и после загрузки и выполнения их всех вызывает функцию callback.
+
+    Скрипт может быть любым, работа функции не должна зависеть от его содержимого.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //My code is better
+    <b>My solution</b>
+    function addScripts(scripts, callback) {
+
+      var count = 0;
+
+      function onLoad() {
+        var loaded = false;
+
+        (function () {
+          if (loaded) return;
+          loaded = true;
+          count++;
+
+          if (count === scripts.length) {
+            callback();
+          }
+        })();
+      }
+
+
+      for (let i = 0; i < scripts.length; i++) {
+        var script = document.createElement("script");
+        script.src = scripts[i];
+        document.body.appendChild(script);
+        script.onload = onLoad;
+      }
+    }
+
+    // функция a() сработает только если загружены a.js, b.js, c.js
+    addScripts(["js/a.js", "js/b.js", "js/c.js"], function() {
+      a();
+    });
+
+    <b>Not my solution</b>
+    function addScript(src) {
+      var script = document.createElement('script');
+      script.src = src;
+      var s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(script, s);
+      return script;
+    }
+
+    function addScripts(scripts, callback) {
+      var loaded = {}; // Для загруженных файлов loaded[i] = true
+      var counter = 0;
+
+      function onload(i) {
+        if (loaded[i]) return; // лишний вызов onload/onreadystatechange
+        loaded[i] = true;
+        counter++;
+        if (counter == scripts.length) callback();
+      }
+
+      for (var i = 0; i < scripts.length; i++)(function(i) {
+        var script = addScript(scripts[i]);
+
+        script.onload = function() {
+          onload(i);
+        };
+
+
+
+      }(i));
+
+    }
+
+    addScripts(["a.js", "b.js", "c.js"], function() {
+      a()
+    });
+
+
+  </pre>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function addScripts(scripts, callback) {
+
+      var count = 0;
+
+      function onLoad() {
+        var loaded = false;
+
+        (function () {
+          if (loaded) return;
+          loaded = true;
+          count++;
+
+          if (count === scripts.length) {
+            callback();
+          }
+        })();
+      }
+
+
+      for (let i = 0; i < scripts.length; i++) {
+        var script = document.createElement("script");
+        script.src = scripts[i];
+        document.body.appendChild(script);
+        script.onload = onLoad;
+      }
+    }
+
+    // функция a() сработает только если загружены a.js, b.js, c.js
+    addScripts(["js/a.js", "js/b.js", "js/c.js"], function() {
+      a();
+    });
+
+  </script>
+
+
+  <br> <br> <br> <br> <br> <br>
+  <br> <br> <br> <br> <br> <br>
+</body>
+</html>

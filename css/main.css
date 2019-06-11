@@ -1,0 +1,173 @@
+*  {
+  text-decoration: none;
+  outline: none;
+  list-style-type: none;
+  box-sizing: border-box;
+}
+
+article,aside,audio,body,canvas,details,fieldset,
+figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,
+header,hgroup,html,img,li,menu,nav,ol,p,section,
+table,tbody,td,tfoot,th,thead,tr,ul,video {
+ margin:0;
+ padding:0;
+ border-style: none;
+}
+
+html {
+  font-size: 16px;
+  font-weight: normal;
+  font-family: 'Lobster', cursive;
+  color: #1c1c1c;
+}
+
+body {
+  background-color: #9f9f9f;
+  /* background-image: url('../img/african_elephants_mother_and_adorable_babies.jpg'); */
+  background-position: top center;
+  background-repeat: no-repeat;
+  /* background-size: contain;
+  min-height: 100vh; */
+  background-size: cover;
+}
+
+pre {
+  font-family: monospace;
+}
+
+section {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+label {
+  cursor: pointer;
+}
+
+.display-none {
+  display: none;
+}
+
+
+/* *********** */
+/*  Nav-bar   */
+/* *********** */
+.nav-bar {
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.nav-bar > ul {
+  display: flex;
+  flex-wrap: wrap;
+  /* text-transform: uppercase; */
+}
+
+.nav-bar  ul > li {
+  line-height: 1rem;
+  display: block;
+  position: relative;
+}
+
+.nav-bar  ul > li > a {
+  display: block;
+  color: #ebe9e9;
+  padding: 1.7rem 2rem;
+  line-height: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  /* background-color: transparent; */
+  /* vertical-align: middle; */
+}
+
+.nav-bar  ul > li a:hover {
+  color: #b57777;
+  background-color: rgba(30, 30, 30, 0.4);
+}
+
+
+/* ********************************* */
+/* Drop menu */
+/* ********************************* */
+.nav-bar .drop-menu {
+  position: absolute;
+  top: 4.4rem;
+  left: 0;
+  z-index: 99;
+  display: none;
+}
+
+.nav-bar  .drop-menu__item a {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem 1rem;
+  line-height: 1rem;
+}
+
+.drop-menu {
+  overflow: hidden;
+}
+
+.show .drop-menu {
+  display: block;
+  -webkit-transform-origin: 50% 0;
+  -moz-transform-origin: 50% 0;
+  -o-transform-origin: 50% 0;
+  -ms-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+
+  -webkit-animation: show 0.3s linear;
+	-moz-animation: show 0.3s linear;
+  -o-animation: show 0.3s linear;
+	-ms-animation: show 0.3s linear;
+	animation: show 0.3s linear;
+}
+
+@keyframes show {
+  0% {
+    /* width: 1px;
+    height: 1px; */
+
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -o-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+  }
+  100% {
+    /* -webkit-transform: ;
+  	-moz-transform: ;
+  	-o-transform: ;
+  	-ms-transform: ;
+  	transform: ; */
+
+    /* width: 100%;
+    height: 100%; */
+
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+
+  }
+}
+
+/* ********************************* */
+/* Section of selection background  */
+/* ********************************* */
+
+/* form of selection */
+.select-background {
+  text-shadow: 1px 1px 2px #ebebeb, 0 0 1rem #808080;
+}
+
+.select-background input:checked + span {
+  color: #282828;
+  text-decoration: underline;
+  font-size: 1.1rem;
+}
+
+.select-background label:hover {
+  text-shadow: 0 0 1rem #808080;
+}

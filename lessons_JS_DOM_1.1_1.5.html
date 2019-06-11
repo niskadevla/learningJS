@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lessons_JS_DOM_1.1 - 1.5</title>
+
+  <style>
+    body > table {
+      border-collapse: collapse;
+    }
+
+    body > table td {
+      border: 1px solid black;
+      padding: 3px 5px;
+    }
+
+    #table_2 td:hover {
+      background-color: red;
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+<body>
+  <!--**********
+  * Документ, события, интерфейсы
+  ************-->
+
+  <!--**********
+  * Окружение: DOM, BOM и JS
+  ************-->
+
+
+  <h1>1.1. Окружение: DOM, BOM и JS  </h1>
+  <h3>Task 1.1.1: BOM </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write(navigator);
+    document.write('<br>');
+
+    let keys = Object.keys(navigator);
+
+    document.write(keys); //пусто
+    document.write('<br>');
+
+    let keys2 = Object.keys(Navigator.prototype);
+
+    document.write(keys2);
+    //vibrate,javaEnabled,getGamepads,mozGetUserMedia,sendBeacon,requestMediaKeySystemAccess,
+    //taintEnabled,permissions,mimeTypes,plugins,doNotTrack,maxTouchPoints,mediaCapabilities,
+    //oscpu,vendor,vendorSub,productSub,cookieEnabled,buildID,mediaDevices,webdriver,
+    //hardwareConcurrency,geolocation,appCodeName,appName,appVersion,platform,userAgent,
+    //product,language,languages,onLine
+    document.write('<br>');
+
+    for (var key in navigator.__proto__) {
+      document.write(key + ' : ');
+      document.write('<br>');
+    }
+
+    document.write('<br>');
+    document.write('navigator.userAgent: ' + navigator.userAgent);
+    document.write('<br>');
+    document.write('navigator.platform: ' + navigator.platform);
+    document.write('<br>');
+    document.write('navigator.language: ' + navigator.language);
+    document.write('<br>');
+
+    document.write('<br>');
+    //getCurrentPosition,watchPosition,clearWatch
+    document.write('navigator.geolocation.__proto__: keys: ' + Object.getOwnPropertyNames(navigator.geolocation.__proto__));
+    document.write('<br>');
+    document.write('navigator.geolocation: keys: ' + Object.getOwnPropertyNames(navigator.geolocation)); // empty
+    document.write('<br>');
+
+    document.write('navigator.permissions: ' + navigator.permissions); //
+    document.write('<br>');
+
+    document.write('navigator.vibrate: ' + navigator.vibrate); //
+    document.write('<br>');
+
+    document.write('navigator.getGamepads: ' + navigator.getGamepads); //
+    document.write('<br>');
+
+    document.write('navigator.sendBeacon: ' + navigator.sendBeacon);
+    document.write('<br>');
+
+    document.write('navigator.requestMediaKeySystemAccess: ' + navigator.requestMediaKeySystemAccess);
+    document.write('<br>');
+
+    document.write('navigator.plugins: keys: ' + Object.getOwnPropertyNames(navigator.plugins));
+    document.write('<br>');
+
+    document.write('navigator.product: ' + navigator.product); //
+    document.write('<br>');
+
+    document.write('navigator.oscpu: ' + navigator.oscpu);
+    document.write('<br>');
+
+    document.write('navigator.vendor: ' + navigator.vendor);
+    document.write('<br>');
+
+
+    //document.write('navigator.geolocation.getCurrentPosition(): ' + navigator.geolocation.getCurrentPosition());
+
+    // *****
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    function success(pos) {
+      var crd = pos.coords;
+
+      console.log('Your current position is:');
+      console.log(`Latitude : ${crd.latitude}`);
+      console.log(`Longitude: ${crd.longitude}`);
+      console.log(`More or less ${crd.accuracy} meters.`);
+    };
+
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+
+    //****
+    function position(pos) {
+      // масив який містить назву міст та їх довготу і широту
+      var misto=[ {name:"Київ",lat: 50.45000 , lon: 30.52333 },
+      {name:"Вінниця", lat: 49.23278 , lon: 28.46806},
+      {name:'Дніпро', lat: 48.45000, lon: 34.98333},
+      {name:'Донецьк', lat: 48.00278, lon: 37.80528},{name:'Маріуполь', lat: 47.09750, lon:37.54361},
+      {name:'Житомир', lat: 50.25667, lon: 28.66417},
+      {name:'Запоріжжя', lat: 47.84361, lon: 35.13056},
+      {name:'Івано-Франківськ', lat: 48.92278, lon: 24.71028},
+      {name:'Кропивницький', lat: 48.50917, lon: 32.25889},
+      {name:'Луганськ', lat: 48.57444, lon: 39.30778},
+      {name:'Луцьк', lat: 50.74722, lon: 25.32528},
+      {name:'Львів', lat: 49.83917, lon: 24.02972},
+      {name:'Миколаїв', lat: 46.97583, lon: 31.99472},
+      {name:'Одеса', lat: 46.46667, lon: 30.73333},
+      {name: 'Полтава', lat: 49.58944, lon: 34.55139},
+      {name: 'Рівне', lat: 50.62111, lon: 26.25194},
+      {name:'Суми', lat: 50.90722, lon: 34.79861},
+      {name: 'Тернопіль', lat: 49.55306, lon: 25.59500},
+      {name: 'Ужгород', lat: 48.62111, lon: 22.28778 },
+      {name: 'Харків', lat: 50.00444, lon: 36.23139},
+      {name:'Херсон',  lat: 46.63611, lon: 32.61694},
+      {name:'Хмельницький', lat: 49.42194 , lon: 26.98972},
+      {name:'Черкаси', lat: 49.44444, lon: 32.05972},
+      {name:'Чернігів', lat: 51.50000, lon: 31.30000},
+      {name:'Чернівці', lat: 48.29222, lon: 25.93500},
+      {name:'Сімферополь', lat: 44.94806, lon: 34.10417}];
+
+      for(i=0.001;i<4; i+=0.001)
+      for(j=0; j<misto.length;j++){
+      if((misto[j].lat<pos.coords.latitude+i && misto[j].lat>=pos.coords.latitude-i) && (misto[j].lon<pos.coords.longitude+i && misto[j].lon>=pos.coords.longitude-i)){ alert( misto[j].name ); return; }
+      }
+    }
+
+    if(navigator.geolocation){
+
+    navigator.geolocation.getCurrentPosition(position, function(e){
+    console.log('Error.code: '+e.code+' Error.message: '+e.message);
+    }
+    );
+
+    }else alert("Ваш браузер НЕ підтримує геолокацію.");
+
+
+  </script>
+
+  <br>
+  <br>
+
+  <h3>Task 1.1.2: location </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let loc = 'http://infolio.top';
+
+    //Откроется в новом окне, а в старом окне останется старый адрес
+    document.write('<br>');
+    document.write('<button type="button" name="button" onclick="window.open(`${loc}`)">Open infolio</button>');
+    document.write('<br>');
+
+    // аналогично
+    // location.href = "http://google.com";
+    // location.assign("http://google.com");
+
+    document.write('<br>');
+    document.write('location.href: ' + location.href);
+
+    //Аналогично
+    document.write('<br>');
+    document.write('location: ' + location);
+    document.write('<br>');
+
+
+    document.write('<br>');
+    //Откроется в новом окне и старое окно заменит на новый адрес
+    document.write('<button type="button" name="button" onclick="window.open(`${location = loc}`)">Open infolio</button>');
+    document.write('<br>');
+
+    // аналогично
+    //location.replace("index.html");
+
+    document.write('<br>');
+    document.write('location: keys: ' + Object.getOwnPropertyNames(location));
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write('location: keys: ' + Object.keys(location));
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write('location: keys: ');
+    for (var key in location) {
+      document.write('<br>');
+      document.write(key + ' : ' + location[key]);
+    }
+
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write('location.port: ' + window.location.port);
+    document.write('<br>');
+
+  </script>
+
+
+
+  <h3>Task 1.1.3: history </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write('<br>');
+    document.write('history: keys: ' + Object.keys(history));
+    document.write('<br>');
+    // keys: go,back,forward,pushState,replaceState,length,scrollRestoration,state,constructor
+    document.write('history.__proto__: keys: ' + Object.getOwnPropertyNames(history.__proto__));
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write('history.state: ' + history.state);
+
+    document.write('<br>');
+    document.write('history.go: ' + history.go);
+
+    document.write('<br>');
+    document.write('history.back: ' + history.back);
+
+    document.write('<br>');
+    document.write('history.forward: ' + history.forward);
+
+    document.write('<br>');
+    document.write('history.pushState: ' + history.pushState);
+
+    document.write('<br>');
+    document.write('history.length: ' + history.length);
+
+    document.write('<br>');
+    document.write('history.scrollRestoration: ' + history.scrollRestoration);
+
+    // document.write('<br>');
+    // document.write(history.go());
+
+
+    document.write('<br>');
+    document.write('<button type="button" name="button" onclick="history.back()">back</button>');
+    document.write('<br>');
+    document.write('<br>');
+
+  </script>
+
+
+  <!--**********
+  * Дерево DOM
+  ************-->
+
+  <h1>1.2.  Дерево DOM </h1>
+  <h3>Task 1.2.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write('<br>');
+    document.write(document.documentElement); //[object HTMLHtmlElement]
+    document.write('<br>');
+    document.write(document.body); // [object HTMLBodyElement]
+
+    document.write('<br>');
+    // text,link,vLink,aLink,bgColor,background,onafterprint,onbeforeprint,
+    //onbeforeunload,onhashchange,onlanguagechange,onmessage,onmessageerror,onoffline,
+    //ononline,onpagehide,onpageshow,onpopstate,onstorage,onunload,constructor
+    document.write(Object.getOwnPropertyNames(document.body.__proto__)); //
+
+  </script>
+
+
+
+  <!--**********
+  * Работа с DOM из консоли
+  ************-->
+
+  <h1>1.3.  Дерево DOM </h1>
+  <h3>Task 1.3.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    console.log(document.body);
+
+    console.log(document.documentElement);
+
+    //console.log($$("h1")); //  в консоли выведет все Н1
+
+    //console.log($("h1")); // в консоли выведет только первый Н1
+
+  </script>
+
+
+
+
+  <!--**********
+  * Навигация по DOM-элементам
+  ************-->
+
+  <h1>1.4.  Навигация по DOM-элементам </h1>
+  <h3>Task 1.4.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var elems = document.body.childNodes;
+
+    for (var i = 0; i < elems.length; i++) {
+      document.write(' | ' + elems[i] + ' | ');
+    }
+
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write( document.body.previousSibling ); //[object Text], т.к. есть перенос строки
+    document.write('<br>');
+    document.write( document.body.nextSibling ); // null, т.к. скрипт еще туда не дошел
+
+    document.write('<br>');
+    document.write( document.body.parentNode );  // [object HTMLHtmlElement]
+    document.write('<br>');
+    document.write('<br>');
+
+
+    var elems2 = document.body.children;
+
+    for (var i = 0; i < elems2.length; i++) {
+      document.write(' | ' + elems2[i] + ' | ');
+    }
+
+    document.write('<br>');
+
+    document.write('<br>');
+    document.write( document.body.previousElementSibling ); //
+
+    document.write('<br>');
+    document.write('<br>');
+
+    let comment = document.body.childNodes[1];
+    document.write(comment.nodeValue); // самый верхний коментарий
+    document.write('<br>');
+    document.write(comment.innerHTML); // undefined
+    document.write('<br>');
+    document.write('<br>');
+
+  </script>
+
+  <div id="div_table">
+    <table>
+      <tr>
+        <td>один</td> <td>два</td>
+      </tr>
+      <tr>
+        <td>три</td>  <td>четыре</td>
+      </tr>
+    </table>
+  </div>
+
+
+  <script>
+  var table = document.getElementById('div_table').children[0];
+
+  document.write('<br>');
+
+  document.write( table.rows[0].cells[0].innerHTML ) // "один"
+  </script>
+
+
+
+  <hr>
+
+
+  <h3>Task 1.4.2: DOM children </h3>
+  <pre>
+
+    Напишите код, который получит элемент HEAD.
+    Напишите код, который получит UL.
+    Напишите код, который получит второй LI.
+    Будет ли ваш код работать в IE8-, если комментарий переместить между элементами LI?
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      let head = document.head,
+        head2 = document.documentElement.children[0],
+        ul_1 = document.body.children[1],
+        li_1 = document.body.children[1].lastElementChild;  // Так будет работать кросбраузерно
+
+      document.write("< br />");
+      document.write(head);
+
+      document.write("< br />");
+      document.write(head2);
+
+
+      document.write("< br />");
+      document.write(ul_1.innerHTML); //Маша, Вовочка
+
+      document.write("< br />");
+      document.write(li_1.innerHTML); // Вовочка
+
+    <b>Not my solution</b>
+      document.documentElement.children[0]
+      document.documentElement.firstChild
+
+      document.body.children[1]
+
+      document.body.children[1].children[1]; // LI
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // Этот код нужно проверять в другом файле
+    /*
+    let head = document.head,
+      head2 = document.documentElement.children[0],
+      ul_1 = document.body.children[1],
+      li_1 = document.body.children[1].lastElementChild;  // Так будет работать кросбраузерно
+
+    document.write("<br />");
+    document.write(head);
+
+    document.write("<br />");
+    document.write(head2);
+
+
+    document.write("<br />");
+    document.write(ul_1.innerHTML); //Маша, Вовочка
+
+    document.write("<br />");
+    document.write(li_1.innerHTML); // Вовочка
+
+    */
+  </script>
+
+
+
+  <div class="" id="emptyElem"></div>
+
+  <h3>Task 1.4.3: Проверка существования детей </h3>
+  <pre>
+    Придумайте самый короткий код для проверки, пуст ли элемент elem.
+    «Пустой» – значит нет дочерних узлов, даже текстовых.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+      let elem = document.getElementById('emptyElem');
+
+      if ( elem.firstChild === 0 ) {
+          document.write('узел elem пуст');
+       }
+
+    // Правильней вариант
+    <b>Not My solution</b>
+    if (!elem.childNodes.length) { ... }
+
+    if (!elem.firstChild) { ... }
+
+    if (!elem.lastChild) { ... }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let elem = document.getElementById('emptyElem');
+
+    if ( elem.firstChild === 0 ) {
+        document.write('узел elem пуст');
+     }
+
+  </script>
+
+
+
+  <table id = "table_1">
+    <tr>
+      <td>1:1</td>
+      <td>2:1</td>
+      <td>3:1</td>
+      <td>4:1</td>
+      <td>5:1</td>
+    </tr>
+    <tr>
+      <td>1:2</td>
+      <td>2:2</td>
+      <td>3:2</td>
+      <td>4:2</td>
+      <td>5:2</td>
+    </tr>
+    <tr>
+      <td>1:3</td>
+      <td>2:3</td>
+      <td>3:3</td>
+      <td>4:3</td>
+      <td>5:3</td>
+    </tr>
+    <tr>
+      <td>1:4</td>
+      <td>2:4</td>
+      <td>3:4</td>
+      <td>4:4</td>
+      <td>5:4</td>
+    </tr>
+    <tr>
+      <td>1:5</td>
+      <td>2:5</td>
+      <td>3:5</td>
+      <td>4:5</td>
+      <td>5:5</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <button type="button" name="button" onclick="changeColor()">Старт</button>
+
+  <br>
+
+  <button type="button" name="button" onclick="stopChangeColor()">Стоп</button>
+
+  <h3>Task 1.4.5: Выделите ячейки по диагонали </h3>
+  <pre>
+    Напишите код, который выделит все ячейки в таблице по диагонали.
+    Вам нужно будет получить из таблицы table все диагональные td и выделить их, используя код:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var table = document.getElementById('table_1');
+    var td;
+
+    document.write(table.children);
+
+    for (var i = 0; i < table.rows.length; i++) {
+      td = table.rows[i].cells[i];
+
+      // в переменной td DOM-элемент для тега < td>
+      td.style.backgroundColor = 'red';
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var table = document.getElementById('table_1');
+    var td;
+
+    document.write(table.children);
+
+    for (var i = 0; i < table.rows.length; i++) {
+      td = table.rows[i].cells[i];
+
+      // в переменной td DOM-элемент для тега <td>
+      td.style.backgroundColor = 'red';
+    }
+
+    var timer;
+
+    function changeColor() {
+
+      timer = setInterval(function() {
+        if (!!td) {
+          td.style.backgroundColor = '';
+        }
+
+        var a = Math.round( Math.random() * (table.rows.length - 1) );
+        var b = Math.round( Math.random() * (table.rows.length - 1) );
+
+        td = table.rows[a].cells[b];
+
+        // в переменной td DOM-элемент для тега <td>
+        td.style.backgroundColor = 'green';
+      }, 300);
+
+    }
+
+    function stopChangeColor() {
+      clearInterval(timer);
+
+      td.style.backgroundColor = 'yellow';
+      // if (!!td) {
+      //   td.style.backgroundColor = '';
+      // }
+    }
+
+  </script>
+
+  <br>
+
+
+  <!--**********
+  * Поиск: getElement* и querySelector* и не только
+  ************-->
+
+  <h1>1.5. Поиск: getElement* и querySelector* и не только  </h1>
+  <h3>Task 1.5.1: Поиск элементов </h3>
+  <pre>
+    Ниже находится документ с таблицей и формой.
+
+    Найдите (получите в переменную) в нём:
+
+        Все элементы label внутри таблицы. Должно быть 3 элемента.
+        Первую ячейку таблицы (со словом "Возраст").
+        Вторую форму в документе.
+        Форму с именем search, без использования её позиции в документе.
+        Элемент input в форме с именем search. Если их несколько, то нужен первый.
+        Элемент с именем info[0], без точного знания его позиции в документе.
+        Элемент с именем info[0], внутри формы с именем search-person.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //не все правильно
+    <b>My solution</b>
+      var label = document.querySelectorAll('table label'),
+       firstTD = document.querySelector('form table').rows[0].cells[0],
+       form = document.getElementsByTagName('form')[1],
+       search = document.getElementsByName('search')[0],
+       search2 = document.querySelector('form[name = "search"]'),
+       input = document.querySelector('form[name = "search"] input'),
+       info_0 = document.getElementsByName('info[0]'),
+       info_0_2 = document.querySelector('form[name = "search-person"] *[name = "info[0]"]');
+
+      console.log(label);
+      document.write('< br>');
+      document.write('< hr>');
+      document.write(firstTD.innerHTML);
+      console.log(form);
+      document.write('< br>');
+      document.write(search);
+      document.write('< br>');
+      document.write(search2);
+      document.write('< br>');
+      document.write(input);
+      document.write('< br>');
+      console.log(info_0);
+      console.log(info_0_2);
+
+    <b>Not my solution</b>
+    / 1
+    document.getElementById('age-table').getElementsByTagName('label');
+
+    // 2
+    document.getElementById('age-table').getElementsByTagName('td')[0];
+    // в современных браузерах можно одним запросом:
+    var result = document.querySelector('#age-table td');
+
+    // 3
+    document.getElementsByTagName('form')[1];
+
+    // 4
+    document.querySelector('form[name="search"]');
+
+    // 5
+    document.querySelector('form[name="search"] input')
+
+    // 6
+    document.getElementsByName("info[0]")[0];
+
+    // 7
+    document.querySelector('form[name="search-person"] [name="info[0]"]');
+  </pre>
+
+
+  <form name="search">
+    <label>Поиск по сайту:
+      <input type="text" name="search">
+    </label>
+    <input type="submit" value="Искать!">
+  </form>
+
+  <hr>
+
+  <form name="search-person">
+    Поиск по посетителям:
+    <table id="age-table">
+      <tbody><tr>
+        <td>Возраст:</td>
+        <td id="age-list">
+          <label>
+            <input type="radio" name="age" value="young">до 18</label>
+          <label>
+            <input type="radio" name="age" value="mature">18-50</label>
+          <label>
+            <input type="radio" name="age" value="senior">более 50</label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Дополнительно:</td>
+        <td>
+          <input type="text" name="info[0]" placeholder="info 0">
+          <input type="text" name="info[1]">
+          <input type="text" name="info[2]">
+        </td>
+      </tr>
+
+    </tbody></table>
+
+    <input type="submit" value="Искать!">
+  </form>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var label = document.querySelectorAll('table label'),
+     firstTD = document.querySelector('form table').rows[0].cells[0],
+     form = document.getElementsByTagName('form')[1],
+     search = document.getElementsByName('search')[0],
+     search2 = document.querySelector('form[name = "search"]'),
+     input = document.querySelector('form[name = "search"] input'),
+     info_0 = document.getElementsByName('info[0]'),
+     info_0_2 = document.querySelector('form[name = "search-person"] *[name = "info[0]"]');
+
+    console.log(label);
+    document.write('<br>');
+    document.write('<hr>');
+    document.write(firstTD.innerHTML);
+    console.log(form);
+    document.write('<br>');
+    document.write(search);
+    document.write('<br>');
+    document.write(search2);
+    document.write('<br>');
+    document.write(input);
+    document.write('<br>');
+    console.log(info_0);
+    console.log(info_0_2);
+
+  </script>
+
+
+
+  <h3>Task 1.5.2: Дерево </h3>
+  <pre>
+    Есть дерево из тегов < ul>/< li>.
+    Напишите код, который для каждого элемента < li> выведет:
+      Текст непосредственно в нём (без подразделов).
+      Количество вложенных в него элементов < li> – всех, с учётом вложенных.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Аналогичное решение
+    <b>My solution</b>
+      var allLi = document.querySelectorAll('#animal li');
+
+      for (var i = 0; i < allLi.length; i++) {
+        document.write( allLi[i].firstChild.textContent, ' : ' );
+        document.write( allLi[i].getElementsByTagName('li').length, '< br>' );
+      }
+
+    <b>Not my solution</b>
+    var lis = document.getElementsByTagName('li');
+
+    for (i = 0; i < lis.length; i++) {
+      // получить название из текстового узла
+      var title = lis[i].firstChild.data;
+
+      title = title.trim(); // убрать лишние пробелы с концов
+
+      // получить количество детей
+      var childCount = lis[i].getElementsByTagName('li').length;
+
+      alert(title + ': ' + childCount);
+    }
+  </pre>
+
+  <div id="animal">
+    <ul>
+      <li>Животные
+        <ul>
+          <li>Млекопитающие
+            <ul>
+              <li>Коровы</li>
+              <li>Ослы</li>
+              <li>Собаки</li>
+              <li>Тигры</li>
+            </ul>
+          </li>
+          <li>Другие
+            <ul>
+              <li>Змеи</li>
+              <li>Птицы</li>
+              <li>Ящерицы</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <li>Рыбы
+        <ul>
+          <li>Аквариумные
+            <ul>
+              <li>Гуппи</li>
+              <li>Скалярии</li>
+            </ul>
+
+          </li>
+          <li>Морские
+            <ul>
+              <li>Морская форель</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var allLi = document.querySelectorAll('#animal li');
+
+    for (var i = 0; i < allLi.length; i++) {
+      document.write( allLi[i].firstChild.textContent, ' : ' );
+      document.write( allLi[i].getElementsByTagName('li').length, '<br>' );
+    }
+
+  </script>
+
+  <hr>
+  <hr>
+
+  <br>
+
+  <table id = "table_2">
+    <tr>
+      <td>1:1</td>
+      <td>2:1</td>
+      <td>3:1</td>
+      <td>4:1</td>
+      <td>5:1</td>
+    </tr>
+    <tr>
+      <td>1:2</td>
+      <td>2:2</td>
+      <td>3:2</td>
+      <td>4:2</td>
+      <td>5:2</td>
+    </tr>
+    <tr>
+      <td>1:3</td>
+      <td>2:3</td>
+      <td>3:3</td>
+      <td>4:3</td>
+      <td>5:3</td>
+    </tr>
+    <tr>
+      <td>1:4</td>
+      <td>2:4</td>
+      <td>3:4</td>
+      <td>4:4</td>
+      <td>5:4</td>
+    </tr>
+    <tr>
+      <td>1:5</td>
+      <td>2:5</td>
+      <td>3:5</td>
+      <td>4:5</td>
+      <td>5:5</td>
+    </tr>
+  </table>
+
+  <script type="text/javascript">
+
+      let table_2 = document.getElementById('table_2');
+
+      let el = table_2.querySelectorAll('td');
+      console.log(el);
+      //el.style.backgroundColor = 'red';
+
+
+  </script>
+
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

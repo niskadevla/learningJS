@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Использование замыканий</title>
+</head>
+<body>
+  <hr>
+
+  <h3>Решение 1</h3>
+  <pre>
+    var a1 = 5;
+
+    function f1(a1) {
+      var a1 = 8
+      document.write(a1);
+    }
+
+    f1(a1); // 8
+  </pre>
+
+  <script type="text/javascript">
+    var a1 = 5;
+
+    function f1(a1) {
+      var a1 = 8
+      document.write(a1);
+    }
+
+    f1(a1); // 8
+
+  </script>
+
+  <hr>
+
+
+  <h3>Решение 2</h3>
+  <pre>
+    var a2 = 5;
+
+    function f2(a2) {
+      var a2 = 8
+      document.write(a2);
+    }
+
+    a2 = 99;
+    f2(a2); // 8
+  </pre>
+
+  <script type="text/javascript">
+    var a2 = 5;
+
+    function f2(a2) {
+      var a2 = 8
+      document.write(a2);
+    }
+
+    a2 = 99;
+    f2(a2); // 8
+
+  </script>
+
+  <hr>
+
+
+  <h3>Решение 3</h3>
+  <pre>
+    var a3 = 5;
+
+    function f3(a3) {
+      document.write(a3);
+    }
+
+    a3 = 99;
+    f3(a3); //99
+  </pre>
+
+  <script type="text/javascript">
+    var a3 = 5;
+
+    function f3(a3) {
+      document.write(a3);
+    }
+
+    a3 = 99;
+    f3(a3); //99
+
+  </script>
+
+  <hr>
+
+  <h3>Решение 4</h3>
+  <pre>
+    var a4 = 5;
+
+    function f4(a4) {
+      document.write(a4);
+      a4 = 3;
+    }
+
+    a4 = 99;
+    f4(a4); //99
+  </pre>
+
+  <script type="text/javascript">
+    var a4 = 5;
+
+    function f4(a4) {
+      document.write(a4);
+      a4 = 3;
+    }
+
+    a4 = 99;
+    f4(a4); //99
+
+  </script>
+
+
+  <hr>
+
+  <h3>Решение 5</h3>
+  <pre>
+    var a5 = 6;
+
+    function f5(a5) {
+      document.write(a5);
+      var a5 = 8;
+    }
+
+    a5 = 9;
+    f5(a5); // 9
+  </pre>
+
+  <script type="text/javascript">
+    var a5 = 6;
+
+    function f5(a5) {
+      document.write(a5);
+      var a5 = 8;
+    }
+
+    a5 = 9;
+    f5(a5); // 9
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 6</h3>
+  <pre>
+    var a6 = 6;
+
+    function f6() {
+      document.write(a6);
+      var a6 = 8;
+    }
+
+    a6 = 9;
+    f6(); // undefined
+  </pre>
+
+  <script type="text/javascript">
+    var a6 = 6;
+
+    function f6() {
+      document.write(a6);
+      var a6 = 8;
+    }
+
+    a6 = 9;
+    f6(); // undefined
+
+  </script>
+
+
+  <hr>
+
+  <h3>Решение 7</h3>
+  <pre>
+    var a7 = 6;
+
+    function f7() {
+      document.write(a7);
+      a7 = 8;
+    }
+
+    a7 = 9;
+    f7(); // 9
+  </pre>
+
+  <script type="text/javascript">
+    var a7 = 6;
+
+    function f7() {
+      document.write(a7);
+      a7 = 8;
+    }
+
+    a7 = 9;
+    f7(); // 9
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 8</h3>
+  <pre>
+    var a8 = 6;
+
+    function f8() {
+      a8 = 8;
+      document.write(a8);
+    }
+
+    a8 = 9;
+    f8(); // 8
+  </pre>
+
+  <script type="text/javascript">
+    var a8 = 6;
+
+    function f8() {
+      a8 = 8;
+      document.write(a8);
+    }
+
+    a8 = 9;
+    f8(); // 8
+
+  </script>
+
+
+  <hr>
+
+  <h3>Решение 9</h3>
+  <pre>
+    var a9 = 6;
+
+    function f9() {
+      var a9 = 8;
+      document.write(a9);
+    }
+
+    a9 = 9;
+    f9(); // 8
+  </pre>
+
+  <script type="text/javascript">
+    var a9 = 6;
+
+    function f9() {
+      var a9 = 8;
+      document.write(a9);
+    }
+
+    a9 = 9;
+    f9(); // 8
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 10</h3>
+  <pre>
+    var a10 = 6;
+
+    function f10() {
+      document.write(a10);
+    }
+
+    f10(); // 6
+    a10 = 9;
+  </pre>
+
+  <script type="text/javascript">
+    var a10 = 6;
+
+    function f10() {
+      document.write(a10);
+    }
+
+    f10(); // 6
+    a10 = 9;
+
+  </script>
+
+  <hr> <br>
+    /////////////
+  <hr>
+
+  <h3>Решение 11</h3>
+  <pre>
+    var a11 = 6;
+
+    function f11() {
+      var a11 = 23;
+
+      function fun11() {
+        document.write(a11);
+      }
+
+      fun11();
+
+    }
+
+    var a11 = 99;
+    f11(); // 23
+  </pre>
+
+  <script type="text/javascript">
+    var a11 = 6;
+
+    function f11() {
+      var a11 = 23;
+
+      function fun11() {
+        document.write(a11);
+      }
+
+      fun11();
+
+    }
+
+    var a11 = 99;
+    f11(); // 23
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 12</h3>
+  <pre>
+    var a12 = 6;
+
+    function f12() {
+      var a12 = 23;
+
+      fun12();
+    }
+
+    function fun12() {
+      document.write(a12);
+    }
+
+    var a12 = 99;
+    f12(); // 99
+  </pre>
+
+  <script type="text/javascript">
+    var a12 = 6;
+
+    function f12() {
+      var a12 = 23;
+
+      fun12();
+    }
+
+    function fun12() {
+      document.write(a12);
+    }
+
+    var a12 = 99;
+    f12(); // 99
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 13</h3>
+  <pre>
+    var a13 = 6;
+
+    function f13() {
+      var a13 = 23;
+
+      fun13();
+    }
+
+    function fun13() {
+      document.write(a13);
+    }
+
+
+    f13(); // 6
+  </pre>
+
+  <script type="text/javascript">
+    var a13 = 6;
+
+    function f13() {
+      var a13 = 23;
+
+      fun13();
+    }
+
+    function fun13() {
+      document.write(a13);
+    }
+
+
+    f13(); // 6
+
+  </script>
+
+
+  <hr>
+
+  <h3>Решение 14</h3>
+  <pre>
+    var a14 = 6;
+
+    function f14() {
+      a14 = 23;
+      fun14();
+    }
+
+    function fun14() {
+      document.write(a14);
+    }
+
+
+    f14(); // 23
+  </pre>
+
+  <script type="text/javascript">
+    var a14 = 6;
+
+    function f14() {
+      a14 = 23;
+      fun14();
+    }
+
+    function fun14() {
+      document.write(a14);
+    }
+
+
+    f14(); // 23
+
+  </script>
+
+
+
+  <hr>
+
+  <h3>Решение 15</h3>
+  <pre>
+    var a15 = 6;
+
+    function f15() {
+      a15 = 23;
+      fun15();
+    }
+
+    function fun15() {
+      document.write(a15);
+    }
+
+    a15 = 999;
+    f15(); // 23
+  </pre>
+
+  <script type="text/javascript">
+    var a15 = 6;
+
+    function f15() {
+      a15 = 23;
+      fun15();
+    }
+
+    function fun15() {
+      document.write(a15);
+    }
+
+    a15 = 999;
+    f15(); // 23
+
+  </script>
+
+
+  <hr>
+
+  <h3>Решение 16</h3>
+  <pre>
+    var a16 = 6;
+
+    function f16() {
+
+      fun16();
+    }
+
+    function fun16() {
+      document.write(a16);
+      var a16 = 898;
+    }
+
+
+    f16(); // undefined 
+  </pre>
+
+  <script type="text/javascript">
+  var a16 = 6;
+
+  function f16() {
+
+    fun16();
+  }
+
+  function fun16() {
+    document.write(a16);
+    var a16 = 898;
+  }
+
+
+  f16(); // undefined
+
+  </script>
+
+  <br><br>
+</body>
+</html>

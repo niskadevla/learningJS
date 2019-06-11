@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>События в деталях </title>
+</head>
+<body>
+  <!--**********
+  * Мышь: клики, кнопка, координаты
+  ************-->
+
+  <h1>3.1. Мышь: клики, кнопка, координаты </h1>
+  <h3>Task 3.1.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <p id="isClick">
+    Lorem ipsum dolor sit amet,  consectetur adipisicing elit. Sunt, ipsam.
+    <a href="http://google.com">event.preventDefault()</a>
+  </p>
+
+  <p id="isClick2">
+    Lorem ipsum dolor sit amet,  consectetur adipisicing elit. Sunt, ipsam.
+    <a href="http://google.com">Google</a>
+  </p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var isClick = document.getElementById("isClick");
+    var isMouseUp = false;
+
+    // isClick.onmouseup = function(event) {
+    //   if (!event.target.closest("a")) return;
+    //
+    //   var target = event.target.closest("a");
+    //   var href = target.getAttribute("href");
+    //
+    //   var q;
+    //   //q = confirm("Уйти на " + href + " ?");
+    //
+    //
+    //   isMouseUp = true;
+    //   if (!q) return false;
+    //   //event.preventDefault();
+    // }
+
+
+    isClick.onclick = function(event) {
+      //if (isMouseUp) return;
+      //if (!event.isTrusted) return false;
+      if (!event.target.closest("a")) return;
+
+      var target = event.target.closest("a");
+      var href = target.getAttribute("href");
+
+      var q;
+      q = confirm("Уйти на " + href + " ?");
+      console.log(event);
+      if (!q) return false;
+      //event.preventDefault();
+    }
+
+    var a1 = isClick2.querySelector("a");
+    console.log(a1);
+
+    a1.onclick = function(event) {
+      // alert("fff");
+      console.log(event);
+    }
+
+
+    var event = new Event("click");
+    a1.dispatchEvent(event);
+
+  </script>
+
+
+
+  <br>
+  <hr>
+  <br>
+
+
+  <h3>Task 3.1.2: Список с выделением </h3>
+  <pre>
+
+    Сделайте список, элементы которого можно выделять кликом.
+    Добавьте мульти-выделение. Если клик с нажатым Ctrl (Cmd под Mac),
+    то элемент добавляется-удаляется из выделенных.
+    Добавьте выделение промежутков. Если происходит клик с нажатым Shift,
+    то к выделению добавляется промежуток элементов от предыдущего кликнутого до этого.
+    При этом не важно, какое именно действие делал предыдущий клик.
+    Это похоже на то, как работает файловый менеджер в ряде ОС,
+    но чуть проще, так как конкретная реализация выделений различается у разных ОС,
+    и её точное воспроизведение не входит в эту задачу.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Мой код униварсальней, но по скорости не понятно
+    // Достаточно только блоку добавить атрибут, и в css клас прописать
+    <b>My solution</b>
+    document.documentElement.addEventListener("click", select);
+    document.documentElement.addEventListener("mousedown", stopSelect);
+
+    function stopSelect(event) {
+      var target = event.target;
+
+      while(target != this) {
+        if (target.hasAttribute("data-selected")) {
+          event.preventDefault();
+        }
+        // таргету присваиваем элемент-родитель
+        target = target.parentNode;
+      }
+    }
+
+
+    function select(event) {
+      var target = event.target;
+      var curTarget = target;
+
+      // Проверяем содержит ли нажатый элемент родителя с атрибутом data-selected
+      while(target != this) {
+        if (target.hasAttribute("data-selected")) {
+          var ctrlKey = event.ctrlKey || event.metaKey;
+
+          // select ctrl
+          if (ctrlKey) {
+            curTarget.classList.toggle("selected");
+
+            //Присваиваем на будущее выделенный элемент
+            select._prevTarget = curTarget;
+          }
+
+
+          // select single
+          if (!ctrlKey && !event.shiftKey) {
+            // Устанавливаем на текущий элемент выделение
+            var elemsSelected = target.querySelectorAll(".selected");
+
+            for (var i = 0; i < elemsSelected.length; i++) {
+              elemsSelected[i].classList.remove("selected");
+            }
+
+            curTarget.classList.add("selected");
+            //Присваиваем на будущее выделенный элемент
+            select._prevTarget = curTarget;
+          }
+
+
+          // select shift
+          if (event.shiftKey) {
+            var curTargetNum, prevTargetNum;
+            for (var i = 0; i < target.children.length; i++) {
+              if (target.children[i] === curTarget) curTargetNum = i;
+              if (target.children[i] === select._prevTarget) prevTargetNum = i;
+            }
+
+            if (curTargetNum < prevTargetNum) {
+              for (var j = prevTargetNum; j >= curTargetNum; j--) {
+                target.children[j].classList.add("selected");
+              }
+            }
+
+            if (curTargetNum > prevTargetNum) {
+              for (var j = curTargetNum; j >= prevTargetNum; j--) {
+                target.children[j].classList.add("selected");
+              }
+            }
+          }
+
+        }
+
+        // Текущий элемент записываем в переменную
+        curTarget = target;
+        // таргету присваиваем элемент-родитель
+        target = target.parentNode;
+      }
+    }
+
+    <b>Not my solution</b>
+    var ul = document.querySelector('ul');
+
+      var lastClickedLi = null;
+
+      // --- обработчики ---
+
+      ul.onclick = function(event) {
+        var target = event.target;
+
+        // возможно, клик был внутри списка UL, но вне элементов LI
+        if (target.tagName != "LI") return;
+
+        // для Mac проверяем Cmd, т.к. Ctrl + click там контекстное меню
+        if (event.metaKey || event.ctrlKey) {
+          toggleSelect(target);
+        } else if (event.shiftKey) {
+          selectFromLast(target);
+        } else {
+          selectSingle(target);
+        }
+
+        lastClickedLi = target;
+      }
+
+      ul.onmousedown = function() {
+        return false;
+      };
+
+      // --- функции для выделения ---
+
+      function toggleSelect(li) {
+        li.classList.toggle('selected');
+      }
+
+      function selectFromLast(target) {
+        var startElem = lastClickedLi || ul.children[0];
+
+        var isLastClickedBefore = startElem.compareDocumentPosition(target) & 4;
+
+        if (isLastClickedBefore) {
+          for (var elem = startElem; elem != target; elem = elem.nextElementSibling) {
+            elem.classList.add('selected');
+          }
+        } else {
+          for (var elem = startElem; elem != target; elem = elem.previousElementSibling) {
+            elem.classList.add('selected');
+          }
+        }
+        elem.classList.add('selected');
+      }
+
+
+      function deselectAll() {
+        for (var i = 0; i < ul.children.length; i++) {
+          ul.children[i].classList.remove('selected');
+        }
+      }
+
+      function selectSingle(li) {
+        deselectAll();
+        li.classList.add('selected');
+      }
+  </pre>
+
+  <style>
+    #wrap1 .selected {
+      background: #0f0;
+    }
+
+    #wrap1 li {
+      cursor: pointer;
+    }
+  </style>
+
+  <div id="wrap1">
+    Клик на элементе выделяет только его.
+    <br> Ctrl(Cmd)+Клик добавляет/убирает элемент из выделенных.
+    <br> Shift+Клик добавляет промежуток от последнего кликнутого к выделению.
+    <br>
+
+    <ul data-selected="" >
+      <li>Кристофер Робин</li>
+      <li>Винни-Пух</li>
+      <li><span>Ослик Иа</span></li>
+      <li>Мудрая Сова</li>
+      <li>Кролик. Просто кролик.</li>
+    </ul>
+  </div>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    document.documentElement.addEventListener("click", select);
+    document.documentElement.addEventListener("mousedown", stopSelect);
+
+    function stopSelect(event) {
+      var target = event.target;
+
+      while(target != this) {
+        if (target.hasAttribute("data-selected")) {
+          event.preventDefault();
+        }
+        // таргету присваиваем элемент-родитель
+        target = target.parentNode;
+      }
+    }
+
+
+    function select(event) {
+      var target = event.target;
+      var curTarget = target;
+
+      // Проверяем содержит ли нажатый элемент родителя с атрибутом data-selected
+      while(target != this) {
+        if (target.hasAttribute("data-selected")) {
+          var ctrlKey = event.ctrlKey || event.metaKey;
+
+          // select ctrl
+          if (ctrlKey) {
+            curTarget.classList.toggle("selected");
+
+            //Присваиваем на будущее выделенный элемент
+            select._prevTarget = curTarget;
+          }
+
+
+          // select single
+          if (!ctrlKey && !event.shiftKey) {
+            // Устанавливаем на текущий элемент выделение
+            var elemsSelected = target.querySelectorAll(".selected");
+
+            for (var i = 0; i < elemsSelected.length; i++) {
+              elemsSelected[i].classList.remove("selected");
+            }
+
+            curTarget.classList.add("selected");
+            //Присваиваем на будущее выделенный элемент
+            select._prevTarget = curTarget;
+          }
+
+
+          // select shift
+          if (event.shiftKey) {
+            var curTargetNum, prevTargetNum;
+            for (var i = 0; i < target.children.length; i++) {
+              if (target.children[i] === curTarget) curTargetNum = i;
+              if (target.children[i] === select._prevTarget) prevTargetNum = i;
+            }
+
+            if (curTargetNum < prevTargetNum) {
+              for (var j = prevTargetNum; j >= curTargetNum; j--) {
+                target.children[j].classList.add("selected");
+              }
+            }
+
+            if (curTargetNum > prevTargetNum) {
+              for (var j = curTargetNum; j >= prevTargetNum; j--) {
+                target.children[j].classList.add("selected");
+              }
+            }
+          }
+
+        }
+
+        // Текущий элемент записываем в переменную
+        curTarget = target;
+        // таргету присваиваем элемент-родитель
+        target = target.parentNode;
+      }
+    }
+
+  </script>
+
+
+
+
+  <h3>Task 3.1.3: Дерево: проверка клика на заголовке </h3>
+  <pre>
+    Решите задачу без обёртывания заголовков в SPAN, используя работу с координатами.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    var tree = document.getElementById('tree');
+
+    tree.onclick = function(evt) {
+      var evt = evt || window.event;
+      var target = evt.target || evt.srcElement;
+
+       /* проверить на попадание события в заголовок LI */
+       /* обернуть заголовок в span */
+      var nodeText = target.firstChild;
+      var span = document.createElement("span");
+      span.appendChild(nodeText);
+      target.prepend(span);
+       /* определить координаты клика*/
+      var elem = document.elementFromPoint(evt.clientX, evt.clientY);
+       /* в любом случае вернуть заголовок в текст обратно перед тем как идти дальше */
+      target.replaceChild(nodeText, span);
+
+       /* определить, был ли клик по координатам - в SPAN ?*/
+      if (elem == span) {
+        /* раскрыть-закрыть детей */
+        var node = target.getElementsByTagName('ul')[0];
+        if (!node) return; // нет детей
+
+        node.style.display = node.style.display ? '' : 'none';
+      }
+
+    }
+
+    <b>Not my solution</b>
+    var tree = document.getElementById('tree');
+
+    /* проверить на попадание события в заголовок LI */
+    function isOverTitle(evt, li) {
+      /* обернуть заголовок в span */
+      var titleWrapper = document.createElement('span');
+      var titleTextNode = li.firstChild; // < li>TITLE...
+      li.insertBefore(titleWrapper, titleTextNode); // < li>< span></ span>TITLE
+      titleWrapper.appendChild(titleTextNode); // < li>< span>TITLE</ span>
+
+      /* определить, был ли клик по координатам - в SPAN ?*/
+      var isClickOnTitle = (document.elementFromPoint(evt.clientX, evt.clientY) == titleWrapper);
+
+      /* в любом случае вернуть заголовок в текст обратно перед тем как идти дальше */
+      titleWrapper.removeChild(titleWrapper.firstChild); // < li>< span></ span>
+      li.replaceChild(titleTextNode, titleWrapper); // < li>TITLE...
+
+      return isClickOnTitle;
+    }
+
+    /* отслеживаем клики на всём дереве */
+    tree.onclick = function(evt) {
+      var evt = evt || event;
+      var target = evt.target || evt.srcElement;
+
+
+      if (!isOverTitle(evt, target)) {
+        return; // клик не на заголовке
+      }
+
+      /* раскрыть-закрыть детей */
+      var node = target.getElementsByTagName('ul')[0];
+      if (!node) return; // нет детей
+
+      node.style.display = node.style.display ? '' : 'none';
+    }
+  </pre>
+
+  <style>
+    .tree li {
+      cursor: pointer;
+    }
+  </style>
+
+  <ul class="tree" id="tree">
+    <li>Животные
+      <ul>
+        <li>Млекопитающие
+          <ul>
+            <li>Коровы</li>
+            <li>Ослы</li>
+            <li>Собаки</li>
+            <li>Тигры</li>
+          </ul>
+        </li>
+        <li>Другие
+          <ul>
+            <li>Змеи</li>
+            <li>Птицы</li>
+            <li>Ящерицы</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>Рыбы
+      <ul>
+        <li>Аквариумные
+          <ul>
+            <li>Гуппи</li>
+            <li>Скалярии</li>
+          </ul>
+
+        </li>
+        <li>Морские
+          <ul>
+            <li>Морская форель</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <script type="text/javascript">
+    'use strict';
+
+
+     var tree = document.getElementById('tree');
+
+     tree.onclick = function(evt) {
+       var evt = evt || window.event;
+       var target = evt.target || evt.srcElement;
+
+        /* проверить на попадание события в заголовок LI */
+        /* обернуть заголовок в span */
+       var nodeText = target.firstChild;
+       var span = document.createElement("span");
+       span.appendChild(nodeText);
+       target.prepend(span);
+        /* определить координаты клика*/
+       var elem = document.elementFromPoint(evt.clientX, evt.clientY);
+        /* в любом случае вернуть заголовок в текст обратно перед тем как идти дальше */
+       target.replaceChild(nodeText, span);
+
+        /* определить, был ли клик по координатам - в SPAN ?*/
+       if (elem == span) {
+         /* раскрыть-закрыть детей */
+         var node = target.getElementsByTagName('ul')[0];
+         if (!node) return; // нет детей
+
+         node.style.display = node.style.display ? '' : 'none';
+       }
+
+     }
+
+  </script>
+
+  <br>
+  <hr>
+  <br><br><br><br>
+
+  <script type="text/javascript">
+    document.write( (16 & 4) );
+
+
+    window.onbeforeunload = function() {
+      alert("he");
+      return "Данные не сохранены. Точно перейти?";
+    };
+
+    // window.onunload = function() {
+    //   alert("he2");
+    //   return "Данные не сохранены. Точно перейти?";
+    // };
+
+    // document.onunload = function(e) {
+    //   alert("Ne");
+    //   return false;
+    // }
+  </script>
+
+  <a href="google.com">goo</a>
+
+
+  <br><br><br><br>
+  <hr>
+
+
+  <!--**********
+  * Мышь: движение mouseover/out, mouseenter/leave
+  ************-->
+
+  <h1>3.3. Мышь: движение mouseover/out, mouseenter/leave </h1>
+  <h3>Task 3.3.1: Поведение "вложенная подсказка" </h3>
+  <pre>
+    Напишите JS-код, который будет показывать всплывающую подсказку над элементом,
+    если у него есть атрибут data-tooltip.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    //Отличие: я не делал дополнительную функцию по созданию подсказки
+    // У меня подсказка добавляется рядом с элементом в DOM
+    <b>My solution</b>
+    // элемент самая вложенная подсказка, внутри которого сейчас курсор
+    var currentElem;
+    var showingTooltip;
+    var count = 0;
+
+    //var house = document.getElementById("house");
+
+    document.onmouseover = function(e) {
+
+      var target = e.target;
+
+      while (target !== this) {
+        if ( target.hasAttribute("data-tooltip") ) break;
+        target = target.parentNode;
+      }
+
+      if (target === this) return;
+
+      // Создание подсказки
+      var text = target.getAttribute("data-tooltip");
+      var parent = target.parentNode;
+      var div = document.createElement("div");
+      div.innerHTML = text;
+      div.classList.add("tooltip");
+      parent.appendChild(div);
+
+      // Координаты элемента, на который навели курсор
+      var rect = target.getBoundingClientRect();
+
+      //Вычисление где разместить подсказку
+      var top = rect.top - div.offsetHeight - 5;
+      if (top < 0) top = rect.top + rect.height + 5;
+      div.style.top = top + "px";
+      var left = rect.left + count - Math.abs(rect.width - div.offsetWidth) / 2;
+      if (left < 0 ) left = 0;
+      div.style.left = left + "px";
+
+      //Присваеваем подсказу
+      currentElem = target;
+      showingTooltip = div;
+    }
+
+    document.onmouseout = function(e) {
+      //Если подсказка была и мышь увели, то исчезает подсказка
+      if (showingTooltip) {
+        var parent = currentElem.parentNode;
+        parent.removeChild(showingTooltip);
+        showingTooltip = null;
+      }
+    }
+  </pre>
+
+  <style>
+
+    #house {
+      margin-top: 50px;
+      width: 400px;
+      border: 1px solid brown;
+    }
+
+    #roof {
+      width: 0;
+      height: 0;
+      border-left: 200px solid transparent;
+      border-right: 200px solid transparent;
+      border-bottom: 20px solid brown;
+      margin-top: -20px;
+    }
+
+    #house p {
+      text-align: justify;
+      margin: 10px 3px;
+    }
+
+    .tooltip {
+      position: fixed;
+      padding: 10px 20px;
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+    }
+  </style>
+
+  <div data-tooltip="Это – внутренность дома" id="house">
+    <div data-tooltip="Это – крыша" id="roof"></div>
+
+    <p>Жили-были на свете три поросёнка. Три брата.</p>
+
+    <p>Все одинакового роста, кругленькие, розовые, с одинаковыми весёлыми хвостиками.</p>
+
+    <p>Даже имена у них были похожи. Звали поросят Ниф-Ниф, Нуф-Нуф и Наф-Наф. Всё лето они кувыркались в зелёной траве, грелись на солнышке, нежились в лужах.</p>
+
+    <p>Но вот наступила осень. <a href="http://ru.wikipedia.org/wiki/Три_поросёнка" data-tooltip="Читать дальше&hellip;">Наведи на меня</a></p>
+
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // элемент самая вложенная подсказка, внутри которого сейчас курсор
+    var currentElem;
+    var showingTooltip;
+    var count = 0;
+
+    //var house = document.getElementById("house");
+
+    document.onmouseover = function(e) {
+
+      var target = e.target;
+
+      while (target !== this) {
+        if ( target.hasAttribute("data-tooltip") ) break;
+        target = target.parentNode;
+      }
+
+      if (target === this) return;
+
+      // Создание подсказки
+      var text = target.getAttribute("data-tooltip");
+      var parent = target.parentNode;
+      var div = document.createElement("div");
+      div.innerHTML = text;
+      div.classList.add("tooltip");
+      parent.appendChild(div);
+
+      // Координаты элемента, на который навели курсор
+      var rect = target.getBoundingClientRect();
+
+      //Вычисление где разместить подсказку
+      var top = rect.top - div.offsetHeight - 5;
+      if (top < 0) top = rect.top + rect.height + 5;
+      div.style.top = top + "px";
+      var left = rect.left + count - Math.abs(rect.width - div.offsetWidth) / 2;
+      if (left < 0 ) left = 0;
+      div.style.left = left + "px";
+
+      currentElem = target;
+      //Присваеваем подсказу
+      showingTooltip = div;
+    }
+
+    document.onmouseout = function(e) {
+      //Если подсказка была и мышь увели, то исчезает подсказка
+      if (showingTooltip) {
+        var parent = currentElem.parentNode;
+        parent.removeChild(showingTooltip);
+        showingTooltip = null;
+      }
+    }
+
+  </script>
+
+
+
+
+
+  <h3>Task 3.3.2: Подсказка при замедлении над элементом </h3>
+  <pre>
+    Нужно написать функцию, которая показывает подсказку при наведении на элемент, но не при быстром проходе над ним.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Меньше код, но меннее универсален
+    <b>My solution</b>
+    // образец подсказки
+    var tooltip = document.createElement('div');
+    tooltip.className = "tooltip";
+    tooltip.innerHTML = "Подсказка";
+
+    var elemClock = document.getElementById("elemClock");
+
+    function HoverIntent(options) {
+      var timerId;
+      var isOver;
+      var curElem;
+
+      // options.elem.onmouseenter = function(e) {
+      //   var self = this;
+      //
+      //   timerId = setTimeout(function() {
+      //     options.over.call(self);
+      //     isOver = true;
+      //   }, 500);
+      // };
+      //
+      // options.elem.onmouseleave = function() {
+      //   if (timerId) clearTimeout(timerId);
+      //
+      //   if (isOver) {
+      //     options.out();
+      //     isOver = false;
+      //   }
+      // };
+
+      options.elem.onmouseover = function(e) {
+        var target = e.target;
+
+        if (curElem) return;
+
+        while(target !== this) {
+          target = target.parentNode;
+        }
+        curElem = target;
+
+        var self = this;
+
+        timerId = setTimeout(function() {
+          options.over.call(self);
+          isOver = true;
+        }, 400);
+      };
+
+      options.elem.onmouseout = function(e) {
+        if (!curElem) return;
+
+        var relatedTarget = e.relatedTarget
+        while(relatedTarget) {
+          if (relatedTarget === curElem) return;
+          relatedTarget = relatedTarget.parentNode;
+        }
+
+        curElem = null;
+
+        if (timerId) clearTimeout(timerId);
+
+        if (isOver) {
+          options.out();
+          isOver = false;
+        }
+      };
+
+    }
+
+    //при "наведении на элемент" показать подсказку
+    var hover = new HoverIntent({
+      elem: elemClock,
+      over: function() {
+        tooltip.style.left = this.getBoundingClientRect().left + 'px';
+        tooltip.style.top = this.getBoundingClientRect().bottom + 5 + 'px';
+        document.body.appendChild(tooltip);
+      },
+      out: function() {
+          document.body.removeChild(tooltip);
+      }
+    });
+
+    <b>Not my solution</b>
+    function HoverIntent(options) {
+
+      options = Object.create(options); // not to modify the object
+      options.interval = options.interval || 100;
+
+      // скорость меньше 1px/ms  считается остановкой над элементом
+      options.sensitivity = options.sensitivity || 0.1;
+      var elem = options.elem;
+
+      // instantiate variables
+      // cX, cY = current X and Y position of mouse, updated by mousemove event
+      // pX, pY = previous X and Y position of mouse, set by mouseover and polling interval
+      var cX, cY, pX, pY, cTime, pTime;
+      var checkSpeedInterval;
+      var isOverElement;
+      var isHover;
+
+      // A private function for handling mouse 'hovering'
+      elem.addEventListener("mouseover", onMouseOver);
+
+      elem.addEventListener("mouseout", onMouseOut);
+
+      function onMouseOver(event) {
+
+        if (isOverElement) {
+          // если мы и так над элементом, то это всплывший переход внутри него
+          // мы и так уже замеряем скорость, поэтому этот переход лишний
+          return;
+        }
+
+        isOverElement = true;
+
+        // при каждом движении мыши mousemove мы будем вычислять расстояние между
+        // предыдущими и текущими координатами курсора
+        // если оно меньше sensivity, то скорость маленькая и это наведение на элемент
+        // pX, pY - "предыдущие" координаты
+        pX = event.pageX;
+        pY = event.pageY;
+        pTime = Date.now();
+
+        elem.addEventListener('mousemove', onMouseMove);
+        checkSpeedInterval = setInterval(trackSpeed, options.interval);
+      }
+
+      function onMouseOut(event) {
+        // если ушли вовне элемента
+        if (!event.relatedTarget || !elem.contains(event.relatedTarget)) {
+          isOverElement = false;
+          elem.removeEventListener('mousemove', onMouseMove);
+          clearInterval(checkSpeedInterval);
+          if (isHover) {
+            // если была остановка над элементом
+            options.out.call(elem, event);
+            isHover = false;
+          }
+        }
+      }
+
+      function onMouseMove(event) {
+        cX = event.pageX;
+        cY = event.pageY;
+        cTime = Date.now();
+      }
+
+      function trackSpeed(event) {
+
+        let speed;
+
+        if (!cTime || cTime == pTime) {
+          // нет измерений скорости (событий mousemove)
+          // значит курсор не двигался
+          speed = 0;
+        } else {
+          speed = Math.sqrt(Math.pow(pX - cX, 2) + Math.pow(pY - cY, 2)) / (cTime - pTime);
+        }
+
+        if (speed < options.sensitivity) {
+          // если с предыдущей позиции меньше sensivity дистанция, то "остановка на элементе"
+          clearInterval(checkSpeedInterval);
+          isHover = true;
+          options.over.call(elem, event);
+        } else {
+          // следующее измерение с текущей точки
+          pX = cX;
+          pY = cY;
+          pTime = cTime;
+        }
+      }
+
+      this.destroy = function() {
+        elem.removeEventListener('mousemove', onMouseMove);
+        elem.removeEventListener('mouseover', onMouseOver);
+        elem.removeEventListener('mouseout', onMouseOut);
+      };
+
+    }
+  </pre>
+
+  <style>
+    .hours {
+      color: red;
+    }
+
+    .minutes {
+      color: green;
+    }
+
+    .seconds {
+      color: blue;
+    }
+
+    .clock {
+      border: 1px dashed black;
+      padding: 5px;
+      display: inline-block;
+      background: yellow;
+      /* position: absolute;
+      left: 0;
+      top: 0; */
+    }
+
+    .tooltip {
+      position: fixed;
+      background: #eee;
+      border: 1px brown solid;
+      padding: 3px;
+    }
+  </style>
+
+  <div id="elemClock" class="clock" drag-and-drop>
+    <span class="hours">12</span> :
+    <span class="minutes">30</span> :
+    <span class="seconds">00</span>
+  </div>
+
+  <!-- <div id="tooltip" hidden>Tooltip</div> -->
+
+  <script type="text/javascript">
+    'use strict';
+
+    // образец подсказки
+    var tooltip = document.createElement('div');
+    tooltip.className = "tooltip";
+    tooltip.innerHTML = "Подсказка";
+
+    var elemClock = document.getElementById("elemClock");
+
+    function HoverIntent(options) {
+      var timerId;
+      var isOver;
+      var curElem;
+
+      // options.elem.onmouseenter = function(e) {
+      //   var self = this;
+      //
+      //   timerId = setTimeout(function() {
+      //     options.over.call(self);
+      //     isOver = true;
+      //   }, 500);
+      // };
+      //
+      // options.elem.onmouseleave = function() {
+      //   if (timerId) clearTimeout(timerId);
+      //
+      //   if (isOver) {
+      //     options.out();
+      //     isOver = false;
+      //   }
+      // };
+
+      options.elem.onmouseover = function(e) {
+        var target = e.target;
+
+        if (curElem) return;
+
+        while(target !== this) {
+          target = target.parentNode;
+        }
+        curElem = target;
+
+        var self = this;
+
+        timerId = setTimeout(function() {
+          options.over.call(self);
+          isOver = true;
+        }, 400);
+      };
+
+      options.elem.onmouseout = function(e) {
+        if (!curElem) return;
+
+        var relatedTarget = e.relatedTarget
+        while(relatedTarget) {
+          if (relatedTarget === curElem) return;
+          relatedTarget = relatedTarget.parentNode;
+        }
+
+        curElem = null;
+
+        if (timerId) clearTimeout(timerId);
+
+        if (isOver) {
+          options.out();
+          isOver = false;
+        }
+      };
+
+    }
+
+    //при "наведении на элемент" показать подсказку
+    var hover = new HoverIntent({
+      elem: elemClock,
+      over: function() {
+        tooltip.style.left = this.getBoundingClientRect().left + 'px';
+        tooltip.style.top = this.getBoundingClientRect().bottom + 5 + 'px';
+        document.body.appendChild(tooltip);
+      },
+      out: function() {
+          document.body.removeChild(tooltip);
+      }
+    });
+
+
+  </script>
+
+
+
+
+  <!--**********
+  *  Мышь: Drag'n'Drop
+  ************-->
+
+  <h1>3.4. Мышь: Drag'n'Drop </h1>
+  <h3>Task 3.4.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div style="position: relative;">
+    <img drag-and-drop id="ball2" src="https://js.cx/clipart/ball.svg" style="cursor: pointer;" width="40" height="40">
+  </div>
+
+  <button type="button" id="button" drag-and-drop>Drag me and drop</button>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var ball = document.getElementById("ball2");
+
+    // dragaAndDrop(button);
+    // dragaAndDrop(ball);
+
+    var elems = document.querySelectorAll("[drag-and-drop]");
+
+    for (var i = 0; i < elems.length; i++) {
+      dragaAndDrop(elems[i]);
+    }
+
+    function dragaAndDrop(elem) {
+      elem.onmousedown = function(e) {
+        var coords = getCoords(elem);
+        var shiftX = e.pageX - coords.left;
+        var shiftY = e.pageY - coords.top;
+
+        elem.style.position = "absolute";
+        document.body.appendChild(elem);
+        moveAt(e);
+
+        elem.style.zIndex = 999; // над другими элементами
+
+        function moveAt(e) {
+          elem.style.left = e.pageX - shiftX + "px";
+          elem.style.top = e.pageY - shiftY + "px";
+        }
+
+        document.onmousemove = function(e) {
+          moveAt(e);
+        };
+
+        elem.onmouseup = function() {
+          document.onmousemove = null;
+          elem.onmouseup = null;
+        };
+
+      }
+
+      elem.ondragstart = function() {
+        return false;
+      }
+
+      function getCoords(elem) {
+        var box = elem.getBoundingClientRect();
+        return {
+          top: box.top + pageYOffset,
+          left: box.left + pageXOffset
+        };
+      }
+
+    }
+
+
+    // ********
+
+    // ball.onmousedown = function(e) {
+    //   var coords = getCoords(ball);
+    //   var shiftX = e.pageX - coords.left;
+    //   var shiftY = e.pageY - coords.top;
+    //
+    //   ball.style.position = "absolute";
+    //   document.body.appendChild(ball);
+    //   moveAt(e);
+    //
+    //   ball.style.zIndex = 999; // над другими элементами
+    //
+    //   function moveAt(e) {
+    //     ball.style.left = e.pageX - shiftX + "px";
+    //     ball.style.top = e.pageY - shiftY + "px";
+    //   }
+    //
+    //   document.onmousemove = function(e) {
+    //     moveAt(e);
+    //   };
+    //
+    //   ball.onmouseup = function() {
+    //     document.onmousemove = null;
+    //     ball.onmouseup = null;
+    //   };
+    //
+    // }
+    //
+    // ball.ondragstart = function() {
+    //   return false;
+    // }
+    //
+    // function getCoords(elem) {
+    //   var box = elem.getBoundingClientRect();
+    //   return {
+    //     top: box.top + pageYOffset,
+    //     left: box.left + pageXOffset
+    //   };
+    // }
+
+  </script>
+
+
+    <br> <br> <br> <br>
+
+    <button type="button" name="button" style="position: absolute;" draggable="true" ondragstart="alert('Me...');">Drag Me</button>
+
+    <img id="img1" src="https://js.cx/clipart/ball.svg" style="position: absolute;" ondrop="alert('drop...')" >
+
+    <script type="text/javascript">
+      'use strict';
+
+      img1.ondrag = function(e) {
+        this.style.left = e.clientX + "px";
+      }
+    </script>
+
+
+
+
+
+    <br>
+    <br>
+    <hr>
+
+
+
+    <h3>Task 3.4.2: Слайдер </h3>
+    <pre>
+      Захватите мышкой синий бегунок и двигайте его, чтобы увидеть в работе.
+    </pre>
+    <h3>Решение</h3>
+    <pre>
+
+    </pre>
+
+    <style>
+
+      .slider {
+        border-radius: 5px;
+        background: #E0E0E0;
+        background: -moz-linear-gradient(left top, #E0E0E0, #EEEEEE) repeat scroll 0 0 transparent;
+        background: -webkit-gradient(linear, left top, right bottom, from(#E0E0E0), to(#EEEEEE));
+        background: linear-gradient(left top, #E0E0E0, #EEEEEE);
+        width: 310px;
+        height: 15px;
+        margin: 5px;
+      }
+
+      .thumb {
+        width: 10px;
+        height: 25px;
+        border-radius: 3px;
+        position: relative;
+        left: 10px;
+        top: -5px;
+        background: blue;
+        cursor: pointer;
+      }
+    </style>
+
+    <div id="slider" class="slider">
+      <div class="thumb"></div>
+      <span></span>
+    </div>
+
+    <script type="text/javascript">
+      'use strict';
+
+      var slider = document.getElementById("slider");
+
+      slider.onmousedown = function(e) {
+        var target = e.target;
+        var self = this;
+
+        if ( !target.classList.contains("thumb") ) return;
+
+        var coordsSlider = this.getBoundingClientRect();
+        var coordsThumb = this.children[0].getBoundingClientRect();
+
+        var shiftX = e.pageX - coordsThumb.left;
+
+        function moveAt(e) {
+          var value = slider.querySelector("span");
+
+          var minRight = self.offsetWidth - self.children[0].offsetWidth;
+          //  вычесть координату родителя, т.к. position: relative
+          var targetLeft = e.pageX - shiftX - coordsSlider.left;
+
+          // курсор ушёл вне слайдера
+          if ( targetLeft < 0 ) {
+            targetLeft = 0;
+          } else if (targetLeft > minRight) {
+            targetLeft = minRight;
+          }
+
+          self.children[0].style.left = targetLeft + "px";
+          value.innerHTML = targetLeft;
+        }
+
+        document.onmousemove = function(e) {
+          moveAt(e);
+        }
+
+        document.onmouseup = function() {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        }
+
+        this.ondragstart = function() {
+          return false;
+        }
+
+        return false; // disable selection start (cursor change)
+      }
+
+
+
+    </script>
+
+
+    <br><br>
+
+
+    <h3>Task 3.4.3: Расставить супергероев по полю </h3>
+    <pre>
+      В этой задаче вы можете проверить своё понимание сразу нескольких аспектов Drag’n’Drop.
+
+      Сделайте так, чтобы элементы с классом draggable можно было переносить мышкой.
+      По окончании переноса элемент остаётся на том месте в документе, где его положили.
+
+      Требования к реализации:
+
+          Должен быть 1 обработчик на document, использующий делегирование.
+          Если элементы подносят к вертикальным краям окна – оно должно прокручиваться вниз/вверх.
+          Горизонтальной прокрутки в этой задаче не существует.
+          Элемент при переносе, даже при резких движениях мышкой, не должен попасть вне окна.
+
+      Футбольное поле в этой задаче слишком большое, чтобы показывать его здесь,
+      поэтому откройте его, кликнув по ссылке ниже. Там же и подробное описание задачи
+      (осторожно, винни-пух и супергерои!).
+    </pre>
+    <h3>Решение</h3>
+    <pre>
+      // Практически аналогично
+      <b>My solution</b>
+      document.onmousedown = function(e) {
+        //элемент над которым непосредственно произошло событие (до всплытия)
+        // всплывает до document
+        var target = e.target;
+        // если объект DOM содержит класс draggable, то идем дальше
+        if ( !target.classList.contains("draggable") ) return;
+
+        //находим координаты объекта в документе абсолютные
+        var targetCoords = getCoords(target);
+        target.style.position = "absolute";
+        document.body.appendChild(target);
+
+        var shiftX = e.pageX - targetCoords.left;
+        var shiftY = e.pageY - targetCoords.top;
+
+        var pageSize = getPageSize();
+
+        var availableCoords = {
+          left: 0,
+          right: pageSize.width - target.offsetWidth,
+          top: 0,
+          bottom: pageSize.height - target.offsetHeight
+        };
+
+        moveAt(e);
+
+        function moveAt(e) {
+          var newCoordX = e.pageX - shiftX;
+          var newCoordY = e.pageY - shiftY;
+
+          // Прокрутка страницы, если есть
+          var scrollY;
+          if ( target.getBoundingClientRect().top < 0 ) {
+            scrollY = Math.max(target.getBoundingClientRect().top, -10);
+            window.scrollBy(0, scrollY);
+          }
+
+          if ( target.getBoundingClientRect().bottom > document.documentElement.clientHeight ) {
+            scrollY = Math.min(target.getBoundingClientRect().bottom, 10);
+            window.scrollBy(0, scrollY);
+          }
+
+          // Проверка чтобы элемент не вылез за страницу
+          if ( newCoordX < (availableCoords.left) ) newCoordX = availableCoords.left;
+          else if (newCoordX > availableCoords.right) newCoordX = availableCoords.right;
+
+          if (newCoordY < availableCoords.top) newCoordY = availableCoords.top;
+          else if (newCoordY > availableCoords.bottom) newCoordY = availableCoords.bottom;
+
+          target.style.left = newCoordX + "px";
+          target.style.top = newCoordY + "px";
+        }
+
+        document.onmousemove = function(e) {
+          moveAt(e);
+        }
+
+        document.onmouseup = function() {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        }
+
+        // чтобы не срабатывало встроенное событие "начало перетаскивания"
+        target.ondragstart = function() {
+          return false;
+        }
+
+        return false; // отключаем выделение, которое по умолчанию
+      }
+
+
+      // функция для нахождения координат элемента DOM (для absolute)
+      function getCoords(elem) {
+        var box = elem.getBoundingClientRect();
+        return {
+          top: box.top + window.pageYOffset,
+          left: box.left + window.pageXOffset,
+          width: box.width,
+          height: box.height
+        };
+      }
+
+      //функция для нахождения максимальной высоты страницы и максимальной ширины страницы
+      function getPageSize() {
+        return {
+          width: Math.max(
+            document.body.scrollWidth, document.documentElement.scrollWidth,
+            document.body.offsetWidth, document.documentElement.offsetWidth,
+            document.body.clientWidth, document.documentElement.clientWidth
+          ),
+          height: Math.max(
+            document.body.scrollHeight, document.documentElement.scrollHeight,
+            document.body.offsetHeight, document.documentElement.offsetHeight,
+            document.body.clientHeight, document.documentElement.clientHeight
+          )
+        }
+      }
+
+
+      <b>Not my solution</b>
+      document.onmousedown = function(e) {
+
+        var dragElement = e.target;
+
+        if (!dragElement.classList.contains('draggable')) return;
+
+        var coords, shiftX, shiftY;
+
+        startDrag(e.clientX, e.clientY);
+
+        document.onmousemove = function(e) {
+          moveAt(e.clientX, e.clientY);
+        };
+
+        dragElement.onmouseup = function() {
+          finishDrag();
+        };
+
+
+        // -------------------------
+
+        function startDrag(clientX, clientY) {
+
+          shiftX = clientX - dragElement.getBoundingClientRect().left;
+          shiftY = clientY - dragElement.getBoundingClientRect().top;
+
+          dragElement.style.position = 'fixed';
+
+          document.body.appendChild(dragElement);
+
+          moveAt(clientX, clientY);
+        };
+
+        function finishDrag() {
+          // конец переноса, перейти от fixed к absolute-координатам
+          dragElement.style.top = parseInt(dragElement.style.top) + pageYOffset + 'px';
+          dragElement.style.position = 'absolute';
+
+          document.onmousemove = null;
+          dragElement.onmouseup = null;
+        }
+
+        function moveAt(clientX, clientY) {
+          // новые координаты
+          var newX = clientX - shiftX;
+          var newY = clientY - shiftY;
+
+          // ------- обработаем вынос за нижнюю границу окна ------
+          // новая нижняя граница элемента
+          var newBottom = newY + dragElement.offsetHeight;
+
+          // если новая нижняя граница вылезает вовне окна - проскроллим его
+          if (newBottom > document.documentElement.clientHeight) {
+            // координата нижней границы документа относительно окна
+            var docBottom = document.documentElement.getBoundingClientRect().bottom;
+
+            // scrollBy, если его не ограничить - может заскроллить за текущую границу документа
+            // обычно скроллим на 10px
+            // но если расстояние от newBottom до docBottom меньше, то меньше
+            var scrollY = Math.min(docBottom - newBottom, 10);
+
+            // ошибки округления при полностью прокрученной странице
+            // могут привести к отрицательному scrollY, что будет означать прокрутку вверх
+            // поправим эту ошибку
+            if (scrollY < 0) scrollY = 0;
+
+            window.scrollBy(0, scrollY);
+
+            // резким движением мыши элемент можно сдвинуть сильно вниз
+            // если он вышел за нижнюю границу документа -
+            // передвигаем на максимально возможную нижнюю позицию внутри документа
+            newY = Math.min(newY, document.documentElement.clientHeight - dragElement.offsetHeight);
+          }
+
+
+          // ------- обработаем вынос за верхнюю границу окна ------
+          if (newY < 0) {
+            // проскроллим вверх на 10px, либо меньше, если мы и так в самом верху
+            var scrollY = Math.min(-newY, 10);
+            if (scrollY < 0) scrollY = 0; // поправим ошибку округления
+
+            window.scrollBy(0, -scrollY);
+            // при резком движении мыши элемент мог "вылететь" сильно вверх, поправим его
+            newY = Math.max(newY, 0);
+          }
+
+
+          // зажать в границах экрана по горизонтали
+          // здесь прокрутки нет, всё просто
+          if (newX < 0) newX = 0;
+          if (newX > document.documentElement.clientWidth - dragElement.offsetWidth) {
+            newX = document.documentElement.clientWidth - dragElement.offsetWidth;
+          }
+
+          dragElement.style.left = newX + 'px';
+          dragElement.style.top = newY + 'px';
+        }
+
+        // отменим действие по умолчанию на mousedown (выделение текста, оно лишнее)
+        return false;
+      }
+    </pre>
+
+    <style>
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #field {
+        background: url(https://js.cx/drag-heroes/field.png);
+        width: 800px;
+        height: 600px;
+        float: left;
+      }
+      /* герои и мяч (переносимые элементы) */
+
+      .hero {
+        background: url(https://js.cx/drag-heroes/heroes.png);
+        width: 130px;
+        height: 128px;
+        float: left;
+      }
+
+      #hero1 {
+        background-position: 0 0;
+      }
+
+      #hero2 {
+        background-position: 0 -128px;
+      }
+
+      #hero3 {
+        background-position: -120px 0;
+      }
+
+      #hero4 {
+        background-position: -125px -128px;
+      }
+
+      #hero5 {
+        background-position: -248px -128px;
+      }
+
+      #hero6 {
+        background-position: -244px 0;
+      }
+
+      .draggable {
+        cursor: pointer;
+      }
+
+    </style>
+
+    <h2>Расставьте супергероев по полю.</h2>
+
+    <p>Супергерои и мяч -- это элементы с классом "draggable". Сделайте так, чтобы их можно было переносить.</p>
+
+    <p>Важно: если супергероя подносят к низу или верху страницы, она должна автоматически прокручиваться.
+      Если страница помещается на вашем экране целиком и не имеет вертикальной прокрутки --
+      сделайте окно браузера меньше, чтобы протестировать эту возможность.
+    </p>
+
+    <p>Да, и ещё: супергерои ни при каких условиях не должны попасть за край экрана.</p>
+
+    <div id="field">
+
+    </div>
+
+    <div class="hero draggable" id="hero1"></div>
+    <div class="hero draggable" id="hero2"></div>
+    <div class="hero draggable" id="hero3"></div>
+    <div class="hero draggable" id="hero4"></div>
+    <div class="hero draggable" id="hero5"></div>
+    <div class="hero draggable" id="hero6"></div>
+
+
+    <img src="https://js.cx/drag-heroes/ball.png" class="draggable">
+
+    <div style="clear:both"></div>
+
+    <script type="text/javascript">
+      'use strict';
+
+      function startDragAndDrop(e) {
+        //элемент над которым непосредственно произошло событие (до всплытия)
+        // всплывает до document
+        var target = e.target;
+        // если объект DOM содержит класс draggable, то идем дальше
+        if ( !target.classList.contains("draggable") ) return;
+
+        //находим координаты объекта в документе абсолютные
+        var targetCoords = getCoords(target);
+        target.style.position = "absolute";
+        document.body.appendChild(target);
+
+        var shiftX = e.pageX - targetCoords.left;
+        var shiftY = e.pageY - targetCoords.top;
+
+        var pageSize = getPageSize();
+
+        var availableCoords = {
+          left: 0,
+          right: pageSize.width - target.offsetWidth,
+          top: 0,
+          bottom: pageSize.height - target.offsetHeight
+        };
+
+        moveAt(e);
+
+        function moveAt(e) {
+          var newCoordX = e.pageX - shiftX;
+          var newCoordY = e.pageY - shiftY;
+
+          // Прокрутка страницы, если есть
+          var scrollY;
+          if ( target.getBoundingClientRect().top < 0 ) {
+            scrollY = Math.max(target.getBoundingClientRect().top, -10);
+            window.scrollBy(0, scrollY);
+          }
+
+          if ( target.getBoundingClientRect().bottom > document.documentElement.clientHeight ) {
+            scrollY = Math.min(target.getBoundingClientRect().bottom, 10);
+            window.scrollBy(0, scrollY);
+          }
+
+          // Проверка чтобы элемент не вылез за страницу
+          if ( newCoordX < (availableCoords.left) ) newCoordX = availableCoords.left;
+          else if (newCoordX > availableCoords.right) newCoordX = availableCoords.right;
+
+          if (newCoordY < availableCoords.top) newCoordY = availableCoords.top;
+          else if (newCoordY > availableCoords.bottom) newCoordY = availableCoords.bottom;
+
+          target.style.left = newCoordX + "px";
+          target.style.top = newCoordY + "px";
+        }
+
+        // Для компов
+        document.addEventListener("mousemove", moveAt);
+
+        function mouseUp() {
+          document.removeEventListener("mousemove", moveAt);
+          document.removeEventListener("mouseup", mouseUp);
+        }
+
+        document.addEventListener("mouseup", mouseUp);
+
+        // Для гаджетов
+        // document.addEventListener("touchmove", moveAt, true);
+        //
+        // function touchEnd() {
+        //   document.removeEventListener("touchmove", moveAt, true);
+        //   document.removeEventListener("touchend", touchEnd, true);
+        // }
+        //
+        // document.addEventListener("touchend", touchEnd, true);
+
+        // чтобы не срабатывало встроенное событие "начало перетаскивания"
+        target.ondragstart = function() {
+          return false;
+        }
+
+        e.preventDefault(); // отключаем выделение, которое по умолчанию
+        return false; // отключаем выделение, которое по умолчанию
+      }
+
+
+
+      // функция для нахождения координат элемента DOM (для absolute)
+      function getCoords(elem) {
+        var box = elem.getBoundingClientRect();
+        return {
+          top: box.top + window.pageYOffset,
+          left: box.left + window.pageXOffset,
+          width: box.width,
+          height: box.height
+        };
+      }
+
+      //функция для нахождения максимальной высоты страницы и максимальной ширины страницы
+      function getPageSize() {
+        return {
+          width: Math.max(
+            document.body.scrollWidth, document.documentElement.scrollWidth,
+            document.body.offsetWidth, document.documentElement.offsetWidth,
+            document.body.clientWidth, document.documentElement.clientWidth
+          ),
+          height: Math.max(
+            document.body.scrollHeight, document.documentElement.scrollHeight,
+            document.body.offsetHeight, document.documentElement.offsetHeight,
+            document.body.clientHeight, document.documentElement.clientHeight
+          )
+        }
+      }
+
+
+      document.addEventListener("mousedown", startDragAndDrop);
+      // Для гаджета
+      // document.addEventListener("touchstart", startDragAndDrop, true);
+
+
+      function touchHandler(event) {
+          var touches = event.changedTouches,
+              first = touches[0],
+              type = "";
+          switch(event.type) {
+
+            case "touchstart": type = "mousedown"; break;
+            case "touchmove":  type = "mousemove"; break;
+            case "touchend":   type = "mouseup"; break;
+            default: return;
+          }
+
+          var simulatedEvent = document.createEvent("MouseEvent");
+          simulatedEvent.initMouseEvent(type, true, true, window, 1/*count*/,
+                                    first.screenX, first.screenY,
+                                    first.clientX, first.clientY, false,
+                                    false, false, false, 0/*left click*/, null);
+          first.target.dispatchEvent(simulatedEvent);
+          event.preventDefault();
+      }
+
+      // Подсказка
+      // event.initMouseEvent(type, canBubble, cancelable, view,
+      //                  detail, screenX, screenY, clientX, clientY,
+      //                  ctrlKey, altKey, shiftKey, metaKey,
+      //                  button, relatedTarget);
+
+      function init() {
+          document.addEventListener("touchstart", touchHandler, true);
+          document.addEventListener("touchmove", touchHandler, true);
+          document.addEventListener("touchend", touchHandler, true);
+          document.addEventListener("touchcancel", touchHandler, true);
+      }
+
+      // если устройство с маленьким экраном, то установить события
+      if (getPageSize().width < 988) init();
+
+
+      // field.addEventListener('touchstart', function(e) {
+      //    // Iterate through the list of touch points that changed
+      //    // since the last event and print each touch point's identifier.
+      //    var arr = [];
+      //    for (var i=0; i < e.changedTouches.length; i++) {
+      //      arr.push("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+      //    }
+      //
+      //    alert(arr.length);
+      // }, false);
+
+    </script>
+
+
+  <br><br><br><br>
+  <br><br><br><br>
+</body>
+</html>

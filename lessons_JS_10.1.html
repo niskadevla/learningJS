@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Современные возможности ES-2015</title>
+</head>
+<body>
+  <!--**********
+  * Переменные: let и const
+  ************-->
+
+
+  <h1>10.2. Переменные: let и const </h1>
+  <h3>Task 10.2.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let apples = 5; // (*)
+
+    if (true) {
+      let apples = 10;
+
+      document.write(apples); // 10 (внутри блока)
+    }
+
+    document.write('<br />');
+    document.write(apples); // 5 (снаружи блока значение не изменилось)
+    document.write('<br />');
+
+
+    function makeArmy() {
+
+      let shooters = [];
+
+      for (let i = 0; i < 10; i++) {
+        shooters.push(function() {
+          document.write( i, '<br />' ); // выводит свой номер
+        });
+      }
+
+      return shooters;
+    }
+
+    var army = makeArmy();
+
+    army[0](); // 0
+    army[5](); // 5
+
+
+    // const
+    const user = {
+      name: "Вася"
+    };
+
+    user.name = "Петя"; // допустимо
+    user = 5; // нельзя, будет ошибка
+
+    document.write(user.name);
+    document.write('<br />');
+
+  </script>
+
+
+
+  <!--**********
+  * Деструктуризация
+  ************-->
+
+
+  <h1>10.3. Деструктуризация </h1>
+  <h3>Task 10.3.1: Массив </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let [fname, lname] = ['Денис', 'Petya'];
+
+    document.write(fname);
+    document.write('<br />');
+    document.write(lname);
+    document.write('<br />');
+
+    // первый и второй элементы не нужны
+    let [, , title1, ...spr] = "Юлий Цезарь Император Рима".split(" ");
+
+    document.write(title1); // Император
+    document.write('<br />');
+    document.write(spr);
+
+    let [fname1 = 'Гость', lname1 = 'Админ'] = [];
+
+    document.write('<br />');
+    document.write(fname1);
+    document.write('<br />');
+    document.write(lname1);
+    document.write('<br />');
+
+
+    function defaultLastName() {
+      return Date.now() + '-visitor';
+    }
+
+    // lastName получит значение, соответствующее текущей дате:
+    let [firstName, lastName=defaultLastName()] = ["Вася"];
+
+    document.write(firstName); // Вася
+    document.write('<br />');
+    document.write(lastName);  // 154...-visitor
+    document.write('<br />');
+
+
+    let [name_1 = 'Гость', name_2, ...rest] = [,'Vasya', 'Ден'];
+
+    document.write('<br />');
+    document.write('name_1: ' + name_1); // Гость
+    document.write('<br />');
+    document.write(rest);  // Ден
+    document.write('<br />');
+
+  </script>
+
+
+
+  <h3>Task 10.3.2: Деструктуризация объекта </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let options = {
+      title2: "Меню",
+      width: 100,
+      height: 200,
+      size: 24
+    };
+
+    //Переменные должны совпадать со свойствами (иметь одно и тоже название)
+    let {title2, width, height} = options;
+
+    document.write(title2);  // Меню
+    document.write('<br />');
+    document.write(width);  // 100
+    document.write('<br />');
+    document.write(height); // 200
+    document.write('<br />');
+
+
+    let {width: w, height: h, border: b = 25, title2: tit, ...s} = options;
+
+    document.write('<br />');
+    document.write(tit);  // Меню
+    document.write('<br />');
+    document.write(w);  // 100
+    document.write('<br />');
+    document.write(h); // 200
+    document.write('<br />');
+    document.write(b); // 25
+    document.write('<br />');
+    document.write(s.size); // 24
+    document.write('<br />');
+
+
+    let a2, b2;
+    ({a2, b2} = {a2:5, b2:6}); // внутри выражения это уже не блок
+
+    document.write('<br />');
+    document.write(b2); // 6
+    document.write('<br />');
+
+  </script>
+
+
+
+  <!--**********
+  * Функции
+  ************-->
+
+
+  <h1>10.4. Функции </h1>
+  <h3>Task 10.4.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    let f = x => x + 1;
+    document.write( f(1) ); // 2
+    document.write('<br />');
+
+    let arr = [1, 3, 5];
+
+    document.write( Math.max(...arr) );
+    document.write('<br />');
+
+    // function fun(name,...spread) {
+    //   document.write(name + ',' + spread);
+    // }
+    let fun = (name,...spread) => name + ', ' + spread;
+
+    document.write(fun('Den','Petya', 'Vasa')); // Den,Petya,Vasya
+
+  </script>
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

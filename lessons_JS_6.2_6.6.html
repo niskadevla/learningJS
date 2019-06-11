@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Методы объектов и контекст вызова</title>
+</head>
+<body>
+
+  <!--**********
+  *  Преобразование объектов: toString и valueOf
+  ************-->
+
+  <h1>6.2. Преобразование объектов: toString и valueOf </h1>
+  <h3>Task 6.2.1: Преобразование объектов: toString </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Есть в каждом объекте метод toString() и его можно переопределить
+
+    var user = {
+      firstName: 'Василий'
+    };
+    document.write( user ); // [object Object]
+    document.write("< br />");
+
+    var user = {
+      firstName: 'Василий'
+    };
+    document.write( user.toString() ); //[object Object]
+    document.write("< br />");
+
+    var user = {
+      firstName: 'Василий',
+      toString: function() {
+        return 'Пользователь ' + this.firstName; // Переопределяем метод toString()
+      }
+    };
+    document.write( user );  // Пользователь Василий
+    document.write("< br />");
+
+    var arr = [1, 2, "23"];
+    document.write( arr.toString() );
+    document.write("< br />");
+
+    var date = new Date;
+    document.write( date );
+    document.write("< br />");
+    document.write( date.toString() );
+    document.write("< br />");
+
+    var f = function() {
+      var a = 2;
+    };
+    document.write( f );
+    document.write("< br />");
+    document.write( f.toString() );
+    document.write("< br />");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      firstName: 'Василий'
+    };
+    document.write( user ); // [object Object]
+    document.write("<br />");
+
+    var user = {
+      firstName: 'Василий'
+    };
+    document.write( user.toString() ); //[object Object]
+    document.write("<br />");
+
+    var user = {
+      firstName: 'Василий',
+      toString: function() {
+        return 'Пользователь ' + this.firstName; // Переопределяем метод toString()
+      }
+    };
+    document.write( user );  // Пользователь Василий
+    document.write("<br />");
+
+    var arr = [1, 2, "23"];
+    document.write( arr.toString() );
+    document.write("<br />");
+
+    var date = new Date;
+    document.write( date );
+    document.write("<br />");
+    document.write( date.toString() );
+    document.write("<br />");
+
+    var f = function() {
+      var a = 2;
+    };
+    document.write( f );
+    document.write("<br />");
+    document.write( f.toString() );
+    document.write("<br />");
+  </script>
+
+
+
+  <h3>Task 6.2.2: Численное преобразование: valueOf </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var room = {
+      number: 777,
+      age: 33,
+      valueOf: function() { return this.number; },
+      toString: function() { return this.number; }
+    };
+
+    document.write( +room );  // 777, вызвался valueOf
+    document.write("<br />");
+    delete room.valueOf; // valueOf удалён
+    document.write( +room );  // 777, вызвался toString
+    document.write("<br />");
+
+    document.write(new Date);
+    document.write("<br />");
+    document.write(+new Date);
+
+    {} + {};
+  </script>
+
+
+  <h3>Task 6.2.3: преобразование объектов к примитивам </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write( ['x'] == 'x' ); // true
+    document.write("<br />");
+    document.write( ['x', 'y'] == 'x,y' ); // true
+    document.write("<br />");
+    document.write( [] == '' ); // true
+    document.write("<br />");
+    document.write("<br />");
+
+    document.write( [] == 0 ); // true
+    document.write("<br />");
+    document.write( [] == undefined ); // false
+    document.write("<br />");
+    document.write( [] == null ); // false
+    document.write("<br />");
+
+    var obj = {};
+    document.write( obj == 0 ); // false
+    document.write("<br />");
+    document.write( obj == {} ); // false
+    document.write("<br />");
+    document.write( obj == obj ); // true
+    document.write("<br />");
+    document.write("<br />");
+
+
+    document.write( {} == null ); // false
+    document.write("<br />");
+    document.write( {} == {} ); // false
+    document.write("<br />");
+    document.write( {} == [] ); // false
+    document.write("<br />");
+    document.write("<br />");
+    document.write( [] == [] ); // false
+    document.write("<br />");
+  </script>
+
+
+  <h3>Task 6.2.4: Преобразование </h3>
+  <pre>
+    Объявлен объект с toString и valueOf.
+    Какими будут результаты alert?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var foo = {
+      toString: function() {
+        return 'foo';
+      },
+      valueOf: function() {
+        return 2;
+      }
+    };
+
+    document.write( foo ); // foo
+    document.write("< br />");
+    document.write( foo + 1 ); // 3
+    document.write("< br />");
+    document.write( foo + "3" ); // 23
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var foo = {
+      toString: function() {
+        return 'foo';
+      },
+      valueOf: function() {
+        return 2;
+      }
+    };
+
+    document.write( foo ); // foo
+    document.write("<br />");
+    document.write( foo + 1 ); // 3
+    document.write("<br />");
+    document.write( foo + "3" ); // 23
+  </script>
+
+
+  <h3>Task 6.2.5: Почему [] == [] неверно, а [ ] == ![ ] верно? </h3>
+  <pre>
+    Почему первое равенство – неверно, а второе – верно?
+
+    alert( [] == [] ); // false
+    alert( [] == ![] ); // true
+
+    Какие преобразования происходят при вычислении?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Два объекта равны только тогда, когда это один и тот же объект.
+    В первом равенстве создаются два массива, это разные объекты, так что они неравны.
+
+    Ответ по второму равенству
+
+        Первым делом, обе части сравнения вычисляются. Справа находится ![]. Логическое НЕ '!'
+        преобразует аргумент к логическому типу. Массив является объектом, так что это true.
+        Значит, правая часть становится ![] = !true = false. Так что получили:
+
+        alert( [] == false );
+
+    Проверка равенства между объектом и примитивом вызывает численное преобразование объекта.
+
+    У массива нет valueOf, сработает toString и преобразует массив в список элементов, то есть – в пустую строку:
+
+    alert( '' == false );
+
+    Сравнение различных типов вызывает численное преобразование слева и справа:
+
+    alert( 0 == 0 );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    document.write( [] == [] ); // false
+    document.write("<br />");
+    document.write( [] == ![] ); // true
+
+  </script>
+
+
+
+  <h3>Task 6.2.6: Вопросник по преобразованиям, для объектов </h3>
+  <pre>
+    Подумайте, какой результат будет у выражений ниже. Когда закончите – сверьтесь с решением.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    new Date(0) - 0 // 0 +
+    new Array(1)[0] + "" // 1
+    ({})[0] // 0
+    [1] + 1 // 11 +
+    [1,2] + [3,4] // 1,2,3,4
+    [] + null + 1 // null1 +
+    [[0]][0][0] // 0 +
+    ({} + {}) // ничего
+
+    <b>Not my solution</b>
+    new Date(0) - 0 = 0 // (1)
+    new Array(1)[0] + "" = "undefined" // (2)
+    ({})[0] = undefined // (3)
+    [1] + 1 = "11" // (4)
+    [1,2] + [3,4] = "1,23,4" // (5)
+    [] + null + 1 = "null1" // (6)
+    [[0]][0][0] = 0 // (7)
+    ({} + {}) = "[object Object][object Object]" // (8)
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    new Date(0) - 0; // 0
+    new Array(1)[0] + ""; // 1
+    ({})[0]; // 0
+    [1] + 1 ;// 11
+    [1,2] + [3,4]; // 1,2,3,4
+    [] + null + 1; // null1
+    [[0]][0][0]; // 0
+    ({} + {}); // ничего
+
+    document.write( "[1,[0],2][1] = " + [1,[0],2][1] );
+  </script>
+
+
+
+  <h3>Task 6.2.7: Сумма произвольного количества скобок </h3>
+  <pre>
+    Напишите функцию sum, которая будет работать так:
+    Количество скобок может быть любым.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    Не решил
+
+    <b>Not my solution</b>
+    function sum(a) {
+      var res = a;
+
+      function f(b) {
+        res += b;
+        return f;
+      }
+
+      f.toString = function() {
+        return res;
+      }
+      console.log(res);
+      //debugger;
+
+      return f;
+    }
+
+    document.write( sum(1)(2) ); // == 3; // 1 + 2
+    document.write("< br>");
+    document.write( sum(1)(2)(3) );  // == 6; // 1 + 2 + 3
+    document.write("< br>");
+    document.write( sum(5)(-1)(8) );  // == 12
+    document.write("< br>");
+    document.write( sum(6)(-1)(-2)(-3) ); //  == 0
+    document.write("< br>");
+    document.write( sum(0)(1)(2)(3)(4)(5) ); //  == 15
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function sum(a) {
+      var res = a;
+
+      function f(b) {
+        res += b;
+        return f;
+      }
+
+      f.toString = function() {
+        return res;
+      }
+      console.log(res);
+      //debugger;
+
+      return f;
+    }
+
+    document.write( sum(1)(2) ); // == 3; // 1 + 2
+    document.write("<br>");
+    document.write( sum(1)(2)(3) );  // == 6; // 1 + 2 + 3
+    document.write("<br>");
+    document.write( sum(5)(-1)(8) );  // == 12
+    document.write("<br>");
+    document.write( sum(6)(-1)(-2)(-3) ); //  == 0
+    document.write("<br>");
+    document.write( sum(0)(1)(2)(3)(4)(5) ); //  == 15
+  </script>
+
+
+
+
+  <!--**********
+  *  Создание объектов через "new"
+  ************-->
+
+  <h1>6.3. Создание объектов через "new" </h1>
+  <h3>Task 6.3.1: Конструктор</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function Login(userName, userPas) {
+      this.userName = userName;
+      this.userPas = userPas;
+    }
+
+    var user = new Login("Denis", "qwerty");
+
+    document.write("< br>");
+    document.write(user.userName);
+    document.write("< br>");
+    document.write(user.userPas);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Login(userName, userPas) {
+      this.userName = userName;
+      this.userPas = userPas;
+    }
+
+    var user = new Login("Denis", "qwerty");
+
+    document.write("<br>");
+    document.write(user.userName);
+    document.write("<br>");
+    document.write(user.userPas);
+  </script>
+
+  <hr>
+
+
+  <h3>Task 6.3.2: </h3>
+  <pre>
+    Возможны ли такие функции A и B в примере ниже, что соответствующие объекты a,b равны (см. код ниже)?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // the same solutions
+    <b>My solution</b>
+    var obj; // нужно сделать общий объект
+
+    function A() {
+      this.name = "Денис"; //это не сработает, чтоб было true
+      obj = {name: "Vasya"};
+      return obj; // возвращаем глобальный объект
+    };
+    function B() {
+      this.name = "Денис"; //это не сработает, чтоб было true
+      return obj; // возвращаем глобальный объект
+    };
+
+    var a = new A;
+    var b = new B;
+
+    document.write( a == b ); // true
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var obj; // нужно сделать общий объект
+
+    function A() {
+      this.name = "Денис"; //это не сработает, чтоб было true
+      obj = {name: "Vasya"};
+      return obj; // возвращаем глобальный объект
+    };
+    function B() {
+      this.name = "Денис"; //это не сработает, чтоб было true
+      return obj; // возвращаем глобальный объект
+    };
+
+    var a = new A;
+    var b = new B;
+
+    document.write( a == b ); // true
+  </script>
+
+
+  <h3>Task 6.3.3: Создать Calculator при помощи конструктора </h3>
+  <pre>
+    Напишите функцию-конструктор Calculator, которая создает объект с тремя методами:
+
+    Метод read() запрашивает два значения при помощи prompt и запоминает их в свойствах объекта.
+    Метод sum() возвращает сумму запомненных свойств.
+    Метод mul() возвращает произведение запомненных свойств.
+
+    Пример использования:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // the same solutions
+    <b>My solution</b>
+    function Calculator() {
+
+      this.read = function() {
+        this.a = +prompt("a ?", 0);
+        this.b = +prompt("b ?", 0);
+      }
+
+      this.sum = function() {
+        return this.a + this.b;
+      }
+
+      this.mul = function() {
+        return this.a*this.b;
+      }
+    }
+
+    var calculator = new Calculator();
+    calculator.read();
+
+    document.write( "Сумма=" + calculator.sum() );
+    document.write("< br>");
+    document.write( "Произведение=" + calculator.mul() );
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Calculator() {
+
+      this.read = function() {
+        //this.a = +prompt("a ?", 0);
+        //this.b = +prompt("b ?", 0);
+        this.a = 2;
+        this.b = 3;
+      }
+
+      this.sum = function() {
+        return this.a + this.b;
+      }
+
+      this.mul = function() {
+        return this.a*this.b;
+      }
+    }
+
+    var calculator = new Calculator();
+    calculator.read();
+
+    document.write( "Сумма=" + calculator.sum() );
+    document.write("<br>");
+    document.write( "Произведение=" + calculator.mul() );
+  </script>
+
+
+
+  <h3>Task 6.3.4: Создать Accumulator при помощи конструктора </h3>
+  <pre>
+    Напишите функцию-конструктор Accumulator(startingValue). Объекты, которые она создает, должны хранить текущую сумму и прибавлять к ней то, что вводит посетитель.
+    Более формально, объект должен:
+        Хранить текущее значение в своём свойстве value. Начальное значение свойства value ставится конструктором равным startingValue.
+        Метод read() вызывает prompt, принимает число и прибавляет его к свойству value.
+    Таким образом, свойство value является текущей суммой всего, что ввел посетитель при вызовах метода read(), с учетом начального значения startingValue.
+    Ниже вы можете посмотреть работу кода:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // the same solutions
+    <b>My solution</b>
+    function Accumulator(startingValue) {
+      this.value = startingValue;
+
+      this.read = function() {
+        this.value += +prompt("Enter number", 0);
+      }
+    }
+
+    var accumulator = new Accumulator(1); // начальное значение 1
+    accumulator.read(); // прибавит ввод prompt к текущему значению
+    accumulator.read(); // прибавит ввод prompt к текущему значению
+    document.write( accumulator.value ); // выведет текущее значение
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Accumulator(startingValue) {
+      this.value = startingValue;
+
+      this.read = function() {
+        //this.value += +prompt("Enter number", 0);
+        this.value += 3;
+      }
+    }
+
+    var accumulator = new Accumulator(1); // начальное значение 1
+    accumulator.read(); // прибавит ввод prompt к текущему значению
+    accumulator.read(); // прибавит ввод prompt к текущему значению
+    document.write( accumulator.value ); // выведет текущее значение
+  </script>
+
+
+  <h3>Task 6.3.4: Создайте калькулятор </h3>
+  <pre>
+    Напишите конструктор Calculator, который создаёт расширяемые объекты-калькуляторы.
+
+    Эта задача состоит из двух частей, которые можно решать одна за другой.
+
+    Первый шаг задачи: вызов calculate(str) принимает строку, например «1 + 2»,
+    с жёстко заданным форматом «ЧИСЛО операция ЧИСЛО» (по одному пробелу вокруг операции), и возвращает результат.
+    Понимает плюс + и минус -.
+
+    2 Второй шаг – добавить калькулятору метод addMethod(name, func), который учит калькулятор новой операции.
+    Он получает имя операции name и функцию от двух аргументов func(a,b), которая должна её реализовывать.
+
+    Например, добавим операции умножить *, поделить / и возвести в степень **:
+
+    Поддержка скобок и сложных математических выражений в этой задаче не требуется.
+    Числа и операции могут состоять из нескольких символов. Между ними ровно один пробел.
+    Предусмотрите обработку ошибок. Какая она должна быть – решите сами.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У меня нет проверок, а так идентично
+    <b>My solution</b>
+    function Calculator() {
+
+      var methods = {};
+
+      methods["+"] = function sum(a, b) {
+              return a + b;
+            };
+      methods["-"] = function diff(a, b) {
+              return a - b;
+            };
+
+      this.calculate = function(str) {
+
+          var arr = str.split(" ");
+          this.a = +arr[0];
+          this.b = +arr[2];
+          this.name = arr[1];
+
+          return methods[this.name](this.a, this.b);
+      };
+
+      this.addMethod = function(name, func) {
+        methods[name] = func;
+      };
+
+    }
+
+    var calc = new Calculator;
+
+    document.write( calc.calculate("3 + 7") ); // 10
+    document.write("< br>");
+
+    var powerCalc = new Calculator;
+    powerCalc.addMethod("*", function(a, b) {
+      return a * b;
+    });
+    powerCalc.addMethod("/", function(a, b) {
+      return a / b;
+    });
+    powerCalc.addMethod("**", function(a, b) {
+      return Math.pow(a, b);
+    });
+
+    var result = powerCalc.calculate("2 ** 3");
+    document.write( result ); // 8
+    document.write("< br>");
+
+    var result = powerCalc.calculate("8 / 2");
+    document.write( result ); // 4
+    document.write("< br>");
+
+    <b>Not my solution</b>
+    function Calculator() {
+
+      var methods = {
+        "-": function(a, b) {
+          return a - b;
+        },
+        "+": function(a, b) {
+          return a + b;
+        }
+      };
+
+      this.calculate = function(str) {
+
+        var split = str.split(' '),
+          a = +split[0],
+          op = split[1],
+          b = +split[2]
+
+        if (!methods[op] || isNaN(a) || isNaN(b)) {
+          return NaN;
+        }
+
+        return methods[op](a, b);
+      }
+
+      this.addMethod = function(name, func) {
+        methods[name] = func;
+      };
+    }
+
+    var calc = new Calculator;
+
+    calc.addMethod("*", function(a, b) {
+      return a * b;
+    });
+    calc.addMethod("/", function(a, b) {
+      return a / b;
+    });
+    calc.addMethod("**", function(a, b) {
+      return Math.pow(a, b);
+    });
+
+    var result = calc.calculate("2 ** 3");
+    alert( result ); // 8
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Calculator() {
+
+      var methods = {};
+
+      methods["+"] = function sum(a, b) {
+              return a + b;
+            };
+      methods["-"] = function diff(a, b) {
+              return a - b;
+            };
+
+      this.calculate = function(str) {
+
+          var arr = str.split(" ");
+          this.a = +arr[0];
+          this.b = +arr[2];
+          this.name = arr[1];
+
+          return methods[this.name](this.a, this.b);
+      };
+
+      this.addMethod = function(name, func) {
+        methods[name] = func;
+      };
+
+    }
+
+    var calc = new Calculator;
+
+    document.write( calc.calculate("3 + 7") ); // 10
+    document.write("<br>");
+
+    var powerCalc = new Calculator;
+    powerCalc.addMethod("*", function(a, b) {
+      return a * b;
+    });
+    powerCalc.addMethod("/", function(a, b) {
+      return a / b;
+    });
+    powerCalc.addMethod("**", function(a, b) {
+      return Math.pow(a, b);
+    });
+
+    var result = powerCalc.calculate("2 ** 3");
+    document.write( result ); // 8
+    document.write("<br>");
+
+    var result = powerCalc.calculate("8 / 2");
+    document.write( result ); // 4
+    document.write("<br>");
+
+  </script>
+
+
+
+
+  <!--**********
+  *  Дескрипторы, геттеры и сеттеры свойств
+  ************-->
+
+  <pre>
+    Object.defineProperty(obj, prop, descriptor)
+    Аргументы:
+
+  obj
+      Объект, в котором объявляется свойство.
+  prop
+      Имя свойства, которое нужно объявить или модифицировать.
+  descriptor
+      Дескриптор – объект, который описывает поведение свойства.
+
+  В нём могут быть следующие поля:
+
+      - value – значение свойства, по умолчанию undefined
+      - writable – значение свойства можно менять, если true. По умолчанию false.
+      - configurable – если true, то свойство можно удалять, а также менять его в дальнейшем при помощи новых вызовов defineProperty.
+        По умолчанию false.
+      - enumerable – если true, то свойство просматривается в цикле for..in и методе Object.keys(). По умолчанию false.
+      - get – функция, которая возвращает значение свойства. По умолчанию undefined.
+      - set – функция, которая записывает значение свойства. По умолчанию undefined.
+
+  Чтобы избежать конфликта, запрещено одновременно указывать значение value и функции get/set.
+  Либо значение, либо функции для его чтения-записи, одно из двух. Также запрещено и не имеет смысла указывать writable при наличии get/set-функций.
+</pre>
+
+  <h1>6.4. Дескрипторы, геттеры и сеттеры свойств </h1>
+  <h3>Task 6.4.1: Обычное свойство </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {};
+
+    user.name = 'Денис';
+
+    Object.defineProperty(user, 'name', {
+      value: 'Вася',
+      writable: true,
+      configurable: true,
+      enumerable: true
+    });
+
+    user.name = 'Петя';
+
+    document.write(user.name);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {};
+
+    // 1. простое присваивание
+    user.name = 'Денис';
+
+    // 2. указание значения через дескриптор
+    Object.defineProperty(user, 'name', {
+      value: 'Вася',
+      writable: true,
+      configurable: true,
+      enumerable: true
+    });
+
+    document.write("Оба вызова выше добавляют в объект user обычное (удаляемое, изменяемое, перечисляемое) свойство.");
+
+    user.name = 'Петя';
+
+    document.write(user.name);
+  </script>
+
+
+  <h3>Task 6.4.2: Свойство-константа </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var user = {};
+
+    Object.defineProperty(user, 'name', {
+      value: 'Денис',
+      writable: false,
+      configurable: false
+    });
+
+    user.name = 'Петя';
+
+    document.write(user.name); //error
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {};
+
+    Object.defineProperty(user, 'name', {
+      value: 'Денис',
+      writable: false,
+      configurable: false
+    });
+
+    user.name = 'Петя';
+
+    document.write(user.name); //error
+  </script>
+
+
+  <h3>Task 6.4.3: Особенности toString </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: 'Denis',
+      toString: function () {
+        return 'Херня! Объект';
+      }
+    };
+
+    document.write(user.name); // Denis
+    document.write('<br>');
+    document.write(user); // Херня! Объект
+
+
+    var arr1 = new Array(5),
+        arr2 = new Array(1, 2);
+
+    document.write('<br>');
+    document.write('<br>');
+    document.write(arr1, ' Ничего, массив длины 5 '); //,,,,
+    document.write('<br>');
+    document.write(arr2); // 1, 2
+    document.write('<br>');
+
+
+
+    var arr = [1, 2];
+
+    //не измененный встроенный метод
+    document.write(arr, '<br>'); // 1,2
+
+    arr.toString = function() {
+      return 'Херня массив';
+    }
+
+    //с измененным встроенным методом
+    document.write(arr, '<br>'); // Херня массив
+
+    //Все эллементы на месте
+    document.write(arr[0], '<br>'); // 1
+    document.write(arr[1], '<br>'); // 2
+  </script>
+
+
+
+  <h3>Task 6.4.4: Свойство, скрытое для for…in (toString) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      name: 'Vasya',
+      toString: function() {
+        return this.name;
+      }
+    }
+
+    Object.defineProperty(user, 'toString', {
+      enumerable: false // запретим участвовать в for ..in
+    });
+
+    for (var key in user) {
+      document.write(key);
+    }
+  </script>
+
+
+  <h3>Task 6.4.5: Свойство-функция get/set </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      firstName: 'Денис',
+      surname: 'Petrov'
+    }
+
+    Object.defineProperty(user, 'fullName', {
+      get: function()  {  // функция, которая возвращает значение свойства.
+        return this.firstName + ' ' + this.surname;
+      },
+      set: function(value) {  //функция, которая записывает значение свойства
+        var split = value.split(' ');
+        this.firstName = split[0];
+        this.surname = split[1];
+      }
+    });
+
+    document.write(user.fullName);
+    document.write('<br>');
+
+    user.fullName = 'Petya Ivanov';
+    document.write(user.firstName);
+    document.write('<br>');
+    document.write(user.surname);
+
+  </script>
+
+
+  <h3>Task 6.4.6: Свойство-функция get/set в литералах (прям в объекте) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      firstName: 'Денис',
+      surname: 'Petrov',
+      get fullName2()  {  // функция, которая возвращает значение свойства.
+        return this.firstName + ' ' + this.surname;
+      },
+      set fullName2(value) {  //функция, которая записывает значение свойства
+        var split = value.split(' ');
+        this.firstName = split[0];
+        this.surname = split[1];
+      }
+    };
+
+    document.write(user.fullName2);
+    document.write('<br>');
+
+    user.fullName2 = 'Ivan Sidorov';
+    document.write(user.firstName);
+    document.write('<br>');
+    document.write(user.surname);
+
+  </script>
+
+
+
+  <h3>Task 6.4.7: Применение get/set </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Было вот так в программе...
+    function User1(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    var pete = new User1("Петя", 25);
+
+    document.write(pete.age);
+    document.write("< br>");
+
+    // ....
+    // Потом решили изменить программу и age сделать динамически
+    function User2(name, birthday) {
+      this.name = name;
+      this.birthday = birthday;
+
+
+      // age будет высчитывать возраст по birthday
+      Object.defineProperty(this, "age", {
+        get: function() {
+          var today = new Date();
+          var yearDelta = today.getFullYear() - this.birthday.getFullYear();
+
+          if ( today.getMonth() > this.birthday.getMonth() ||
+              ( today.getMonth() === this.birthday.getMonth() && today.getDate() >= this.birthday.getDate() )) {
+                return yearDelta;
+              }
+          return yearDelta - 1;
+        }
+      });
+
+    }
+
+    var pete = new User2('Denis', new Date(1987, 3, 30));
+
+    document.write(pete.birthday);
+    document.write("< br>");
+    document.write(pete.age);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // Было вот так в программе...
+    function User1(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    var pete = new User1("Петя", 25);
+
+    document.write(pete.age);
+    document.write("<br>");
+
+    // ....
+    // Потом решили изменить программу и age сделать динамически
+    function User2(name, birthday) {
+      this.name = name;
+      this.birthday = birthday;
+
+
+      // age будет высчитывать возраст по birthday
+      Object.defineProperty(this, "age", {
+        get: function() {
+          var today = new Date();
+          var yearDelta = today.getFullYear() - this.birthday.getFullYear();
+
+          if ( today.getMonth() > this.birthday.getMonth() ||
+              ( today.getMonth() === this.birthday.getMonth() && today.getDate() >= this.birthday.getDate() )) {
+                return yearDelta;
+              }
+          return yearDelta - 1;
+        }
+      });
+
+    }
+
+    var pete = new User2('Denis', new Date(1987, 3, 30));
+
+    document.write(pete.birthday);
+    document.write("<br>");
+    document.write(pete.age);
+
+  </script>
+
+
+
+  <h3>Task 6.4.8: Object.getOwnPropertyNames(obj) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+        var usr = {
+          name: 'Denis'
+        };
+
+        var prop = Object.getOwnPropertyNames(usr);
+
+        document.write(prop); // name
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var usr = {
+      name: 'Denis'
+    };
+
+    var prop = Object.getOwnPropertyNames(usr);
+
+    document.write(prop); // name
+
+  </script>
+
+  <hr>
+
+
+  <h3>Task 6.4.9: </h3>
+  <pre>
+    Сделайте, чтобы были доступны свойства firstName и lastName, причём не только на чтение, но и на запись.
+
+    Важно: в этой задаче fullName должно остаться свойством, а firstName/lastName – реализованы через get/set.
+    Лишнее дублирование здесь ни к чему.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    // Мое короче решение, но не совсем соответсвует заданию, хотя ответ такой же
+    <b>My solution</b>
+    function User(fullName) {
+      this.fullName = fullName;
+    }
+
+    var vasya = new User("Василий Попкин");
+
+
+    // Типа ниже новый код
+    function User(fullName) {
+
+      var split = fullName.split(' ');
+      this.firstName = split[0];
+      this.lastName = split[1];
+
+      Object.defineProperty(this, 'fullName',
+        {
+          get: function() {
+            return this.firstName + ' ' + this.lastName;
+          }
+        });
+    }
+
+    var vasya = new User("Василий Попкин");
+
+    // чтение firstName/lastName
+    document.write( vasya.firstName ); // Василий
+    document.write("< br>");
+    document.write( vasya.lastName ); // Попкин
+    document.write("< br>");
+
+    // запись в lastName
+    vasya.lastName = 'Сидоров';
+
+    document.write( vasya.fullName ); // Василий Сидоров
+    document.write("< br>");
+
+    <b>Not my solution</b>
+    function User(fullName) {
+      this.fullName = fullName;
+
+      Object.defineProperties(this, {
+
+        firstName: {
+
+          get: function() {
+            return this.fullName.split(' ')[0];
+          },
+
+          set: function(newFirstName) {
+            this.fullName = newFirstName + ' ' + this.lastName;
+          }
+
+        },
+
+        lastName: {
+
+          get: function() {
+            return this.fullName.split(' ')[1];
+          },
+
+          set: function(newLastName) {
+            this.fullName = this.firstName + ' ' + newLastName;
+          }
+
+        }
+
+      });
+    }
+
+    var vasya = new User("Василий Попкин");
+
+    // чтение firstName/lastName
+    alert( vasya.firstName ); // Василий
+    alert( vasya.lastName ); // Попкин
+
+    // запись в lastName
+    vasya.lastName = 'Сидоров';
+
+    alert( vasya.fullName ); // Василий Сидоров
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function User(fullName) {
+      this.fullName = fullName;
+    }
+
+    var vasya = new User("Василий Попкин");
+
+
+    // Типа ниже новый код
+    function User(fullName) {
+
+      var split = fullName.split(' ');
+      this.firstName = split[0];
+      this.lastName = split[1];
+
+      Object.defineProperty(this, 'fullName',
+        {
+          get: function() {
+            return this.firstName + ' ' + this.lastName;
+          }
+        });
+    }
+
+    var vasya = new User("Василий Попкин");
+
+    // чтение firstName/lastName
+    document.write( vasya.firstName ); // Василий
+    document.write("<br>");
+    document.write( vasya.lastName ); // Попкин
+    document.write("<br>");
+
+    // запись в lastName
+    vasya.lastName = 'Сидоров';
+
+    document.write( vasya.fullName ); // Василий Сидоров
+    document.write("<br>");
+  </script>
+
+
+
+
+  <!--**********
+  *  Статические и фабричные методы
+  ************-->
+
+  <h1>6.5. Статические и фабричные методы  </h1>
+  <h3>Task 6.5.1: Статические свойства и методы </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Article() {
+      Article.count++;
+
+      //...
+    }
+    Article.count = 0; // статическое свойство-переменная
+
+    Article.showCount = function() {
+      document.write( this.count ); // (1)
+    }
+
+    // использование
+    new Article();
+    new Article();
+    Article.showCount(); // (2)
+
+    document.write("<br />");
+
+    var obj_1 = {
+      counter: 0,
+      showCount: function() {
+        document.write(this.counter);
+      }
+    };
+
+    obj_1.showCount(); // 0
+
+    //var arr = {0, function() { document.write(this.count) } };
+  </script>
+
+
+
+  <h3>Task 6.5.2: Фабричный метод </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function User() {
+      Article.count_2++;
+      this.sayHi = function() {
+        document.write(this.name)
+      };
+    }
+
+    Article.count_2 = 0;
+
+    User.createAnonymous = function() {
+      var user = new User;
+      user.name = 'Аноним';
+      return user;
+    }
+
+    User.createFromData = function(userData) {
+      var user = new User;
+      user.name = userData.name;
+      user.age = userData.age;
+      return user;
+    }
+
+    // Использование
+
+    var guest = User.createAnonymous();
+    guest.sayHi(); // Аноним
+
+    document.write("<br />");
+
+    var knownUser = User.createFromData({
+      name: 'Вася',
+      age: 25
+    });
+    knownUser.sayHi(); // Вася
+
+    document.write("<br />");
+    document.write("Article.count_2 = ", Article.count_2);
+
+  </script>
+
+  <hr>
+
+
+  <h3>Task 6.5.3: Счетчик объектов </h3>
+  <pre>
+    Добавить в конструктор Article:
+
+    Подсчёт общего количества созданных объектов.
+    Запоминание даты последнего созданного объекта.
+
+    Используйте для этого статические свойства.
+
+    Пусть вызов Article.showStats() выводит то и другое.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //идентичны решения :)
+    <b>My solution: </b>
+    function Article() {
+      this.created = new Date();
+
+      // ... ваш код ...
+      Article.count++;
+      Article.created = this.created;
+    }
+
+    Article.count = 0;
+
+    Article.showStats = function() {
+      document.write('Всего: ' + this.count + ', Последняя: ' + this.created + "<br>");
+    }
+
+    new Article();
+    new Article();
+
+    Article.showStats(); // Всего: 2, Последняя: (дата)
+
+    new Article();
+
+    Article.showStats(); // Всего: 3, Последняя: (дата)
+
+    <b>Not my solution: </b>
+    function Article() {
+      this.created = new Date();
+
+      Article.count++; // увеличиваем счетчик при каждом вызове
+      Article.last = this.created; // и запоминаем дату
+    }
+    Article.count = 0; // начальное значение
+    // (нельзя оставить undefined, т.к. Article.count++ будет NaN)
+
+    Article.showStats = function() {
+      alert( 'Всего: ' + this.count + ', Последняя: ' + this.last );
+    };
+
+    new Article();
+    new Article();
+
+    Article.showStats(); // Всего: 2, Последняя: (дата)
+
+    new Article();
+
+    Article.showStats(); // Всего: 3, Последняя: (дата)
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Article() {
+      this.created = new Date();
+
+      // ... ваш код ...
+      Article.count++;
+      Article.created = this.created;
+    }
+
+    Article.count = 0;
+
+    Article.showStats = function() {
+      document.write('Всего: ' + this.count + ', Последняя: ' + this.created + "<br>");
+    }
+
+    new Article();
+    new Article();
+
+    Article.showStats(); // Всего: 2, Последняя: (дата)
+
+    new Article();
+
+    Article.showStats(); // Всего: 3, Последняя: (дата)
+
+  </script>
+
+
+
+
+
+  <!--**********
+  *  Явное указание this: "call", "apply"
+  ************-->
+
+  <h1>6.6. Явное указание this: "call", "apply" </h1>
+  <h3>Task 6.6.1: Метод call </h3>
+  <pre>
+    Вызов func.call(context, a, b...) – то же, что обычный вызов func(a, b...), но с явно указанным this(=context).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var user = {
+      firstName: "Василий",
+      surname: "Петров",
+      patronym: "Иванович"
+    };
+
+    function showFullName(firstPart, lastPart) {
+      document.write( this[firstPart] + " " + this[lastPart], "<br />" );
+    }
+
+    // f.call(контекст, аргумент1, аргумент2, ...)
+    showFullName.call(user, 'firstName', 'surname') // "Василий Петров"
+    showFullName.call(user, 'firstName', 'patronym') // "Василий Иванович"
+  </script>
+
+
+
+  <h3>Task 6.6.2: «Одалживание метода» безопасно </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function printArgs() {
+      var join = [].join; // скопируем ссылку на функцию в переменную
+
+      // вызовем join с this=arguments,
+      // этот вызов эквивалентен arguments.join(':')
+      var argStr = join.call(arguments, ' | ');
+
+      document.write(argStr); // сработает и выведет
+    }
+
+    printArgs(1, 3, 6, 7);
+  </script>
+
+
+
+  <h3>Task 6.6.3: Метод apply </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr = [];
+    arr.push(1);
+    arr.push(5);
+    arr.push(2);
+
+    // получить максимум из элементов arr
+    document.write( Math.max.apply(null, arr) ); // 5
+    document.write('<br />');
+    document.write( Math.max.apply(Math, [1,5,2]) ); // 5
+    document.write('<br />');
+    document.write( Math.max(1, 5, 2) );
+  </script>
+
+
+  <hr>
+
+  <h3>Task 6.6.4: Перепишите суммирование аргументов </h3>
+  <pre>
+    Есть функция sum, которая суммирует все элементы массива:
+      function sum(arr) {
+        return arr.reduce(function(a, b) {
+          return a + b;
+        });
+      }
+
+      alert( sum([1, 2, 3]) ); // 6 (=1+2+3);
+
+    Создайте аналогичную функцию sumArgs(), которая будет суммировать все свои аргументы:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Same as second solution
+    <b>My solution</b>
+    // вариант одалживание метода с помощью call
+    function sumArgs() {
+      var reduce = [].reduce;
+
+      return reduce.call(arguments, function(a, b) {
+        return a + b;
+      });
+    }
+
+    document.write( sumArgs(1, 2, 3, 4) ); // 10, аргументы переданы через запятую, без массива
+    document.write('< br />');
+
+    <b>Not my solution</b>
+    //first
+    function sumArgs() {
+      // скопируем reduce из массива
+      arguments.reduce = [].reduce;
+      return arguments.reduce(function(a, b) {
+        return a + b;
+      });
+    }
+
+    alert( sumArgs(4, 5, 6) ); // 15
+
+    //second
+    function sumArgs() {
+      // запустим reduce из массива напрямую
+      return [].reduce.call(arguments, function(a, b) {
+        return a + b;
+      });
+    }
+
+    alert( sumArgs(4, 5, 6) ); // 15
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // вариант одалживание метода с помощью call
+    function sumArgs() {
+      var reduce = [].reduce;
+
+      return reduce.call(arguments, function(a, b) {
+        return a + b;
+      });
+    }
+
+    document.write( sumArgs(1, 2, 3, 4) ); // 10, аргументы переданы через запятую, без массива
+    document.write('<br />');
+
+
+  </script>
+
+
+
+  <h3>Task 6.6.5: Примените функцию к аргументам </h3>
+  <pre>
+    Напишите функцию applyAll(func, arg1, arg2...), которая получает функцию func и
+    произвольное количество аргументов.
+    Она должна вызвать func(arg1, arg2...), то есть передать в func все аргументы,
+    начиная со второго, и возвратить результат.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    function applyAll() {
+      var arrArg = [];
+
+      // превращаем объект в массив, чтобы работали все методы массива, а также для метода apply
+      // иначе apply не сработает
+
+      for (var key in arguments) {
+        arrArg.push(arguments[key]);
+      }
+      arrArg.shift(); // удаляем первый эллемент
+
+      // arguments[0] - это функция, которая передана нулевым парметром в ф-цию applyAll
+      // arguments - это объект (ассоциативный массив) параметров переданный в ф-цию applyAll
+      // arrArg - массив параметров начиная со второго эл-та (т.е arguments[1])
+      return arguments[0].apply(arguments, arrArg); // вместо arguments можно написать и this или null, любой объект
+    }
+
+
+    // второе решение частично не мое
+    function applyAll_2() {
+      var arrArg = [].slice.call(arguments, 1);
+
+      // arguments[0] - это функция, которая передана нулевым парметром в ф-цию applyAll
+      // arguments - это объект (ассоциативный массив) параметров переданный в ф-цию applyAll
+      // arrArg - массив параметров начиная со второго эл-та (т.е arguments[1])
+      return arguments[0].apply(this, arrArg); // здесь this не важно можно написать хоть null, любой объект
+                                              // эта запись равносильна arguments[0](arrArg),
+                                              //только метод apply передает не сам массив, а значения массива по порядку
+    }
+
+
+    function sum() { // суммирует аргументы: sum(1,2,3) = 6
+      return [].reduce.call(arguments, function(a, b) {
+        return a + b;
+      });
+    }
+
+    function mul() { // перемножает аргументы: mul(2,3,4) = 24
+      return [].reduce.call(arguments, function(a, b) {
+        return a * b;
+      });
+    }
+
+    document.write("< br />");
+    document.write( applyAll_2(sum, 1, 2, 3) ); // -> sum(1, 2, 3) = 6
+
+    document.write("< br />");
+    document.write( applyAll(sum, 1, 2, 3) ); // -> sum(1, 2, 3) = 6
+    document.write("< br />");
+    document.write( applyAll(mul, 2, 3, 4) ); // -> mul(2, 3, 4) = 24
+    document.write("< br />");
+
+    // Применить Math.max к аргументам 2, -2, 3
+    document.write( applyAll(Math.max, 2, -2, 3) ); // 3
+    document.write("< br />");
+
+    // Применить Math.min к аргументам 2, -2, 3
+    document.write( applyAll(Math.min, 2, -2, 3) ); // -2
+    document.write("< br />");
+
+    <b>Not my solution</b>
+    function applyAll(func) {
+      return func.apply(this, [].slice.call(arguments, 1));
+    }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function applyAll() {
+      var arrArg = [];
+
+      // превращаем объект в массив, чтобы работали все методы массива, а также для метода apply
+      // иначе apply не сработает
+
+      for (var key in arguments) {
+        arrArg.push(arguments[key]);
+      }
+      arrArg.shift(); // удаляем первый эллемент
+
+      // arguments[0] - это функция, которая передана нулевым парметром в ф-цию applyAll
+      // arguments - это объект (ассоциативный массив) параметров переданный в ф-цию applyAll
+      // arrArg - массив параметров начиная со второго эл-та (т.е arguments[1])
+      return arguments[0].apply(arguments, arrArg); // вместо arguments можно написать и this или null, любой объект
+    }
+
+
+    // второе решение частично не мое
+    function applyAll_2() {
+      var arrArg = [].slice.call(arguments, 1);
+
+      // arguments[0] - это функция, которая передана нулевым парметром в ф-цию applyAll
+      // arguments - это объект (ассоциативный массив) параметров переданный в ф-цию applyAll
+      // arrArg - массив параметров начиная со второго эл-та (т.е arguments[1])
+      return arguments[0].apply(this, arrArg); // здесь this не важно можно написать хоть null, любой объект
+                                              // эта запись равносильна arguments[0](arrArg),
+                                              //только метод apply передает не сам массив, а значения массива по порядку
+    }
+
+
+    function sum() { // суммирует аргументы: sum(1,2,3) = 6
+      return [].reduce.call(arguments, function(a, b) {
+        return a + b;
+      });
+    }
+
+    function mul() { // перемножает аргументы: mul(2,3,4) = 24
+      return [].reduce.call(arguments, function(a, b) {
+        return a * b;
+      });
+    }
+
+    document.write("<br />");
+    document.write( applyAll_2(sum, 1, 2, 3) ); // -> sum(1, 2, 3) = 6
+
+    document.write("<br />");
+    document.write( applyAll(sum, 1, 2, 3) ); // -> sum(1, 2, 3) = 6
+    document.write("<br />");
+    document.write( applyAll(mul, 2, 3, 4) ); // -> mul(2, 3, 4) = 24
+    document.write("<br />");
+
+    // Применить Math.max к аргументам 2, -2, 3
+    document.write( applyAll(Math.max, 2, -2, 3) ); // 3
+    document.write("<br />");
+
+    // Применить Math.min к аргументам 2, -2, 3
+    document.write( applyAll(Math.min, 2, -2, 3) ); // -2
+    document.write("<br />");
+  </script>
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+</body>
+</html>

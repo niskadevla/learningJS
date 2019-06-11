@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ООП в прототипном стиле</title>
+</head>
+<body>
+  <!--**********
+  * Прототип объекта
+  ************-->
+
+
+  <h1>9.1. Прототип объекта </h1>
+  <h3>Task 9.1.1: Чему равно свойство после delete? </h3>
+  <pre>
+    Какие значения будут выводиться в коде ниже?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var animal = {
+      jumps: null
+    };
+    var rabbit = {
+      jumps: true
+    };
+
+    rabbit.__proto__ = animal;
+
+    document.write( rabbit.jumps ); // true (1)
+    document.write("<br />");
+
+    delete rabbit.jumps;
+
+    document.write( rabbit.jumps ); // null (2)
+    document.write("<br />");
+
+    delete animal.jumps;
+
+    document.write( rabbit.jumps ); // udefined (3)
+    document.write("<br />");
+
+    /*
+
+    true, свойство взято из rabbit.
+    null, свойство взято из animal.
+    undefined, свойства больше нет.
+    */
+
+  </script>
+
+
+
+  <h3>Task 9.1.2: Прототип и this </h3>
+  <pre>
+    Сработает ли вызов rabbit.eat() ?
+    Если да, то в какой именно объект он запишет свойство full:
+    в rabbit или animal?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var animal = {
+      eat: function() {
+        this.full = true;
+      }
+    };
+
+    var rabbit = {
+      __proto__: animal
+    };
+
+    rabbit.eat(); //  свойство будет записано в rabbit.
+
+    document.write( rabbit.hasOwnProperty('full') );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var animal = {
+      eat: function() {
+        this.full = true;
+      }
+    };
+
+    var rabbit = {
+      __proto__: animal
+    };
+
+    rabbit.eat(); //  свойство будет записано в rabbit.
+
+    document.write( rabbit.hasOwnProperty('full') );
+
+  </script>
+
+
+
+  <h3>Task 9.1.3: Алгоритм для поиска </h3>
+  <pre>
+    Задание состоит из двух частей:
+    Присвойте объектам ссылки __proto__ так,
+    чтобы любой поиск чего-либо шёл по алгоритму pockets -> bed -> table -> head.
+
+    То есть pockets.pen == 3, bed.glasses == 1, но table.money == undefined.
+    После этого ответьте на вопрос, как быстрее искать glasses:
+    обращением к pockets.glasses или head.glasses? Попробуйте протестировать.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var head = {
+      glasses: 1
+    };
+
+    var table = {
+      pen: 3,
+      __proto__: head
+    };
+
+    var bed = {
+      sheet: 1,
+      pillow: 2,
+      __proto__: table
+    };
+
+    var pockets = {
+      money: 2000,
+      __proto__: bed
+    };
+
+    document.write(pockets.pen); // 3
+    document.write("<br />");
+
+    document.write(bed.glasses); // 1
+    document.write("<br />");
+
+    document.write(table.money); // undefined
+    document.write("<br />");
+
+    //Прверка что быстрее
+    //Запуск первого таймера
+    var timer1Start = performance.now();
+    var timer1Arr = [];
+
+    for (var i = 0; i < 10000; i++) {
+      timer1Arr[i] = pockets.glasses;
+    }
+
+    document.write(pockets.glasses); // 1
+    document.write("<br />");
+    //Окончание первого таймера
+    var timer1Finish = performance.now();
+    var timer1 = timer1Finish - timer1Start;
+    document.write(timer1 + " мс");
+    document.write("<br />");
+
+    //запуск второго таймера
+    var timer2Start = performance.now();
+    var timer2Arr = [];
+
+    for (var i = 0; i < 10000; i++) {
+      timer2Arr[i] = head.glasses;
+    }
+
+    document.write(head.glasses); // 1
+    document.write("<br />");
+    var timer2Finish = performance.now();
+    var timer2 = timer2Finish - timer2Start;
+    document.write(timer2 + " мс");
+    document.write("<br />");
+
+    //Одинаково
+    document.write("Одинаково");
+
+  </script>
+
+
+
+  <!--**********
+  * Свойство F.prototype и создание объектов через new
+  ************-->
+
+  <h1>9.2. Свойство F.prototype и создание объектов через new </h1>
+  <h3>Task 9.2.1: Свойство F.prototype </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var animal1 = {
+      eats: true
+    };
+
+    function Rabbit1(name) {
+      this.name = name;
+    }
+
+    // Это тоже самое, что в функцию Rabbit1 записать this.__proto__ = animal;
+    Rabbit1.prototype = animal1;
+
+    var rabbit1 = new Rabbit1("Кроль"); //  rabbit.__proto__ == animal
+
+    document.write( rabbit1.eats ); // true
+
+  </script>
+
+
+
+  <h3>Task 9.2.2: Свойство constructor </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Rabbit2() {}
+
+    // в Rabbit.prototype есть одно свойство: constructor
+    document.write( Object.getOwnPropertyNames(Rabbit2.prototype) ); //constructor
+    document.write("<br>");
+
+    // оно равно Rabbit
+    document.write( Rabbit2.prototype.constructor == Rabbit2 ); // true
+
+  </script>
+
+
+  <hr>
+
+
+  <h3>Task 9.2.3:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function f1() {
+
+    }
+
+    function F() {
+      document.write('Я функция');
+    }
+
+    F.prototype.constructor(); // F.prototype.constructor() == F
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function f1() {
+
+    }
+
+    function F() {
+      document.write('Я функция');
+      document.write("<br>");
+    }
+
+    F.prototype.constructor(); // F.prototype.constructor() == F
+
+    function Fun() {};
+    Fun.prototype = {
+      age: 25
+    };
+
+    var fun = new Fun();
+
+    Fun.prototype = {
+      name: "Vasya"
+    };
+
+    document.write(fun.name); //undefined
+    document.write("<br>");
+
+    var fun2 = new Fun();
+    document.write(fun2.name); //Vasya
+    document.write("<br>");
+    document.write(fun2.age); //undefined
+    document.write("<br>");
+
+    Fun.prototype.age = 30;
+    var fun3 = new Fun();
+    document.write(fun3.name); //Vasya
+    document.write("<br>");
+    document.write(fun3.age); // 30
+    document.write("<br>");
+
+
+    function Rabbit_1(name) {
+      this.name = name;
+      document.write( this.name );
+      document.write("<br>");
+    }
+
+    var rabbit_1 = new Rabbit_1("Кроль"); // Кроль
+
+    var rabbit2_1 = new rabbit_1.constructor("Крольчиха"); // Это тоже самое, что и первая запись
+
+  </script>
+
+
+
+  <h3>Task 9.2.4: Прототип после создания </h3>
+  <pre>
+    В примерах ниже создаётся объект new Rabbit, а затем проводятся
+    различные действия с prototype.
+    Каковы будут результаты выполнения? Почему?
+    Начнём с этого кода. Что он выведет?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    'use strict';
+
+    function Rabbit() {}
+
+    Rabbit.prototype = {
+      eats: true
+    };
+
+    var rabbit = new Rabbit();
+
+    document.write( rabbit.eats );  // true
+    document.write("< br>");
+
+    //***
+    function Rabbit2() {}
+
+    Rabbit2.prototype = {
+      eats: true
+    };
+
+    var rabbit2 = new Rabbit2();
+
+    Rabbit2.prototype = {}; // Rabbit2.prototype заменяется на пустой объект
+    //Все последующие объекты небудут иметь прототип
+    //Здесь rabbit2 берет прототип из верхнего обїекта
+    //rabbit2_2 - создается с новым об объектом прототипирования
+    var rabbit2_2 = new Rabbit2();
+    document.write( "rabbit2.eats = " + rabbit2.eats  );  // true
+    document.write("< br>");
+    document.write( "rabbit2_2.eats = " + rabbit2_2.eats  );  // undefined
+    document.write("< br>");
+
+    //****
+    function Rabbit3() {}
+
+    Rabbit3.prototype = {
+      eats: true
+    };
+
+    var rabbit3 = new Rabbit3();
+
+    Rabbit3.prototype.eats = false;
+    document.write( rabbit3.eats );  // false
+    document.write("< br>");
+
+    //****
+    function Rabbit4() {}
+
+    Rabbit4.prototype = {
+      eats: true
+    };
+
+    var rabbit4 = new Rabbit4();
+
+    delete rabbit4.eats; // (*)
+    document.write( rabbit4.eats );  // true
+    document.write("< br>");
+
+
+    //***
+    function Rabbit5() {}
+
+    Rabbit5.prototype = {
+      eats: true
+    };
+
+    var rabbit5 = new Rabbit5();
+
+    delete Rabbit5.prototype.eats; // (*)
+    document.write( rabbit5.eats );  // undefined
+    document.write("< br>");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Rabbit() {}
+
+    Rabbit.prototype = {
+      eats: true
+    };
+
+    var rabbit = new Rabbit();
+
+    document.write( rabbit.eats );  // true
+    document.write("<br>");
+
+    //***
+    function Rabbit2() {}
+
+    Rabbit2.prototype = {
+      eats: true
+    };
+
+    var rabbit2 = new Rabbit2();
+
+    Rabbit2.prototype = {}; // Rabbit2.prototype заменяется на пустой объект
+    //Все последующие объекты не будут иметь прототип
+
+    //Здесь rabbit2 берет прототип из верхнего обїекта
+    //rabbit2_2 - создается с новым объектом прототипирования
+    var rabbit2_2 = new Rabbit2();
+    document.write( "rabbit2.eats = " + rabbit2.eats  );  // true
+    document.write("<br>");
+    document.write( "rabbit2_2.eats = " + rabbit2_2.eats  );  // undefined
+    document.write("<br>");
+
+    //****
+    function Rabbit3() {}
+
+    Rabbit3.prototype = {
+      eats: true
+    };
+
+    var rabbit3 = new Rabbit3();
+
+    Rabbit3.prototype.eats = false;
+    document.write( rabbit3.eats );  // false
+    document.write("<br>");
+
+    //****
+    function Rabbit4() {}
+
+    Rabbit4.prototype = {
+      eats: true
+    };
+
+    var rabbit4 = new Rabbit4();
+
+    delete rabbit4.eats; // (*)
+    document.write( rabbit4.eats );  // true
+    document.write("<br>");
+
+
+    //***
+    function Rabbit5() {}
+
+    Rabbit5.prototype = {
+      eats: true
+    };
+
+    var rabbit5 = new Rabbit5();
+
+    delete Rabbit5.prototype.eats; // (*)
+    document.write( rabbit5.eats );  // undefined
+    document.write("<br>");
+
+  </script>
+
+
+
+  <h3>Task 9.2.5: Аргументы по умолчанию </h3>
+  <pre>
+    Есть функция Menu, которая получает аргументы в виде объекта options
+    Ряд опций должны иметь значение по умолчанию
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var options = {
+      width: 100,
+      height: 200
+    }
+
+    var options2 = Object.create(options, {
+      width: {
+        value: 300,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      },
+      border: {
+        value: 3,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      },
+      height: {
+        value: 400,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      }
+    });
+
+
+    function Menu(options) {
+      //options.width = options.width || 300; // по умолчанию ширина 300
+      document.write(Object.getOwnPropertyNames(options));
+      document.write("< br>");
+      document.write(options.border);
+      document.write("< br>");
+    }
+
+    var obj = new Menu(options2);
+
+    //Not my solution
+    function Menu3(options) {
+      options = Object.create(options);
+      options.width = 300;
+
+      document.write("width: " + options.width + "< br>"); // возьмёт width из наследника
+      document.write("height: " + options.height + "< br>"); // возьмёт height из исходного объекта
+    }
+
+    var options3 = {
+      width: 100,
+      height: 200
+    };
+
+    var menu3 = new Menu3(options);
+
+    document.write("original width: " + options3.width + "< br>"); // width исходного объекта
+    document.write("original height: " + options3.height + "< br>"); // height исходного объекта
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var options = {
+      width: 100,
+      height: 200
+    }
+
+    var options2 = Object.create(options, {
+      width: {
+        value: 300,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      },
+      border: {
+        value: 3,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      },
+      height: {
+        value: 400,
+        writable: true,
+        enumarable: true,
+        configurable: true
+      }
+    });
+
+
+    function Menu(options) {
+      //options.width = options.width || 300; // по умолчанию ширина 300
+      document.write(Object.getOwnPropertyNames(options));
+      document.write("<br>");
+      document.write(options.border);
+      document.write("<br>");
+    }
+
+    var obj = new Menu(options2);
+
+    //Not my solution
+    function Menu3(options) {
+      options = Object.create(options);
+      options.width = 300;
+
+      document.write("width: " + options.width + "<br>"); // возьмёт width из наследника
+      document.write("height: " + options.height + "<br>"); // возьмёт height из исходного объекта
+    }
+
+    var options3 = {
+      width: 100,
+      height: 200
+    };
+
+    var menu3 = new Menu3(options);
+
+    document.write("original width: " + options3.width + "<br>"); // width исходного объекта
+    document.write("original height: " + options3.height + "<br>"); // height исходного объекта
+
+  </script>
+
+
+
+  <h3>Task 9.2.6: Есть ли разница между вызовами? </h3>
+  <pre>
+    Одинаково ли сработают эти вызовы?
+
+    rabbit.sayHi();
+    Rabbit.prototype.sayHi();
+    Object.getPrototypeOf(rabbit).sayHi();
+    rabbit.__proto__.sayHi();
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function Rabbit6(name) {
+      this.name = name;
+    }
+    Rabbit6.prototype.sayHi = function() {
+      document.write( this.name );
+      document.write("< br>");
+    };
+
+    var rabbit6 = new Rabbit6("Rabbit");
+
+    rabbit6.sayHi(); // "Rabbit" (кросс-браузерный)
+    Rabbit6.prototype.sayHi(); // udefined (кросс-браузерный)
+    Object.getPrototypeOf(rabbit6).sayHi(); // udefined (кроме IE8-)
+    rabbit6.__proto__.sayHi(); //udefined (кроме IE10-)
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Rabbit6(name) {
+      this.name = name;
+    }
+    Rabbit6.prototype.sayHi = function() {
+      document.write( this.name );
+      document.write("<br>");
+    };
+
+    var rabbit6 = new Rabbit6("Rabbit");
+
+    rabbit6.sayHi(); // "Rabbit" (кросс-браузерный)
+    Rabbit6.prototype.sayHi(); // udefined (кросс-браузерный)
+    Object.getPrototypeOf(rabbit6).sayHi(); // udefined (кроме IE8-)
+    rabbit6.__proto__.sayHi(); //udefined (кроме IE10-)
+
+    //Первый вызов ставит this == rabbit, остальные ставят this равным Rabbit.prototype,
+    //следуя правилу "this – объект перед точкой".
+
+  </script>
+
+
+
+  <h3>Task 9.2.7: Создать объект тем же конструктором </h3>
+  <pre>
+    Пусть у нас есть произвольный объект obj, созданный
+    каким-то конструктором, каким – мы не знаем, но хотели бы создать
+    новый объект с его помощью.
+
+    Сможем ли мы сделать так?
+
+    Приведите пример конструкторов для obj, при которых такой код будет
+    работать верно – и неверно.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    Да, можем, но только если уверены, что кто-то позаботился о том,
+    чтобы значение constructor было верным.
+
+    function Constr() {
+      this.name = "Den";
+    }
+
+    //not correct
+    // Constr.prototype = {
+    //   age: 25
+    // }
+
+    var obj = new Constr();
+
+
+    var obj2 = new obj.constructor();
+
+    document.write(obj2.name);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Constr() {
+      this.name = "Den";
+    }
+
+    //not correct
+    // Constr.prototype = {
+    //   age: 25
+    // }
+
+    var obj = new Constr();
+
+
+    var obj2 = new obj.constructor();
+
+    document.write(obj2.name);
+    document.write("<br>");
+
+    //Эксперимент
+    document.write("<br>");
+    //length,name,prototype
+    document.write(Object.getOwnPropertyNames(Window));
+    document.write("<br>");
+
+    //assign,getPrototypeOf,setPrototypeOf,getOwnPropertyDescriptor,
+    //getOwnPropertyDescriptors,keys,values,entries,is,defineProperty,
+    //defineProperties,create,getOwnPropertyNames,getOwnPropertySymbols,
+    //isExtensible,preventExtensions,freeze,isFrozen,seal,isSealed,
+    //fromEntries,prototype,length,name
+    document.write(Object.getOwnPropertyNames(Object));
+    document.write("<br>");
+    document.write("<br>");
+
+    //toSource,toString,toLocaleString,valueOf,hasOwnProperty,
+    //isPrototypeOf,propertyIsEnumerable,__defineGetter__,__defineSetter__,
+    //__lookupGetter__,__lookupSetter__,__proto__,constructor
+    document.write(Object.getOwnPropertyNames(Object.prototype));
+    document.write("<br>");
+    document.write("<br>");
+
+    //length,name,assert,clear,count,countReset,debug,error,info,
+    //log,table,trace,warn,dir,dirxml,group,groupCollapsed,
+    //groupEnd,time,timeLog,timeEnd,exception,timeStamp,profile,profileEnd
+    document.write(Object.getOwnPropertyNames(console));
+    document.write("<br>");
+    document.write("<br>");
+
+    document.write(Object.getOwnPropertyNames(Error.prototype));
+    document.write("<br>");
+
+  </script>
+
+
+
+  <!--**********
+  *  Встроенные "классы" в JavaScript
+  ************-->
+
+  <h1>9.3. Встроенные "классы" в JavaScript  </h1>
+  <h3>Task 9.3.1: Изменение встроенных прототипов </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    Object.prototype.each = function(f) {
+      for (var prop in this) {
+        var value = this[prop];
+        f.call(value, prop, value); // вызовет f(prop, value), this=value
+      }
+    }
+
+    // Попробуем! (внимание, пока что это работает неверно!)
+    var user = {
+      name: 'Вася',
+      age: 25
+    };
+
+    user.each(function(prop, val) {
+      document.write( prop + ' : '); // name -> age -> (!) each
+      document.write( val, "<br />" ); // напишет даже коментарии
+    });
+
+  </script>
+
+
+
+  <h3>Task 9.3.2: Добавить функциям defer </h3>
+  <pre>
+    Добавьте всем функциям в прототип метод defer(ms),
+    который откладывает вызов функции на ms миллисекунд.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Идентичное решение
+    <b>My solution</b>
+    Function.prototype.defer = function(ms) {
+      var f = this;
+      setTimeout(f, ms);
+    }
+
+    function f() {
+      console.log( "привет" );
+    }
+
+    f.defer(1000); // выведет "привет" через 1 секунду
+
+    <b>Not my solution</b>
+      Function.prototype.defer = function(ms) {
+        setTimeout(this, ms);
+      }
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    Function.prototype.defer = function(ms) {
+      var f = this;
+      setTimeout(f, ms);
+    }
+
+    function f() {
+      console.log( "привет" );
+    }
+
+    f.defer(1000); // выведет "привет" через 1 секунду
+  </script>
+
+
+
+  <h3>Task 9.3.3: Добавить функциям defer с аргументами </h3>
+  <pre>
+    Добавьте всем функциям в прототип метод defer(ms), который возвращает
+    обёртку, откладывающую вызов функции на ms миллисекунд.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Идентичное решение
+    <b>My solution</b>
+      Function.prototype.defer = function(ms) {
+        var f = this;
+
+        return function() {
+          var arg = arguments;
+          setTimeout(function() {f.apply(this, arg)}, ms);
+        }
+
+      }
+
+      function f(a, b) {
+        alert( a + b );
+      }
+
+      f.defer(1000)(1, 2); // выведет 3 через 1 секунду.
+
+    <b>Not my solution</b>
+    Function.prototype.defer = function(ms) {
+      var f = this;
+      return function() {
+        var args = arguments,
+          context = this;
+        setTimeout(function() {
+          f.apply(context, args);
+        }, ms);
+      }
+      }
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    Function.prototype.defer = function(ms) {
+      var f = this;
+
+      return function() {
+        var arg = arguments;
+        setTimeout(function() {f.apply(this, arg)}, ms);
+      }
+
+    }
+
+    function f(a, b) {
+      console.log( a + b );
+    }
+
+    f.defer(1000)(1, 2); // выведет 3 через 1 секунду.
+  </script>
+
+
+
+
+  <!--**********
+  * Свои классы на прототипах
+  ************-->
+
+  <h1>9.4. Свои классы на прототипах </h1>
+  <h3>Task 9.4.1: Перепишите в виде класса  </h3>
+  <pre>
+    Есть класс CoffeeMachine, заданный в функциональном стиле.
+    Задача: переписать CoffeeMachine в виде класса с использованием
+    прототипа.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function CoffeeMachine(power) {
+      this._waterAmount = 0;
+      this._power = power;
+
+      // this._WATER_HEAT_CAPACITY = 4200;
+      //
+      // this._getTimeToBoil = function() {
+      //   return this._waterAmount * this._WATER_HEAT_CAPACITY * 80 / power;
+      //}
+
+    }
+
+    CoffeeMachine.prototype.WATER_HEAT_CAPACITY = 4200;
+
+    CoffeeMachine.prototype.run = function() {
+      setTimeout(function() {
+        alert( 'Кофе готов!' );
+      }, this._getTimeToBoil());
+    };
+
+    CoffeeMachine.prototype.setWaterAmount = function(amount) {
+      this._waterAmount = amount;
+    };
+
+    CoffeeMachine.prototype._getTimeToBoil = function() {
+      return this._waterAmount * this.WATER_HEAT_CAPACITY * 80 / this._power;
+    }
+
+    var coffeeMachine = new CoffeeMachine(10000);
+    coffeeMachine.setWaterAmount(50);
+    coffeeMachine.run();
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function CoffeeMachine(power) {
+      this._waterAmount = 0;
+      this._power = power;
+    }
+
+    CoffeeMachine.prototype.WATER_HEAT_CAPACITY = 4200;
+
+    CoffeeMachine.prototype.run = function() {
+      setTimeout(function() {
+        console.log( 'Кофе готов!' );
+      }, this._getTimeToBoil());
+    };
+
+    CoffeeMachine.prototype.setWaterAmount = function(amount) {
+      this._waterAmount = amount;
+    };
+
+    CoffeeMachine.prototype._getTimeToBoil = function() {
+      return this._waterAmount * this.WATER_HEAT_CAPACITY * 80 / this._power;
+    }
+
+    var coffeeMachine = new CoffeeMachine(10000);
+    coffeeMachine.setWaterAmount(50);
+    coffeeMachine.run();
+
+  </script>
+
+
+
+  <h3>Task 9.4.2: Хомяки с __proto__  </h3>
+  <pre>
+    Вы – руководитель команды, которая разрабатывает игру, хомяковую ферму. Один из
+    программистов получил задание создать класс «хомяк» (англ – "Hamster").
+    Объекты-хомяки должны иметь массив food для хранения еды и метод found для добавления.
+    Ниже – его решение. При создании двух хомяков, если поел один – почему-то
+    сытым становится и второй тоже.
+
+    В чём дело? Как поправить?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Hamster() {
+      this.food = [];
+    }
+
+    // Hamster.prototype.food = []; // пустой "живот"
+
+    Hamster.prototype.found = function(something) {
+      this.food.push(something);
+    };
+
+    // Создаём двух хомяков и кормим первого
+    var speedy = new Hamster();
+    var lazy = new Hamster();
+
+    speedy.found("яблоко");
+    speedy.found("орех");
+
+    document.write( speedy.food.length, "<br>" ); // 2
+    document.write( lazy.food.length ); // 1 (!??)
+
+  </script>
+
+
+
+  <!--**********
+  * Наследование классов в JavaScript
+  ************-->
+
+  <h1>9.5. Наследование классов в JavaScript </h1>
+  <h3>Task 9.5.1_1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    console.dir([1,2,3]);
+
+  </script>
+
+
+  <hr>
+
+
+
+  <h3>Task 9.5.1: Найдите ошибку в наследовании </h3>
+  <pre>
+    Найдите ошибку в прототипном наследовании. К чему она приведёт?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution same</b>
+    function Animal(name) {
+      this.name = name;
+    }
+
+    Animal.prototype.walk = function() {
+      document.write( "ходит " + this.name );
+      document.write('< br>');
+    };
+
+    function Rabbit(name) {
+      this.name = name;
+    }
+    Rabbit.prototype = Animal.prototype; // Не правильно!
+    //нужно так
+    //Rabbit.prototype = Object.create(Animal.prototype);
+
+    Rabbit.prototype.walk = function() {
+      document.write( "прыгает! и ходит: " + this.name );
+      document.write('< br>');
+    };
+
+    var cow = new Animal('Корова');
+
+    cow.walk(); // прыгает! и ходит: Корова (!)
+
+    //***
+    var obj1 = {
+      name: "Den"
+    };
+    var a1 = 5;
+
+    var a2 = a1;
+    var obj2 = obj1;
+
+    a2 = 10;
+    obj2.name = "Petya";
+
+
+    document.write(a1);
+    document.write('< br>');
+    document.write(obj1.name);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Animal(name) {
+      this.name = name;
+    }
+
+    Animal.prototype.walk = function() {
+      document.write( "ходит " + this.name );
+      document.write('<br>');
+    };
+
+    function Rabbit(name) {
+      this.name = name;
+    }
+    Rabbit.prototype = Animal.prototype; // Не правильно!
+    //нужно так
+    //Rabbit.prototype = Object.create(Animal.prototype);
+
+    Rabbit.prototype.walk = function() {
+      document.write( "прыгает! и ходит: " + this.name );
+      document.write('<br>');
+    };
+
+    var cow = new Animal('Корова');
+
+    cow.walk(); // прыгает! и ходит: Корова (!)
+
+    //***
+    var obj1 = {
+      name: "Den"
+    };
+    var a1 = 5;
+
+    var a2 = a1;
+    var obj2 = obj1;
+
+    a2 = 10;
+    obj2.name = "Petya";
+
+
+    document.write(a1);
+    document.write('<br>');
+    document.write(obj1.name);
+
+  </script>
+
+
+
+  <h3>Task 9.5.2: В чём ошибка в наследовании </h3>
+  <pre>
+    Найдите ошибку в прототипном наследовании. К чему она приведёт?
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution same</b>
+    function Animal_2(name) {
+      this.name = name;
+
+      this.walk = function() {
+        document.write( "ходит " + this.name ); //Не правильно!
+      };
+
+    }
+
+    //нужно
+    // Animal.prototype.walk = function() {
+    //   document.write( "ходит " + this.name );
+    // };
+
+    function Rabbit_2(name) {
+      Animal_2.apply(this, arguments);
+    }
+    Rabbit_2.prototype = Object.create(Animal_2.prototype);
+
+    Rabbit_2.prototype.walk = function() {
+      document.write( "прыгает " + this.name );
+    };
+
+    var rabbit_2 = new Rabbit_2("Кроль");
+    rabbit_2.walk();  // ходит Кроль
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Animal_2(name) {
+      this.name = name;
+
+      this.walk = function() {
+        document.write( "ходит " + this.name ); //Не правильно!
+      };
+
+    }
+
+    //нужно
+    // Animal.prototype.walk = function() {
+    //   document.write( "ходит " + this.name );
+    // };
+
+    function Rabbit_2(name) {
+      Animal_2.apply(this, arguments);
+    }
+    Rabbit_2.prototype = Object.create(Animal_2.prototype);
+
+    Rabbit_2.prototype.walk = function() {
+      document.write( "прыгает " + this.name );
+    };
+
+    var rabbit_2 = new Rabbit_2("Кроль");
+    rabbit_2.walk();  // ходит Кроль
+
+  </script>
+
+
+  <h3>Task 9.5.3: Класс "часы" </h3>
+  <pre>
+    Есть реализация часиков, оформленная в виде одной функции-конструктора.
+    У неё есть приватные свойства timer, template и метод render.
+    Задача: переписать часы на прототипах.
+    Приватные свойства и методы сделать защищёнными.
+
+    P.S. Часики тикают в браузерной консоли (надо открыть её, чтобы увидеть).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    function Clock(options) {
+
+      this._template = options.template;
+    }
+
+    Clock.prototype._render = function() {
+      var date = new Date();
+
+      var hours = date.getHours();
+      if (hours < 10) hours = '0' + hours;
+
+      var min = date.getMinutes();
+      if (min < 10) min = '0' + min;
+
+      var sec = date.getSeconds();
+      if (sec < 10) sec = '0' + sec;
+
+      var output = this._template.replace('h', hours).replace('m', min).replace('s', sec);
+
+      console.log(output);
+    }
+
+    Clock.prototype.stop = function() {
+      clearInterval(this._timer);
+    };
+
+    Clock.prototype.start = function() {
+      this._render();
+      var self = this;
+      this._timer = setInterval(function(){
+        self._render();
+      }, 1000);
+    }
+
+    var clock = new Clock({
+      template: 'h:m:s'
+    });
+    clock.start();
+    //clock.stop();
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function Clock(options) {
+      this._template = options.template;
+    }
+
+    Clock.prototype._render = function() {
+      var date = new Date();
+
+      var hours = date.getHours();
+      if (hours < 10) hours = '0' + hours;
+
+      var min = date.getMinutes();
+      if (min < 10) min = '0' + min;
+
+      var sec = date.getSeconds();
+      if (sec < 10) sec = '0' + sec;
+
+      var output = this._template.replace('h', hours).replace('m', min).replace('s', sec);
+
+      console.log(output);
+    }
+
+    Clock.prototype.stop = function() {
+      clearInterval(this._timer);
+    };
+
+    // Clock.prototype.start = function() {
+    //   this._render();
+    //   var self = this;
+    //   this._timer = setInterval(function(){
+    //     self._render();
+    //   }, 1000);
+    // }
+
+    // var clock = new Clock({
+    //   template: 'h:m:s'
+    // });
+    // clock.start();
+    // clock.stop();
+
+  </script>
+
+
+
+  <h3>Task 9.5.4: Класс "расширенные часы" </h3>
+  <pre>
+    Есть реализация часиков на прототипах. Создайте класс,
+    расширяющий её, добавляющий поддержку параметра precision,
+    который будет задавать частоту тика в setInterval.
+    Значение по умолчанию: 1000.
+
+    Для этого класс Clock надо унаследовать. Пишите ваш новый код в
+    файле extended-clock.js.
+    Исходный класс Clock менять нельзя.
+    Пусть конструктор потомка вызывает конструктор родителя.
+    Это позволит избежать проблем при расширении Clock новыми опциями.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Не добавил по умолчанию, зато добавил конструктор
+    <b>My solution</b>
+    function ExtendedClock(options) {
+      Clock.apply(this, arguments);
+      this._precision = options.precision ;
+    }
+
+    ExtendedClock.prototype = Object.create(Clock.prototype);
+    ExtendedClock.prototype.constructor = ExtendedClock;
+
+    ExtendedClock.prototype.start = function() {
+      //Clock.prototype.start.apply(this);
+      this._render();
+      var self = this;
+
+      this._timer = setInterval(function(){
+        self._render();
+      }, this._precision);
+    }
+
+    var lowResolutionClock = new ExtendedClock({
+        template: 'h:m:s',
+        precision: 10000
+    });
+
+    lowResolutionClock.start();
+
+
+    <b>Not my solution</b>
+    function ExtendedClock(options) {
+      Clock.apply(this, arguments);
+      this._precision = +options.precision || 1000; // Добавлено оп умолчанию
+    }
+
+    ExtendedClock.prototype = Object.create(Clock.prototype);
+
+    ExtendedClock.prototype.start = function() {
+      this._render();
+      var self = this;
+      this._timer = setInterval(function() {
+        self._render();
+      }, this._precision);
+    };
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    /*
+	Надо: часы, которые тикают раз в 10 секунд (точность 10000)
+    var lowResolutionClock = new ExtendedClock({
+        template: 'h:m:s',
+        precision: 10000
+    });
+
+    lowResolutionClock.start();
+    */
+
+
+    function ExtendedClock(options) {
+      Clock.apply(this, arguments);
+      this._precision = options.precision ;
+    }
+
+    ExtendedClock.prototype = Object.create(Clock.prototype);
+    ExtendedClock.prototype.constructor = ExtendedClock;
+
+    ExtendedClock.prototype.start = function() {
+      //Clock.prototype.start.apply(this);
+      this._render();
+      var self = this;
+
+      this._timer = setInterval(function(){
+        self._render();
+      }, this._precision);
+    }
+
+    var lowResolutionClock = new ExtendedClock({
+        template: 'h:m:s',
+        precision: 10000
+    });
+
+    lowResolutionClock.start();
+
+  </script>
+
+
+
+  <h3>Task 9.5.5: Меню с таймером для анимации </h3>
+  <pre>
+    Есть класс Menu. У него может быть два состояния: открыто STATE_OPEN и закрыто STATE_CLOSED.
+
+Создайте наследника AnimatingMenu, который добавляет третье состояние STATE_ANIMATING.
+
+    При вызове open() состояние меняется на STATE_ANIMATING, а через 1 секунду,
+    по таймеру, открытие завершается вызовом open() родителя.
+    Вызов close() при необходимости отменяет таймер анимации (назначаемый в open) и
+    передаёт вызов родительскому close.
+    Метод showState для нового состояния выводит "анимация", для остальных – полагается на родителя.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Не правильно
+    <b>My solution</b>
+    function Menu() {
+      // this.STATE_OPEN = false;
+      // this.STATE_CLOSED = true;
+    }
+
+    Menu.prototype.STATE_OPEN = false;
+    Menu.prototype.STATE_CLOSED = true;
+
+    Menu.prototype.open = function() {
+      this.STATE_OPEN = true;
+      this.STATE_CLOSED = false;
+    }
+
+    Menu.prototype.close = function() {
+      this.STATE_OPEN = false;
+      this.STATE_CLOSED = true;
+    }
+
+    Menu.prototype.showState = function() {
+      var state;
+
+      if (this.STATE_OPEN) {
+        state = 'Открыто';
+      } else if (this.STATE_CLOSED) {
+        state = 'Закрыто';
+      }
+
+      alert(state);
+    }
+
+    function AnimatingMenu()  {
+      this.STATE_ANIMATING = false;
+      // this.STATE_OPEN = false;
+      // this.STATE_CLOSED = true;
+    }
+
+    AnimatingMenu.prototype = Object.create(Menu.prototype);
+    AnimatingMenu.prototype.constructor = AnimatingMenu;
+
+    AnimatingMenu.prototype.open = function() {
+      this.STATE_ANIMATING = true;
+
+      var self = this;
+
+      this._timer_1 = setTimeout(function(){
+        self.STATE_ANIMATING = false;
+        Menu.prototype.open();
+      }, 1000);
+    }
+
+    AnimatingMenu.prototype.close = function() {
+      clearTimeout(this._timer_1);
+      Menu.prototype.close();
+    }
+
+    AnimatingMenu.prototype.showState = function() {
+      if (this.STATE_ANIMATING) {
+          alert("анимация");
+      }else (Menu.prototype.showState());
+    }
+
+    var Menu1 = new Menu();
+    var menu = new AnimatingMenu();
+
+    menu.showState(); // закрыто
+
+    menu.open();
+    menu.showState(); // анимация
+
+    setTimeout(function() {
+      menu.showState(); // открыто
+
+      menu.close();
+      menu.showState(); // закрыто (закрытие без анимации)
+    }, 1000);
+
+    <b> Not my solution</b>
+    function Menu(state) {
+      this._state = state || this.STATE_CLOSED;
+    }
+
+    Menu.prototype.STATE_OPEN = 1;
+    Menu.prototype.STATE_CLOSED = 0;
+
+    Menu.prototype.open = function() {
+      this._state = this.STATE_OPEN;
+    };
+
+    Menu.prototype.close = function() {
+      this._state = this.STATE_CLOSED;
+    };
+
+    Menu.prototype._stateAsString = function() {
+      switch (this._state) {
+        case this.STATE_OPEN:
+          return 'открыто';
+
+        case this.STATE_CLOSED:
+          return 'закрыто';
+      }
+    };
+
+    Menu.prototype.showState = function() {
+      alert(this._stateAsString());
+    }
+
+
+    function AnimatingMenu() {
+      Menu.apply(this, arguments);
+    }
+
+    AnimatingMenu.prototype = Object.create(Menu.prototype);
+
+    AnimatingMenu.prototype.STATE_ANIMATING = 2;
+
+    AnimatingMenu.prototype.open = function() {
+      var self = this;
+
+      this._state = this.STATE_ANIMATING;
+
+      this._timer = setTimeout(function() {
+        Menu.prototype.open.call(self);
+      }, 1000);
+    };
+
+    AnimatingMenu.prototype.close = function() {
+      clearTimeout(this._timer);
+      Menu.prototype.close.apply(this);
+    };
+
+    AnimatingMenu.prototype._stateAsString = function() {
+
+      switch (this._state) {
+        case this.STATE_ANIMATING:
+          return 'анимация';
+
+        default:
+          return Menu.prototype._stateAsString.call(this);
+      }
+    };
+
+    // тест, использование..
+    var menu = new AnimatingMenu();
+
+    menu.showState(); // закрыто
+
+    menu.open();
+    menu.showState(); // анимация
+
+    setTimeout(function() { // через 1 секунду
+      menu.showState(); // открыто
+
+      menu.close();
+      menu.showState(); // закрыто
+    }, 1000);
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+/*
+    function Menu_1() {
+    }
+
+    Menu_1.prototype.STATE_OPEN = false;
+    Menu_1.prototype.STATE_CLOSED = true;
+
+    Menu_1.prototype.open = function() {
+      this.STATE_OPEN = true;
+      this.STATE_CLOSED = false;
+    }
+
+    Menu_1.prototype.close = function() {
+      this.STATE_OPEN = false;
+      this.STATE_CLOSED = true;
+    }
+
+    Menu_1.prototype.showState = function() {
+      var state;
+
+      if (this.STATE_OPEN) {
+        state = 'Открыто';
+      } else if (this.STATE_CLOSED) {
+        state = 'Закрыто';
+      }
+
+      alert(state);
+    }
+
+    function AnimatingMenu_1()  {
+      this.STATE_ANIMATING = false;
+    }
+
+    AnimatingMenu_1.prototype = Object.create(Menu_1.prototype);
+    AnimatingMenu_1.prototype.constructor = AnimatingMenu_1;
+
+    AnimatingMenu_1.prototype.open = function() {
+      this.STATE_ANIMATING = true;
+
+      var self = this;
+
+      this._timer_1 = setTimeout(function(){
+        self.STATE_ANIMATING = false;
+        Menu_1.prototype.open();
+      }, 1000);
+    }
+
+    AnimatingMenu_1.prototype.close = function() {
+      clearTimeout(this._timer_1);
+      Menu_1.prototype.close();
+    }
+
+    AnimatingMenu_1.prototype.showState = function() {
+      if (this.STATE_ANIMATING) {
+          alert("анимация");
+      }else (Menu_1.prototype.showState());
+    }
+
+    var Menu1_1 = new Menu_1();
+    var menu_1 = new AnimatingMenu_1();
+
+    menu_1.showState(); // закрыто
+
+    menu_1.open();
+    menu_1.showState(); // анимация
+
+    setTimeout(function() {
+      menu_1.showState(); // открыто
+
+      menu_1.close();
+      menu_1.showState(); // закрыто (закрытие без анимации)
+    }, 1000);
+*/
+
+    //Not my solution
+    function Menu(state) {
+      this._state = state || this.STATE_CLOSED;
+    }
+
+    Menu.prototype.STATE_OPEN = 1;
+    Menu.prototype.STATE_CLOSED = 0;
+
+    Menu.prototype.open = function() {
+      this._state = this.STATE_OPEN;
+    };
+
+    Menu.prototype.close = function() {
+      this._state = this.STATE_CLOSED;
+    };
+
+    Menu.prototype._stateAsString = function() {
+      switch (this._state) {
+        case this.STATE_OPEN:
+          return 'открыто';
+
+        case this.STATE_CLOSED:
+          return 'закрыто';
+      }
+    };
+
+    Menu.prototype.showState = function() {
+      alert(this._stateAsString());
+    }
+
+
+    function AnimatingMenu() {
+      Menu.apply(this, arguments);
+    }
+
+    AnimatingMenu.prototype = Object.create(Menu.prototype);
+    AnimatingMenu.prototype.constructor = AnimatingMenu;
+
+    AnimatingMenu.prototype.STATE_ANIMATING = 2;
+
+    AnimatingMenu.prototype.open = function() {
+      var self = this;
+
+      this._state = this.STATE_ANIMATING;
+
+      this._timer = setTimeout(function() {
+        Menu.prototype.open.call(self);
+      }, 1500);
+    };
+
+    AnimatingMenu.prototype.close = function() {
+      clearTimeout(this._timer);
+      console.log(this == menu);
+      Menu.prototype.close.apply(this);
+    };
+
+    AnimatingMenu.prototype._stateAsString = function() {
+
+      switch (this._state) {
+        case this.STATE_ANIMATING:
+          return 'анимация';
+
+        default:
+          return Menu.prototype._stateAsString.call(this);
+      }
+    };
+
+    // тест, использование..
+    var menu = new AnimatingMenu();
+    //alert(menu.constructor);
+
+    menu.showState(); // закрыто
+
+    menu.open();
+    menu.showState(); // анимация
+
+    setTimeout(function() { // через 1 секунду
+      menu.showState(); // открыто
+
+      menu.close();
+      menu.showState(); // закрыто
+    }, 1000);
+
+  </script>
+
+  <p><b>PS: - Методы выносим в прототип функции-конструктор</b></p>
+  <p><b> - Константы, (т.е с верхенем регистре) выносим в протип функции-конструктор</b></p>
+  <p><b> - Защищенные свойства, (т.е. пишутся с нижним подчеркиванием) пишутся в саму функцию-конструктор</b></p>
+  <p><b> - Вспомогательные функции-методы выносим в защищенный метод протипа функции-конструктор</b></p>
+
+
+
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

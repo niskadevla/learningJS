@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Learning JS 4.7</title>
+</head>
+<body>
+
+  <!--**********
+  *  Массивы
+  ************-->
+
+  <h1>4.7. Массивы с числовыми индексами</h1>
+  <h3>Task 4.7.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var fruits = ["Яблоки", "Груши", "Сливы"];
+    document.write(fruits);
+    document.write("<br>");
+
+    // Ведет себя как объект, т.е. данные не копируются в переменную, а передается ссылка
+    var vag = fruits;
+    vag[0] = "Помидоры";
+    document.write(fruits);
+    document.write("<br>");
+    document.write(vag);
+    document.write("<br>");
+    console.log(vag);
+
+    // Примитивная переменная клонируется целиком
+    var a, b;
+    a = 3;
+    b = a;
+    b = 4;
+    document.write(a + "<br>" + b);
+
+  </script>
+
+
+  <h3>Task 4.7.2: pop, push, shift, unshift </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    // Начало массива
+    var fru = ["Яблоки", "Груши", "Сливы"];
+    document.write(fru);
+    document.write("<br>");
+    document.write( "fru.pop() // " + fru.pop() ); // Сливы
+    document.write("<br>");
+    document.write(fru); // Яблоки,Груши
+    document.write("<br>");
+    document.write( fru.push("Апельсин")); // 3 (Длина массива)
+    document.write("<br>");
+    document.write(fru); // Яблоки,Груши,Апельсин
+
+    // Конец массива
+    var fr = ["Яблоки", "Груши", "Сливы"];
+    document.write("<br>");
+    document.write("<br>");
+    document.write( fr.shift() ); // Яблоки
+    document.write("<br>");
+    document.write(fr); // Груши,Сливы
+    document.write("<br>");
+    document.write( fr.unshift("Бананы") ); // 3 (Длина массива)
+    console.log( fr.unshift("Бананы") ); // 4 (Длина масива 4)
+    document.write("<br>");
+    document.write(fr);
+    document.write("<br>");
+
+    fr.push("Апельсин", "Персик");
+    fr.unshift("Ананас", "Лимон");
+    document.write(fr)
+
+  </script>
+
+
+
+  <h3>Task 4.7.3: Внутреннее устройство массива</h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var arr = [];
+
+    arr[9] = 5;
+    document.write(arr); //,,,,,,,,,5
+    document.write("<br>");
+
+    document.write( arr.length ); // последний индекс + 1
+    document.write("<br>");
+
+    // Самый простой способ очистить массив – это arr.length=0.
+    arr.length = 0;
+    document.write(arr); // Пусто будет
+
+  </script>
+
+  <hr>
+
+
+  <h3>Task 4.7.4: Получить последний элемент массива </h3>
+  <pre>
+    Как получить последний элемент из произвольного массива?
+
+    У нас есть массив goods. Сколько в нем элементов – не знаем, но можем прочитать из goods.length.
+
+    Напишите код для получения последнего элемента goods.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    'use strict';
+
+    var goods = [2, "dew", 34, 567];
+    var lastElem = goods[goods.length-1];
+    document.write(lastElem);
+    document.write("< br>");
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var goods = [2, "dew", 34, 567];
+    var lastElem = goods[goods.length-1];
+    document.write(lastElem);
+    document.write("<br>");
+
+  </script>
+
+
+  <h3>Task 4.7.5: Добавить новый элемент в массив </h3>
+  <pre>
+    Как добавить элемент в конец произвольного массива?
+
+    У нас есть массив goods. Напишите код для добавления в его конец значения «Компьютер».
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    var goods = [2, "dew", 34, 567];
+    goods.push("Компьютер");
+    document.write(goods);
+    document.write("< br>");
+
+    <b>Not my solution</b>
+    goods[goods.length] = 'Компьютер'
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var goods = [2, "dew", 34, 567];
+    goods.push("Компьютер");
+    document.write(goods);
+    document.write("<br>");
+
+  </script>
+
+
+  <h3>Task 4.7.6: Создание массива </h3>
+  <pre>
+    Задача из 5 шагов-строк:
+
+    Создайте массив styles с элементами «Джаз», «Блюз».
+    Добавьте в конец значение «Рок-н-Ролл»
+    Замените предпоследнее значение с конца на «Классика». Код замены предпоследнего значения должен работать для массивов любой длины.
+    Удалите первое значение массива и выведите его alert.
+    Добавьте в начало значения «Рэп» и «Регги».
+
+      Массив в результате каждого шага:
+
+      Джаз, Блюз
+      Джаз, Блюз, Рок-н-Ролл
+      Джаз, Классика, Рок-н-Ролл
+      Классика, Рок-н-Ролл
+      Рэп, Регги, Классика, Рок-н-Ролл
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    var styles = ["Джаз", "Блюз"];
+
+    document.write(styles);
+    document.write("<br>");
+
+    styles.push("Рок-н-Ролл");
+    document.write(styles);
+    document.write("<br>");
+
+    styles[styles.length - 2] = "Классика";
+    document.write(styles);
+    document.write("<br>");
+
+    styles.shift();
+    document.write(styles);
+    document.write("<br>");
+
+    styles.unshift("Рэп", "Рэгги");
+    document.write(styles);
+    document.write("<br>");
+
+    <b>Not my solution</b>
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    var styles = ["Джаз", "Блюз"];
+
+    document.write(styles);
+    document.write("<br>");
+
+    styles.push("Рок-н-Ролл");
+    document.write(styles);
+    document.write("<br>");
+
+    styles[styles.length - 2] = "Классика";
+    document.write(styles);
+    document.write("<br>");
+
+    styles.shift();
+    document.write(styles);
+    document.write("<br>");
+
+    styles.unshift("Рэп", "Рэгги");
+    document.write(styles);
+    document.write("<br>");
+
+  </script>
+
+
+  <h3>Task 4.7.7: Получить случайное значение из массива </h3>
+  <pre>
+    Напишите код для вывода alert случайного значения из массива:
+
+    var arr = ["Яблоко", "Апельсин", "Груша", "Лимон"];
+
+    P.S. Код для генерации случайного целого от min to max включительно:
+
+    var rand = min + Math.floor(Math.random() * (max + 1 - min));
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    // У меня хуже код
+    function randomNum(min, max) {
+      return min + Math.floor( Math.random()*(max + 1 - min) );
+    }
+
+    var arr = ["Яблоко", "Апельсин", "Груша", "Лимон", "Банан", "Клубника", "Слива", "Виноград", "Малина", "Айва", "Абрикос", "Вишня", "Гранат", "Мандарин"];
+    var min = 0,
+        max= arr.length - 1;
+
+    document.write( arr[randomNum(min, max)] );
+
+    <b>Not my solution</b>
+    var arr = ["Яблоко", "Апельсин", "Груша", "Лимон"];
+
+    var rand = Math.floor(Math.random() * arr.length);
+
+    alert( arr[rand] );
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function randomNum(min, max) {
+      return min + Math.floor( Math.random()*(max + 1 - min) );
+    }
+
+    var arr = ["Яблоко", "Апельсин", "Груша", "Лимон", "Банан", "Клубника", "Слива", "Виноград", "Малина", "Айва", "Абрикос", "Вишня", "Гранат", "Мандарин"];
+    var min = 0,
+        max= arr.length - 1;
+
+    document.write( arr[randomNum(min, max)] );
+
+  </script>
+
+
+
+  <h3>Task 4.7.8: Создайте калькулятор для введённых значений </h3>
+  <pre>
+    Напишите код, который:
+
+    Запрашивает по очереди значения при помощи prompt и сохраняет их в массиве.
+    Заканчивает ввод, как только посетитель введёт пустую строку, не число или нажмёт «Отмена».
+    При этом ноль 0 не должен заканчивать ввод, это разрешённое число.
+    Выводит сумму всех значений массива
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n)
+    }
+
+    var arr = [];
+    var sum = 0;
+
+    while (true) {
+      var val = prompt('Enter number', '');
+
+      if ( isNumeric(val) ) {
+        arr.push(+val);
+        sum += +val;
+      } else {
+        document.write("Sum is number = " + sum);
+        break;
+      }
+    }
+
+    //Подсчет суммы из массива правильней
+    <b>Not my solution</b>
+    var numbers = [];
+
+    while (true) {
+
+      var value = prompt("Введите число", 0);
+
+      if (value === "" || value === null || isNaN(value)) break;
+
+      numbers.push(+value);
+    }
+
+    var sum = 0;
+    for (var i = 0; i < numbers.length; i++) {
+      sum += numbers[i];
+    }
+
+    alert( sum );
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n)
+    }
+
+    var arr = [];
+    var sum = 0;
+
+    while (true) {
+      var val = prompt('Enter number', '');
+
+      if ( isNumeric(val) ) {
+        arr.push(+val);
+        sum += +val;
+      } else {
+        document.write("Sum is number = " + sum);
+        break;
+      }
+    }
+
+  </script>
+
+
+  <h3>Task 4.7.9: Поиск в массиве </h3>
+  <pre>
+    Создайте функцию find(arr, value), которая ищет в массиве arr значение value и возвращает его номер, если найдено, или -1, если не найдено.
+
+    Например:
+
+    arr = ["test", 2, 1.5, false];
+
+    find(arr, "test"); // 0
+    find(arr, 2); // 1
+    find(arr, 1.5); // 2
+
+    find(arr, 0); // -1
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    <b>My solution</b>
+    'use strict';
+
+    arr = ["test", 2, 1.15, false];
+
+    function find(arr, value) {
+
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === value) return i;
+      }
+
+      return -1;
+    }
+
+    document.write( find(arr, 1.15) );
+
+    document.write("< br>");
+    document.write(arr.indexOf);
+    console.log(arr.indexOf);
+
+    // Лучше и кросбраузерный способ
+    <b>Not my solution</b>
+    // создаем пустой массив и проверяем поддерживается ли indexOf
+    if ([].indexOf) {
+
+      // Можно использовать только этот кусок кода
+      var find = function(array, value) {
+        return array.indexOf(value);
+      }
+
+    } else {
+      var find = function(array, value) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i] === value) return i;
+        }
+
+        return -1;
+      }
+
+    }
+
+  </pre>
+  <script type="text/javascript">
+    'use strict';
+
+    arr = ["test", 2, 1.15, false];
+
+    function find(arr, value) {
+
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === value) return i;
+      }
+
+      return -1;
+    }
+
+    document.write( find(arr, 1.15) );
+
+    document.write("<br>");
+    document.write(arr.indexOf);
+    console.log(arr.indexOf);
+  </script>
+
+
+
+<h3>Task 4.7.10: Фильтр диапазона </h3>
+<pre>
+  Создайте функцию filterRange(arr, a, b), которая принимает массив чисел arr и возвращает новый массив,
+  который содержит только числа из arr из диапазона от a до b. То есть, проверка имеет вид a ≤ arr[i] ≤ b.
+  Функция не должна менять arr.
+
+  Пример работы:
+
+  var arr = [5, 4, 3, 8, 0];
+
+  var filtered = filterRange(arr, 3, 5);
+  // теперь filtered = [5, 4, 3]
+  // arr не изменился
+</pre>
+<h3>Решение</h3>
+<pre>
+  // Мое правильное решение
+  <b>My solution</b>
+  document.write("< br>");
+  document.write("<span style='color: red;'>Вот рабочий вариант</span>")
+  function filterRange(arr, a, b) {
+    a = arr.indexOf(a);
+    b = arr.indexOf(b);
+    var aIndex;
+    var bIndex;
+    var range = [];
+    var j = 0;
+
+    // Если диапазона задан задом наперед, то меняем порядок
+    if (a < b) {
+      aIndex = a;
+      bIndex = b;
+    }
+    else {
+      aIndex = b;
+      bIndex = a;
+    }
+
+    for (var i = aIndex; i <= bIndex; i++) {
+      range[j] = arr[i];
+      j++;
+    }
+
+    return range;
+  }
+
+  var arr = [5, 4, 3, 8, 0];
+  var filtered = filterRange(arr, 5, 0);
+
+  document.write( "<span style='color: red;'>" + filtered + "</span>");
+
+  //Не работает
+  <b>Not my solution</b>
+  document.write("<span style='color: red;'>У Автора не работает</span>")
+  function filterRange2(arr, a, b) {
+  var result = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] >= a && arr[i] <= b) {
+      result.push(arr[i]);
+    }
+  }
+
+  return result;
+  }
+
+  var arr = [5, 4, 3, 8, 0];
+
+  var filtered = filterRange2(arr, 5, 0);
+  alert( filtered );
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  document.write("<span style='color: red;'>У Автора не работает</span>")
+  function filterRange2(arr, a, b) {
+  var result = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] >= a && arr[i] <= b) {
+      result.push(arr[i]);
+    }
+  }
+
+  return result;
+  }
+
+  var arr = [5, 4, 3, 8, 0];
+
+  var filtered = filterRange2(arr, 5, 0);
+  alert( filtered );
+
+
+  document.write("<br>");
+  document.write("<span style='color: red;'>Вот рабочий вариант</span>")
+  function filterRange(arr, a, b) {
+    a = arr.indexOf(a);
+    b = arr.indexOf(b);
+    var aIndex;
+    var bIndex;
+    var range = [];
+    var j = 0;
+
+    // Если диапазона задан задом наперед, то меняем порядок
+    if (a < b) {
+      aIndex = a;
+      bIndex = b;
+    }
+    else {
+      aIndex = b;
+      bIndex = a;
+    }
+
+    for (var i = aIndex; i <= bIndex; i++) {
+      range[j] = arr[i];
+      j++;
+    }
+
+    return range;
+  }
+
+  var arr = [5, 4, 3, 8, 0];
+  var filtered = filterRange(arr, 0, 5);
+
+  document.write( "<span style='color: red;'>" + filtered + "</span>");
+
+</script>
+
+
+
+<h3>Task 4.7.11: Решето Эратосфена </h3>
+<pre>
+  Целое число, большее 1, называется простым, если оно не делится нацело ни на какое другое, кроме себя и 1.
+
+  Древний алгоритм «Решето Эратосфена» для поиска всех простых чисел до n выглядит так:
+
+      Создать список последовательных чисел от 2 до n: 2, 3, 4, ..., n.
+      Пусть p=2, это первое простое число.
+      Зачеркнуть все последующие числа в списке с разницей в p, т.е. 2*p, 3*p, 4*p и т.д. В случае p=2 это будут 4,6,8....
+      Поменять значение p на первое не зачеркнутое число после p.
+      Повторить шаги 3-4 пока p2 < n.
+      Все оставшиеся не зачеркнутыми числа – простые.
+
+  Посмотрите также анимацию алгоритма.
+
+  Реализуйте «Решето Эратосфена» в JavaScript, используя массив.
+
+  Найдите все простые числа до 100 и выведите их сумму.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  'use strict';
+
+  var arrayNumber = [];
+  var arr = [];
+  var arrayNumberNew = [];
+
+  var i, j, p, p2, n, count;
+
+  // Создали массив чисел от 2 до n
+  n = 101;
+  p = 2;
+  count = 0;
+  for ( i = 2; i <= n; i++ ) {
+    arrayNumber[i - 2] = i;
+  }
+
+
+  // Главный цикл
+  while (p*p < n) {
+
+    i = p;
+    p2 = i * p;
+
+    //Создаем массив не нужных чисел
+    while (p2 <= n) {
+      arr.push( arrayNumber[ arrayNumber.indexOf(p2) ] );
+      i++;
+      p2 = i * p;
+    }
+
+    // Создаем массив нужных чисел
+    for ( j = 0; j < arrayNumber.length; j++ ) {
+      if (  arr.indexOf(arrayNumber[j]) != -1  ) continue;
+      else arrayNumberNew.push( arrayNumber[j] );
+    }
+
+    count++; // Счетчик
+    n = arrayNumberNew[arrayNumberNew.length - 1]; // Последний элемент массива
+    p = arrayNumberNew[count]; // Следующий элемент в массиве
+    arr.length = 0;
+    arrayNumber.length = 0; // Обнуляем входной массив
+
+    // Переприсваеваем входной массив (становится новым массивом)
+    for (j = 0; j < arrayNumberNew.length; j++) {
+      arrayNumber.push( arrayNumberNew[j] );
+    }
+
+    arrayNumberNew.length = 0;
+
+  }
+
+  //Сумма чисел Эратосфена
+  var sum = 0;
+  for (i = 0; i < arrayNumber.length; i++) {
+    sum += arrayNumber[i];
+  }
+
+  document.write("<br />");
+  document.write(arrayNumber);
+  document.write("<br />");
+  document.write("Sum = " + sum);
+
+
+  // Короче код
+  <b>Not my solution</b>
+  'use strict';
+
+      // шаг 1
+  var arr = [];
+
+  for (var i = 2; i < 100; i++) {
+    arr[i] = true
+  }
+  document.write(arr);
+
+  // шаг 2
+  var p = 2;
+
+  do {
+    // шаг 3
+    for (i = 2 * p; i < 100; i += p) {
+      arr[i] = false;
+    }
+
+    // шаг 4
+    for (i = p + 1; i < 100; i++) {
+      if (arr[i]) break;
+    }
+
+    p = i;
+  } while (p * p < 100); // шаг 5
+
+  // шаг 6 (готово)
+  // посчитать сумму
+  var sum = 0;
+  for (i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      sum += i;
+    }
+  }
+
+
+  document.write("<br />");
+  document.write(arr);
+  document.write("<br />");
+  document.write("Sum = " + sum);
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arrayNumber = [];
+  var arr = [];
+  var arrayNumberNew = [];
+
+  var i, j, p, p2, n, count;
+
+  // Создали массив чисел от 2 до n
+  n = 101;
+  p = 2;
+  count = 0;
+  for ( i = 2; i <= n; i++ ) {
+    arrayNumber[i - 2] = i;
+  }
+
+
+  // Главный цикл
+  while (p*p < n) {
+
+    i = p;
+    p2 = i * p;
+
+    //Создаем массив не нужных чисел
+    while (p2 <= n) {
+      arr.push( arrayNumber[ arrayNumber.indexOf(p2) ] );
+      i++;
+      p2 = i * p;
+    }
+
+    // Создаем массив нужных чисел
+    for ( j = 0; j < arrayNumber.length; j++ ) {
+      if (  arr.indexOf(arrayNumber[j]) != -1  ) continue;
+      else arrayNumberNew.push( arrayNumber[j] );
+    }
+
+    count++; // Счетчик
+    n = arrayNumberNew[arrayNumberNew.length - 1]; // Последний элемент массива
+    p = arrayNumberNew[count]; // Следующий элемент в массиве
+    arr.length = 0;
+    arrayNumber.length = 0; // Обнуляем входной массив
+
+    // Переприсваеваем входной массив (становится новым массивом)
+    for (j = 0; j < arrayNumberNew.length; j++) {
+      arrayNumber.push( arrayNumberNew[j] );
+    }
+
+    arrayNumberNew.length = 0;
+
+  }
+
+  //Сумма чисел Эратосфена
+  var sum = 0;
+  for (i = 0; i < arrayNumber.length; i++) {
+    sum += arrayNumber[i];
+  }
+
+
+  document.write("<br />");
+  document.write(arrayNumber);
+  document.write("<br />");
+  document.write("Sum = " + sum);
+
+</script>
+
+
+
+
+<h3>Task 4.7.12: Подмассив наибольшей суммы </h3>
+<pre>
+  На входе массив чисел, например: arr = [1, -2, 3, 4, -9, 6].
+  Задача – найти непрерывный подмассив arr, сумма элементов которого максимальна.
+  Ваша функция должна возвращать только эту сумму.
+  Например:
+    getMaxSubSum([-1, 2, 3, -9]) = 5 (сумма выделенных)
+    getMaxSubSum([2, -1, 2, 3, -9]) = 6
+    getMaxSubSum([-1, 2, 3, -9, 11]) = 11
+    getMaxSubSum([-2, -1, 1, 2]) = 3
+    getMaxSubSum([100, -9, 2, -3, 5]) = 100
+    getMaxSubSum([1, 2, 3]) = 6 (неотрицательные - берем всех)
+
+    Если все элементы отрицательные, то не берём ни одного элемента и считаем сумму равной нулю:
+      getMaxSubSum([-1, -2, -3]) = 0
+    Постарайтесь придумать решение, которое работает за O(n2), а лучше за O(n) операций.
+</pre>
+<h3>Решение</h3>
+<pre>
+  <i>НЕ ПРАВИЛЬНО</i>
+  <b>My solution</b>
+  'use strict';
+
+function getMaxSubSum_1(arr) {
+  var sum = 0;
+  var n = 0;
+  var p = 0;
+  var i;
+  var j;
+
+  //Проверка на минус и плюс  всех значений
+  // for ( i = 0; i < arr.length; i++) {
+  //   if ( arr[i] < 0) {
+  //     n++;
+  //     if (n == arr.length) {
+  //       return 0};
+  //   }
+  //   else if (arr[i] >= 0) {
+  //     p++;
+  //     sum += arr[i];
+  //     if (p == arr.length) {
+  //       return sum;
+  //     }
+  //   }
+  //   console.log(n + "\n" + p);
+  // }
+
+  sum = 0;
+  n = 0;
+  p = 0;
+  var arr_2 = [];
+
+  for (i = 0; i < arr.length; i++) {
+    for (j = i; j < arr.length; j++) {
+      sum += arr[j];
+      arr_2.push(sum);
+    }
+    // console.log(arr_2 + "\n");
+    sum = 0;
+  }
+
+  sum = 0;
+  for (i = 0; i < arr_2.length; i++) {
+    if (sum < arr_2[i] ) {
+      sum = arr_2[i];
+    }
+  }
+
+  // for (i = 0; i < arr.length; i++) {
+  //   if ( arr[i] < (arr[i] + arr[i+1]) && (arr[i] + arr[i+1]) > sum ) {
+  //     sum = (arr[i] + arr[i+1]);
+  //   }
+  //   else if ( arr[i] > (arr[i] + arr[i+1]) )
+  // }
+  console.log(arr_2);
+  return sum;
+
+}
+
+document.write("< br />");
+document.write( getMaxSubSum_1([1, 2, 3]) );
+
+  <b>Not my solution</b>
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function getMaxSubSum(arr) {
+    var maxSum = 0,
+        partialSum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      partialSum += arr[i];
+      maxSum = Math.max(maxSum, partialSum);
+      if (partialSum < 0) partialSum = 0;
+    }
+    return maxSum;
+  }
+
+  document.write( getMaxSubSum([-1, 2, 3, -9]) ); // 5
+  document.write("<br>");
+  document.write( getMaxSubSum([-1, 2, 3, -9, 11]) ); // 11
+  document.write("<br>");
+  document.write( getMaxSubSum([-2, -1, 1, 2]) ); // 3
+  document.write("<br>");
+  document.write( getMaxSubSum([100, -9, 2, -3, 5]) ); // 100
+  document.write("<br>");
+  document.write( getMaxSubSum([1, 2, 3]) ); // 6
+  document.write("<br>");
+  document.write( getMaxSubSum([-1, -2, -3]) ); // 0
+  document.write("<br>");
+  document.write( getMaxSubSum([2, -1, 2, 3, -9]) ); // 6
+  document.write("<br>");
+  document.write( getMaxSubSum([20, -3, 2, -1, 3]) ); // 21
+  document.write("<br>");
+  document.write( getMaxSubSum([0, -3, 2, -1, 3]) ); // 4
+
+</script>
+
+
+<!--***********
+*
+**************-->
+<h1>4.8. Массивы: методы</h1>
+<h3>Task 4.8.1: Сортировка Sort </h3>
+<pre>
+
+</pre>
+<h3>Решение</h3>
+<pre>
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  [1, -2, 15, 2, 0, 8].sort(function(a, b) {
+    document.write( a + " <> " + b + " ");
+  });
+</script>
+
+
+<h3>Task 4.8.2: Object.keys(obj) </h3>
+<pre>
+
+</pre>
+<h3>Решение</h3>
+<pre>
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var user = {
+      name: "Петя",
+      age: 30
+  };
+
+  var keys = Object.keys(user);
+
+  document.write(keys[0] + " | " + keys[1]);
+</script>
+
+<p>
+  <pre>
+  Итого
+
+Методы массивов:
+
+    push/pop, shift/unshift, splice – для добавления и удаления элементов.
+    join/split – для преобразования строки в массив и обратно.
+    slice – копирует участок массива.
+    sort – для сортировки массива. Если не передать функцию сравнения – сортирует элементы как строки.
+    reverse – меняет порядок элементов на обратный.
+    concat – объединяет массивы.
+    indexOf/lastIndexOf – возвращают позицию элемента в массиве (не поддерживается в IE8-).
+
+Дополнительно:
+
+    Object.keys(obj) возвращает массив свойств объекта.
+  </pre>
+</p>
+
+<hr>
+
+
+
+<h3>Task 4.8.3: Добавить класс в строку </h3>
+<pre>
+  В объекте есть свойство className, которое содержит
+  список «классов» – слов, разделенных пробелом:
+      var obj = {
+    className: 'open menu'
+    }
+  Создайте функцию addClass(obj, cls), которая добавляет в
+  список класс cls, но только если его там еще нет:
+    addClass(obj, 'new'); // obj.className='open menu new'
+    addClass(obj, 'open'); // без изменений (класс уже существует)
+    addClass(obj, 'me'); // obj.className='open menu new me'
+
+alert( obj.className ); // "open menu new me"
+</pre>
+<h3>Решение</h3>
+<pre>
+  // Работает, но не проверяет существует ли вообще такой ключ
+  <b>My solution</b>
+  'use strict';
+
+  function addClass(obj, cls) {
+    var arrClsName = obj.className.split(" ");
+
+    if ( ~arrClsName.indexOf(cls) ) return;
+    else {
+      arrClsName.push(cls);
+      obj.className = arrClsName.join(" ");
+    }
+
+    return obj.className;
+  }
+
+  var obj = {
+    className: 'open menu'
+  };
+
+  addClass(obj, 'new');
+  addClass(obj, 'open');
+  addClass(obj, 'me');
+  addClass(obj, 'mymenu');
+
+  document.write(obj.className);
+
+  <b>Not my solution</b>
+  function addClass(obj, cls) {
+    // Нужная строчка (проверяет существует ли вообще такой ключ)
+    var classes = obj.className ? obj.className.split(' ') : [];
+
+    for (var i = 0; i < classes.length; i++) {
+      if (classes[i] == cls) return; // класс уже есть
+    }
+
+    classes.push(cls); // добавить
+
+    obj.className = classes.join(' '); // и обновить свойство
+}
+
+var obj = {
+  className: 'open menu'
+};
+
+addClass(obj, 'new');
+addClass(obj, 'open');
+addClass(obj, 'me');
+alert(obj.className) // open menu new me
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function addClass(obj, cls) {
+    var arrClsName = obj.className.split(" ");
+
+    if ( ~arrClsName.indexOf(cls) ) return;
+    else {
+      arrClsName.push(cls);
+      obj.className = arrClsName.join(" ");
+    }
+
+    return obj.className;
+  }
+
+  var obj = {
+    className: 'open menu'
+  };
+
+  addClass(obj, 'new');
+  addClass(obj, 'open');
+  addClass(obj, 'me');
+  addClass(obj, 'mymenu');
+
+  document.write(obj.className);
+
+</script>
+
+
+
+<h3>Task 4.8.4: Перевести текст вида border-left-width в borderLeftWidth </h3>
+<pre>
+  Напишите функцию camelize(str), которая преобразует строки вида «my-short-string» в «myShortString».
+  То есть, дефисы удаляются, а все слова после них получают заглавную букву.
+  Например:
+      camelize("background-color") == 'backgroundColor';
+      camelize("list-style-image") == 'listStyleImage';
+      camelize("-webkit-transition") == 'WebkitTransition';
+  Такая функция полезна при работе с CSS.
+
+  P.S. Вам пригодятся методы строк charAt, split и toUpperCase.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  function camelize(str) {
+    var arr = str.split('');
+    for (var i = 0; i < arr.length; i++) {
+      if ( arr[i] == "-") {
+        arr[i + 1] = arr[i + 1].toUpperCase();
+        arr.splice(i,1);
+      }
+    }
+
+    return arr.join('');
+  }
+
+  document.write( camelize("background-color") );
+  document.write("< br>");
+  document.write( camelize("-webkit-transition") );
+  document.write("< br>");
+  document.write( camelize("list-style-image") );
+
+  <b>Not my solution</b>
+  function camelize(str) {
+  var arr = str.split('-');
+
+  for (var i = 1; i < arr.length; i++) {
+    // преобразовать: первый символ с большой буквы
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+  }
+
+  return arr.join('');
+  }
+
+  alert( camelize("background-color") ); // backgroundColor
+  alert( camelize("list-style-image") ); // listStyleImage
+  alert( camelize("-webkit-transition") ); // WebkitTransition
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function camelize(str) {
+    var arr = str.split('');
+    for (var i = 0; i < arr.length; i++) {
+      if ( arr[i] == "-") {
+        arr[i + 1] = arr[i + 1].toUpperCase();
+        arr.splice(i,1);
+      }
+    }
+
+    return arr.join('');
+  }
+
+  document.write( camelize("background-color") );
+  document.write("<br>");
+  document.write( camelize("-webkit-transition") );
+  document.write("<br>");
+  document.write( camelize("list-style-image") );
+
+</script>
+
+
+
+<h3>Task 4.8.5: Функция removeClass </h3>
+<pre>
+  У объекта есть свойство className, которое хранит список «классов» – слов, разделенных пробелами:
+
+var obj = {
+className: 'open menu'
+};
+
+Напишите функцию removeClass(obj, cls), которая удаляет класс cls, если он есть:
+
+removeClass(obj, 'open'); // obj.className='menu'
+removeClass(obj, 'blabla'); // без изменений (нет такого класса)
+
+P.S. Дополнительное усложнение. Функция должна корректно обрабатывать дублирование класса в строке:
+
+obj = {
+className: 'my menu menu'
+};
+removeClass(obj, 'menu');
+alert( obj.className ); // 'my'
+
+Лишних пробелов после функции образовываться не должно.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  function removeClass(obj, cls) {
+    if (!obj.className) return;
+    var classes = obj.className.split(" ");
+
+    for (var i = 0; i < classes.length; i++) {
+      if (classes[i] == cls) {
+        //classes.splice(i, 1);
+        delete classes[i];
+      }
+    }
+    obj.className = classes.join(" ");
+  }
+
+  var obj = {
+    className: "my menu menu open"
+  };
+
+  removeClass(obj, "open");
+  document.write(obj.className);
+  document.write("< br>");
+  removeClass(obj, "menu");
+  document.write(obj.className);
+
+  <b>Not my solution</b>
+  function removeClass(obj, cls) {
+  var classes = obj.className.split(' ');
+
+  for (var i = 0; i < classes.length; i++) {
+    if (classes[i] == cls) {
+      classes.splice(i, 1); // удалить класс
+      i--; // (*)
+    }
+  }
+  obj.className = classes.join(' ');
+
+}
+
+var obj = {
+  className: 'open menu menu'
+}
+
+removeClass(obj, 'blabla');
+removeClass(obj, 'menu')
+alert(obj.className) // open
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function removeClass(obj, cls) {
+    if (!obj.className) return;
+    var classes = obj.className.split(" ");
+
+    for (var i = 0; i < classes.length; i++) {
+      if (classes[i] == cls) {
+        //classes.splice(i, 1);
+        delete classes[i];
+      }
+    }
+    obj.className = classes.join(" ");
+  }
+
+  var obj = {
+    className: "my menu menu open"
+  };
+
+  removeClass(obj, "open");
+  document.write(obj.className);
+  document.write("<br>");
+  removeClass(obj, "menu");
+  document.write(obj.className);
+
+</script>
+
+
+
+<h3>Task 4.8.6: Фильтрация массива "на месте" </h3>
+<pre>
+  Создайте функцию filterRangeInPlace(arr, a, b),
+  которая получает массив с числами arr и удаляет из него все числа вне диапазона a..b.
+  То есть, проверка имеет вид a ≤ arr[i] ≤ b. Функция должна менять сам массив и ничего не возвращать.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  function filterRangeInPlace(arr, a, b) {
+     for (var i = 0; i < arr.length; i++) {
+       if ( !( (a <= arr[i]) && (arr[i] <= b) ) ) {
+         arr.splice(i, 1);
+         i--;
+       }
+     }
+   }
+
+   var arr = [1, 5, 7, 3];
+
+   filterRangeInPlace(arr, 1, 4);
+   document.write(arr);
+
+  <b>Not my solution</b>
+  function filterRangeInPlace(arr, a, b) {
+
+  for (var i = 0; i < arr.length; i++) {
+    var val = arr[i];
+    if (val < a || val > b) {
+      arr.splice(i--, 1);
+    }
+  }
+
+}
+
+var arr = [5, 3, 8, 1];
+
+filterRangeInPlace(arr, 1, 4);
+alert( arr ); // [3, 1]
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function filterRangeInPlace(arr, a, b) {
+     for (var i = 0; i < arr.length; i++) {
+       if ( !( (a <= arr[i]) && (arr[i] <= b) ) ) {
+         arr.splice(i, 1);
+         i--;
+       }
+     }
+   }
+
+   var arr = [1, 5, 7, 3];
+
+   filterRangeInPlace(arr, 1, 4);
+   document.write(arr);
+
+</script>
+
+
+
+<h3>Task 4.8.7: Сортировать в обратном порядке </h3>
+<pre>
+  Как отсортировать массив чисел в обратном порядке?
+  var arr = [5, 2, 1, -10, 8];
+
+// отсортируйте?
+
+alert( arr ); // 8, 5, 2, 1, -10
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  function sortReverse(arr) {
+    arr.sort(function compareNumeric(a, b) {
+      return a-b;
+    });
+    arr.reverse();
+  }
+
+  var arr = [5, 2, 1, -10, 8];
+
+  // отсортируйте?
+
+  sortReverse(arr);
+  document.write( arr ); // 8, 5, 2, 1, -10
+
+  <b>Not my solution</b>
+  var arr = [5, 2, 1, -10, 8];
+
+function compareReversed(a, b) {
+  return b - a;
+}
+
+arr.sort(compareReversed);
+
+alert( arr );
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function sortReverse(arr) {
+    arr.sort(function compareNumeric(a, b) {
+      return a-b;
+    });
+    arr.reverse();
+  }
+
+  var arr = [5, 2, 1, -10, 8];
+
+  // отсортируйте?
+
+  sortReverse(arr);
+  document.write( arr ); // 8, 5, 2, 1, -10
+
+</script>
+
+
+
+<h3>Task 4.8.8: Скопировать и отсортировать массив </h3>
+<pre>
+  Есть массив строк arr. Создайте массив arrSorted – из тех же элементов, но отсортированный.
+
+Исходный массив не должен меняться.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  var arr = ["HTML", "JavaScript", "CSS"];
+  arrSorted = arr.slice();
+  arrSorted.sort();
+  document.write(arrSorted);
+  document.write("<br>");
+  document.write(arr);
+
+  <b>Not my solution</b>
+  var arr = ["HTML", "JavaScript", "CSS"];
+
+var arrSorted = arr.slice().sort();
+
+alert( arrSorted );
+alert( arr );
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arr = ["HTML", "JavaScript", "CSS"];
+  var arrSorted = arr.slice();
+  arrSorted.sort();
+  document.write(arrSorted);
+  document.write("<br>");
+  document.write(arr);
+
+</script>
+
+
+
+<h3>Task 4.8.9: Случайный порядок в массиве </h3>
+<pre>
+  Используйте функцию sort для того, чтобы «перетрясти» элементы массива в случайном порядке.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  var arr = [1, 2, 35, 4, 5];
+
+  arr.sort( function randomOrder(a, b) {
+    return Math.random() - Math.random();
+  } );
+
+  document.write( arr ); // элементы в случ
+
+  <b>Not my solution</b>
+  var arr = [1, 2, 3, 4, 5];
+
+function compareRandom(a, b) {
+  return Math.random() - 0.5;
+}
+
+arr.sort(compareRandom);
+
+alert( arr ); // элементы в случайном порядке, например [3,5,1,2,4]
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arr = [1, 2, 35, 4, 5];
+
+  arr.sort( function randomOrder(a, b) {
+    return Math.random() - Math.random();
+  } );
+
+  document.write( arr ); // элементы в случ
+
+</script>
+
+
+
+<h3>Task 4.8.10: Сортировка объектов </h3>
+<pre>
+  Напишите код, который отсортирует массив объектов people по полю age.
+
+  Выведите список имён в массиве после сортировки.
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  <b>My solution</b>
+  function sortObj(a, b) {
+    if (a.age < b.age) return -1;
+    if (a.age > b.age) return 1;
+    return 0;
+  }
+
+  var vasya = { name: "Вася", age: 23 };
+  var masha = { name: "Маша", age: 18 };
+  var vovochka = { name: "Вовочка", age: 6 };
+
+  var people = [ vasya , masha , vovochka ];
+
+  people.sort(sortObj);
+  document.write(people[0].age);
+  document.write("<br>");
+
+  for (var i = 0; i < people.length; i++) {
+    document.write( people[i].name + " ");
+  }
+
+
+  <b>Not my solution</b>
+  // Наша функция сравнения
+function compareAge(personA, personB) {
+  return personA.age - personB.age;
+}
+
+// проверка
+var vasya = { name: "Вася", age: 23 };
+var masha = { name: "Маша", age: 18 };
+var vovochka = { name: "Вовочка", age: 6 };
+
+var people = [ vasya , masha , vovochka ];
+
+people.sort(compareAge);
+
+// вывести
+for(var i = 0; i < people.length; i++) {
+  alert(people[i].name); // Вовочка Маша Вася
+}
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function sortObj(a, b) {
+    if (a.age < b.age) return -1;
+    if (a.age > b.age) return 1;
+    return 0;
+  }
+
+  var vasya = { name: "Вася", age: 23 };
+  var masha = { name: "Маша", age: 18 };
+  var vovochka = { name: "Вовочка", age: 6 };
+
+  var people = [ vasya , masha , vovochka ];
+
+  people.sort(sortObj);
+  document.write(people[0].age);
+  document.write("<br>");
+
+  for (var i = 0; i < people.length; i++) {
+    document.write( people[i].name + " ");
+  }
+
+
+</script>
+
+
+
+<h3>Task 4.8.11: Вывести односвязный список </h3>
+<pre>
+  Односвязный список – это структура данных, которая состоит из элементов, каждый из которых хранит ссылку на следующий.
+  Последний элемент может не иметь ссылки, либо она равна null.
+
+Например, объект ниже задаёт односвязный список, в next хранится ссылка на следующий элемент:
+</pre>
+<h3>Решение</h3>
+<pre>
+  <b><i>Плохой код у меня и не до конца</i> </b>
+  <b>My solution</b>
+  var list = {value: 1};
+  list.next = {value: 2};
+  list.next.next = {value: 3};
+  list.next.next.next = {value: 4};
+
+  function printList_1(obj) {
+    var newObj = {};
+    for (var key in obj) {
+      if (typeof obj[key] != 'object') {
+        document.write("elem = " + key + " " + obj[key] + "; ");
+        document.write("< br>");
+      } else {
+          newObj = obj[key];
+          for (var key in newObj) {
+            if (typeof newObj[key] != 'object') {
+              document.write("elem = " + key + " " + newObj[key] + "; ");
+              document.write("< br>");
+            }
+          }
+      }
+    }
+  }
+
+  printList_1(list);
+
+  Вывод списка с рекурсией:
+
+  var list2 = {value: 1};
+  list2.next = {value: 2};
+  list2.next.next = {value: 3};
+  list2.next.next.next = {value: 4};
+
+  function printList_2(obj) {
+      document.write(obj.value);
+      document.write("<br>");
+      if (obj.next) {
+        printList_2(obj.next);
+      }
+
+  }
+
+  printList_2(list2);
+
+  <b>Not my solution</b>
+  var list = {
+  value: 1,
+  next: {
+    value: 2,
+    next: {
+      value: 3,
+      next: {
+        value: 4,
+        next: null
+      }
+    }
+  }
+};
+
+function printList(obj) {
+  var tmp = obj;
+
+  while (tmp) {
+    alert( tmp.value );
+    tmp = tmp.next;
+  }
+
+}
+
+printList(list);
+
+
+<u>Вывод списка с рекурсией:</u>
+
+function printList(list) {
+
+  alert( list.value ); // (1)
+
+  if (list.next) {
+    printList(list.next); // (2)
+  }
+
+}
+
+printList(list);
+
+
+<u>Обратный вывод с рекурсией:</u>
+
+function printReverseList(list) {
+
+  if (list.next) {
+    printReverseList(list.next);
+  }
+
+  alert( list.value );
+}
+
+printReverseList(list);
+
+
+<u>Обратный вывод без рекурсии: </u>
+
+function printReverseList(list) {
+  var arr = [];
+  var tmp = list;
+
+  while (tmp) {
+    arr.push(tmp.value);
+    tmp = tmp.next;
+  }
+
+  for (var i = arr.length - 1; i >= 0; i--) {
+    alert( arr[i] );
+  }
+}
+
+printReverseList(list);
+
+<b> рекурсия больше ест памяти, но код более короткий </b>
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var list = {value: 1};
+  list.next = {value: 2};
+  list.next.next = {value: 3};
+  list.next.next.next = {value: 4};
+
+  function printList_1(obj) {
+    var newObj = {};
+    for (var key in obj) {
+      if (typeof obj[key] != 'object') {
+        document.write("elem = " + key + " " + obj[key] + "; ");
+        document.write("<br>");
+      } else {
+          newObj = obj[key];
+          for (var key in newObj) {
+            if (typeof newObj[key] != 'object') {
+              document.write("elem = " + key + " " + newObj[key] + "; ");
+              document.write("<br>");
+            }
+          }
+      }
+    }
+  }
+
+// ******* не мой код
+  printList_1(list);
+
+  function printList_1b(obj) {
+    var tmp = obj;
+
+    while (tmp) {
+      document.write(tmp.value);
+      document.write("<br>");
+      tmp = tmp.next;
+    }
+    document.write(tmp);
+  }
+
+  printList_1b(list);
+  document.write("<br>");
+  document.write(list);
+  document.write("<br>");
+
+//***** Мой код рекурсией
+  var list2 = {value: 1};
+  list2.next = {value: 2};
+  list2.next.next = {value: 3};
+  list2.next.next.next = {value: 4};
+
+  function printList_2(obj) {
+      document.write(obj.value);
+      document.write("<br>");
+      if (obj.next) {
+        printList_2(obj.next);
+      }
+
+  }
+
+  printList_2(list2);
+
+</script>
+
+
+
+<h3>Task 4.8.12: Отфильтровать анаграммы </h3>
+<pre>
+  Анаграммы – слова, состоящие из одинакового количества одинаковых букв, но в разном порядке.
+  Например:
+    воз - зов
+    киборг - гробик
+    корсет - костер - сектор
+
+Напишите функцию aclean(arr), которая возвращает массив слов, очищенный от анаграмм.
+Например:
+
+    var arr = ["воз", "киборг", "корсет", "ЗОВ", "гробик", "костер", "сектор"];
+
+    alert( aclean(arr) ); // "воз,киборг,корсет" или "ЗОВ,гробик,сектор"
+
+Из каждой группы анаграмм должно остаться только одно слово, не важно какое.
+
+
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  //У меня наглядней, и старый массив превращается в новый
+  <b>My solution</b>
+  'use strict';
+
+  var arr = ["воз", "киборг", "корсет", "ЗОВ", "гробик", "костер", "сектор", "ракета"];
+
+  function arrclean(arr) {
+    var arrChar1 = [],
+        arrChar2 = [];
+
+    for (var i = 0; i < (arr.length - 1); i++) {
+      for (var j = i + 1; j < arr.length; j++) {
+        if (arr[i].length == arr[j].length) {
+          //слово переводим в нижний регистр, и разбиваем по буквам
+          arrChar1 = arr[i].toLowerCase().split('');
+          arrChar2 = arr[j].toLowerCase().split('');
+          // Сортируем все буквы, чтобы выстроились одинаково в ряд
+          arrChar1.sort();
+          arrChar2.sort();
+          //склеиваем масив букв в слово (абракадабру)
+          arrChar1 = arrChar1.join('');
+          arrChar2 = arrChar2.join('');
+
+          if (arrChar1 == arrChar2) {
+            // Удаляем слово - анаграмму
+            arr.splice(j, 1);
+            j--;
+            //i--;
+          }
+        }
+      }
+    }
+    return arr;
+  }
+
+  document.write("< br>");
+  document.write(arr);
+  document.write("< br>");
+  document.write( arrclean(arr)  );
+
+
+//использовано преимущество того, что в объекте не может быть два одинаковых ключа
+// Остается и старый массив и новый
+  <b>Not my solution</b>
+  function aclean(arr) {
+    // этот объект будем использовать для уникальности
+    var obj = {};
+
+    for (var i = 0; i < arr.length; i++) {
+      // разбить строку на буквы, отсортировать и слить обратно
+      var sorted = arr[i].toLowerCase().split('').sort().join(''); // (*)
+
+      obj[sorted] = arr[i]; // сохраняет только одно значение с таким ключом
+    }
+
+    var result = [];
+
+    // теперь в obj находится для каждого ключа ровно одно значение
+    for (var key in obj) result.push(obj[key]);
+
+    return result;
+  }
+
+var arr = ["воз", "киборг", "корсет", "ЗОВ", "гробик", "костер", "сектор"];
+
+alert( aclean(arr) );
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arr = ["воз", "киборг", "корсет", "ЗОВ", "гробик", "костер", "сектор", "ракета", "ТРОПИК", "Кортип"];
+
+  function arrclean(arr) {
+    var arrChar1 = [],
+        arrChar2 = [];
+
+    for (var i = 0; i < (arr.length - 1); i++) {
+      for (var j = i + 1; j < arr.length; j++) {
+        if (arr[i].length == arr[j].length) {
+          //слово переводим в нижний регистр, и разбиваем по буквам
+          arrChar1 = arr[i].toLowerCase().split('');
+          arrChar2 = arr[j].toLowerCase().split('');
+          // Сортируем все буквы, чтобы выстроились одинаково в ряд
+          arrChar1.sort();
+          arrChar2.sort();
+          //склеиваем масив букв в слово (абракадабру)
+          arrChar1 = arrChar1.join('');
+          arrChar2 = arrChar2.join('');
+
+          if (arrChar1 == arrChar2) {
+            // Удаляем слово - анаграмму
+            arr.splice(j, 1);
+            j--;
+            //i--;
+          }
+        }
+      }
+    }
+    return arr;
+  }
+
+  document.write("<br>");
+  document.write(arr);
+  document.write("<br>");
+  document.write( arrclean(arr)  );
+
+</script>
+
+
+
+<h3>Task 4.8.13: Оставить уникальные элементы массива </h3>
+<pre>
+  Пусть arr – массив строк.
+  Напишите функцию unique(arr), которая возвращает массив, содержащий только уникальные элементы arr.
+  Например:
+    function unique(arr) {
+      /* ваш код */
+    }
+
+    var strings = ["кришна", "кришна", "харе", "харе",
+      "харе", "харе", "кришна", "кришна", "8-()"
+    ];
+
+    alert( unique(strings) ); // кришна, харе, 8-()
+
+</pre>
+<h3>Решение</h3>
+<pre>
+
+  // Мое не много хуже, нужно заменить на Object.keys(obj)
+  <b>My solution</b>
+  function unique(arr) {
+    var obj = {};
+
+    for (var i = 0; i < arr.length; i++) {
+      obj[ arr[i] ] = arr[i];
+    }
+
+    var res = [];
+
+    for (var key in obj) res.push(obj[key]);
+
+    return res;
+  }
+
+  var strings = ["кришна", "кришна", "харе", "харе",
+    "харе", "харе", "кришна", "кришна", "8-()"
+  ];
+
+  document.write( unique(strings) );
+
+
+  <b>Not my solution</b>
+  Решение перебором (медленное)
+
+  function unique(arr) {
+  var result = [];
+
+  nextInput:
+    for (var i = 0; i < arr.length; i++) {
+      var str = arr[i]; // для каждого элемента
+      for (var j = 0; j < result.length; j++) { // ищем, был ли он уже?
+        if (result[j] == str) continue nextInput; // если да, то следующий
+      }
+      result.push(str);
+    }
+
+  return result;
+}
+
+var strings = ["кришна", "кришна", "харе", "харе",
+  "харе", "харе", "кришна", "кришна", "8-()"
+];
+
+alert( unique(strings) ); // кришна, харе, 8-()
+
+
+Решение с объектом (быстрое)
+function unique(arr) {
+  var obj = {};
+
+  for (var i = 0; i < arr.length; i++) {
+    var str = arr[i];
+    obj[str] = true; // запомнить строку в виде свойства объекта
+  }
+
+  return Object.keys(obj); // или собрать ключи перебором для IE8-
+}
+
+var strings = ["кришна", "кришна", "харе", "харе",
+  "харе", "харе", "кришна", "кришна", "8-()"
+];
+
+alert( unique(strings) ); // кришна, харе, 8-()
+
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function unique(arr) {
+    var obj = {};
+
+    for (var i = 0; i < arr.length; i++) {
+      obj[ arr[i] ] = arr[i];
+    }
+
+    var res = [];
+
+    for (var key in obj) res.push(obj[key]);
+
+    return res;
+  }
+
+  var strings = ["кришна", "кришна", "харе", "харе",
+    "харе", "харе", "кришна", "кришна", "8-()"
+  ];
+
+  document.write( unique(strings) );
+
+</script>
+
+
+
+<!--***********
+*
+**************-->
+<h1>4.9. Массив: перебирающие методы</h1>
+<h3>Task 4.9.1: Перепишите цикл через map </h3>
+<pre>
+  var arr = ["Есть", "жизнь", "на", "Марсе"];
+
+    var arrLength = [];
+    for (var i = 0; i < arr.length; i++) {
+      arrLength[i] = arr[i].length;
+    }
+
+  alert( arrLength ); // 4,5,2,5
+
+Перепишите выделенный участок: уберите цикл, используйте вместо него метод map.
+</pre>
+<h3>Решение</h3>
+<pre>
+  'use strict';
+
+  var arr = ["Есть", "жизнь", "на", "Марсе", "?"];
+
+  var arrLength = arr.map( function(item) {
+    return item.length;
+  });
+
+  document.write ( arrLength ); // 4,5,2,5,1
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arr = ["Есть", "жизнь", "на", "Марсе", "?"];
+
+  var arrLength = arr.map( function(item) {
+    return item.length;
+  });
+
+  document.write ( arrLength ); // 4,5,2,5,1
+
+</script>
+
+
+
+<h3>Task 4.9.2: Массив частичных сумм </h3>
+<pre>
+    На входе массив чисел, например: arr = [1,2,3,4,5].
+
+    Напишите функцию getSums(arr), которая возвращает массив его частичных сумм.
+
+    Иначе говоря, вызов getSums(arr) должен возвращать новый массив из такого же числа элементов,
+    в котором на каждой позиции должна быть сумма элементов arr до этой позиции включительно.
+
+    То есть:
+
+    для arr = [ 1, 2, 3, 4, 5 ]
+    getSums( arr ) = [ 1, 1+2, 1+2+3, 1+2+3+4, 1+2+3+4+5 ] = [ 1, 3, 6, 10, 15 ]
+
+    Еще пример: getSums([-2,-1,0,1]) = [-2,-3,-3,-2].
+
+    Функция не должна модифицировать входной массив.
+    В решении используйте метод arr.reduce.
+
+</pre>
+<h3>Решение</h3>
+<pre>
+  <b>My solution: </b>
+  'use strict';
+
+  var arr = [1,2,3,4,5];
+
+  function getSums(arr) {
+    var arrSum = [];
+
+    var sum = arr.reduce(function(previousValue, currentItem) {
+      arrSum.push(previousValue);
+      return previousValue + currentItem;
+    });
+
+    arrSum.push(sum);
+
+    return arrSum;
+  }
+
+  document.write( getSums(arr) ); //1, 3, 6, 10, 15
+  document.write( "< br />" );
+  document.write( getSums([]) ); // [-2,-3,-3,-2
+
+  //Тоже самое, что и уменя, только добавлена строчка проверки на нулевой массив
+  <b>Not my solution: </b>
+  function getSums(arr) {
+  var result = [];
+  if (!arr.length) return result; // Эта строчка проверяет не нулевой ли массив, чтоб функция reduce не вызвала ошибку
+
+  var totalSum = arr.reduce(function(sum, item) {
+    result.push(sum);
+    return sum + item;
+  });
+  result.push(totalSum);
+
+  return result;
+}
+
+alert(getSums([1,2,3,4,5])); // 1,3,6,10,15
+alert(getSums([-2,-1,0,1])); // -2,-3,-3,-2
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  var arr = [1,2,3,4,5];
+
+  function getSums(arr) {
+    var arrSum = [];
+
+    var sum = arr.reduce(function(previousValue, currentItem) {
+      arrSum.push(previousValue);
+      return previousValue + currentItem;
+    });
+
+    arrSum.push(sum);
+
+    return arrSum;
+  }
+
+  document.write( getSums(arr) ); //1, 3, 6, 10, 15
+  document.write( "<br />" );
+  document.write( getSums([-2,-1,0,1]) ); // -2,-3,-3,-2
+</script>
+
+
+
+
+<!--***********
+*
+**************-->
+<h1>4.10. Псевдомассив аргументов "arguments" </h1>
+<h3>Task 4.9.1:  </h3>
+<pre>
+
+</pre>
+<h3>Решение</h3>
+<pre>
+  'use strict';
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  document.write("************* <br>");
+
+  function foo(x) {
+    arguments[0] = 5;
+    document.write(x);
+  }
+
+  foo(1); // 1
+
+  document.write("<br> ************* <br> ");
+
+  function f(w, h, title) {
+    w = w || 200; // если не указана w, то w = 200
+    h = h || 100; //если нет h, то h = 100
+    if (title === undefined) title = "title defined"; // Если мы хотим в явном виде title === undefined
+
+    return w + " " + h + " " + title;
+  }
+
+  document.write( f(100) ); // 100 100 title defined
+  document.write("<br>");
+
+</script>
+
+
+
+<h3>Task 4.9.2: Проверка на аргумент-undefined </h3>
+<pre>
+  Как в функции отличить отсутствующий аргумент от undefined?
+    function f(x) {
+    // ..ваш код..
+    // выведите 1, если первый аргумент есть, и 0 - если нет
+    }
+
+    f(undefined); // 1
+    f(); // 0
+</pre>
+<h3>Решение</h3>
+<pre>
+    <b>My solution</b>
+     Не смог
+
+     <b>Not my solution</b>
+     'use strict';
+
+     function f(x) {
+       return arguments.length ? 1 : 0;
+     }
+
+     document.write( f(undefined) ); //1
+     document.write( "< br>" );
+     document.write( f() ); //0
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function f(x) {
+    return arguments.length ? 1 : 0;
+  }
+
+  document.write( f(undefined) ); //1
+  document.write( "<br>" );
+  document.write( f() ); //0
+</script>
+
+
+
+<h3>Task 4.9.3: Сумма аргументов </h3>
+<pre>
+  Напишите функцию sum(...), которая возвращает сумму всех своих аргументов:
+</pre>
+<h3>Решение</h3>
+<pre>
+    // Мой код хуже и длиннее
+    <b>My solution</b>
+    'use strict';
+
+    function sum() {
+      if (!arguments.length) return 0;
+
+      var arr = [];
+
+      for (var i = 0; i < arguments.length; i++) {
+        arr[i] = arguments[i];
+      }
+
+      return arr.reduce(function(prevVal, item){
+        return prevVal + item;
+      });
+    }
+
+    document.write( sum() ); // 0
+    document.write("< br>");
+    document.write( sum(1) );
+    document.write("< br>");
+    document.write( sum(1,2) );
+    document.write("< br>");
+    document.write( sum(1,2,3) );
+    document.write("< br>");
+    document.write( sum(1,2,3,4) );
+
+    <b>Not my solution</b>
+    function sum() {
+      var result = 0;
+
+      for (var i = 0; i < arguments.length; i++) {
+        result += arguments[i];
+      }
+
+      return result;
+    }
+
+    alert( sum() ); // 0
+    alert( sum(1) ); // 1
+    alert( sum(1, 2) ); // 3
+    alert( sum(1, 2, 3) ); // 6
+    alert( sum(1, 2, 3, 4) ); // 10
+
+</pre>
+<script type="text/javascript">
+  'use strict';
+
+  function sum() {
+    if (!arguments.length) return 0;
+
+    var arr = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+      arr[i] = arguments[i];
+    }
+
+    return arr.reduce(function(prevVal, item){
+      return prevVal + item;
+    });
+  }
+
+  document.write( sum() ); // 0
+  document.write("<br>");
+  document.write( sum(1) );
+  document.write("<br>");
+  document.write( sum(1,2) );
+  document.write("<br>");
+  document.write( sum(1,2,3) );
+  document.write("<br>");
+  document.write( sum(1,2,3,4) );
+
+</script>
+
+
+
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

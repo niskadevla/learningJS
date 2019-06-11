@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Drag and drop</title>
+</head>
+<body>
+
+  <h3>Task 2.1.7: Карусель (Слайдер) </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+
+
+  </pre>
+
+
+  <style>
+
+    .container {
+      max-width: 390px;
+      margin: 0 auto;
+      /* border: 1px solid red; */
+    }
+
+    .slider_wrap {
+      /* max-width: 100%; */
+      position: relative;
+      /* padding: 5px 10px; */
+      background-color: rgb(224, 224, 224);
+      border-radius: 10px;
+      overflow: hidden;
+      /* border: 1px solid green; */
+    }
+
+    .arrow {
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: calc(50% - 15px);
+      z-index: 99;
+    }
+
+    .arrow.next {
+      right: 5px;
+    }
+
+    .arrow.prev {
+      left: 5px;
+    }
+
+    .arrow:hover {
+      cursor: pointer;
+    }
+
+    .slider {
+      position: relative;
+      display: flex;
+      margin: 0 auto;
+      padding: 5px 10px;
+      list-style: none;
+      overflow: hidden;
+      transition: 0.5s;
+      /* max-width: 100%; */
+      /* border: 2px dotted black; */
+    }
+
+    .slider_item {
+      position: relative;
+      /* display: inline-block; */
+      /* border: 1px dotted blue; */
+    }
+
+    .slider_item img {
+      display: block;
+    }
+
+  </style>
+
+  <div class="container">
+    <div id="slider_wrap" class="slider_wrap">
+      <button class="arrow prev">⇦</button>
+      <button class="arrow next">⇨</button>
+
+      <ul class="slider">
+        <li class="slider_item draggable"><img src="https://js.cx/carousel/1.png"></li>
+        <li class="slider_item draggable"><img src="https://js.cx/carousel/2.png"></li>
+        <li class="slider_item draggable"><img src="https://js.cx/carousel/3.png"></li>
+        <li class="slider_item draggable"><img src="https://js.cx/carousel/4.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/5.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/6.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/7.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/8.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/9.png"></li>
+        <li class="slider_item"><img src="https://js.cx/carousel/10.png"></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function afterLoaded() {
+      // этот код помечает картинки цифрами, для удобства разработки
+      // его можно убрать, если не нужен
+      var lis = document.querySelectorAll('.slider li');
+      for (var i = 0; i < lis.length; i++) {
+        // lis[i].style.position = 'relative';
+        var span = document.createElement('span');
+        span.style.cssText = 'position:absolute;left:0;top:0';
+        span.innerHTML = i + 1;
+        lis[i].appendChild(span);
+      }
+
+      var amountItem = lis.length;
+      var sliderWrap = document.getElementById('slider_wrap');
+      var wSliderWrap = sliderWrap.clientWidth;
+
+      var wLi = lis[0].offsetWidth;
+      var sliders = document.getElementsByClassName('slider');
+      sliders[0].style.width = wLi * amountItem + 'px';
+
+      var buttonsNext = document.getElementsByClassName('next');
+      var buttonsPrev = document.getElementsByClassName('prev');
+      sliders[0].style.left = 0;
+
+      buttonsPrev[0].addEventListener("click", function() {
+        if ( parseInt(sliders[0].style.left) < 0 ) {
+          sliders[0].style.left = parseInt(sliders[0].style.left) + wLi + 'px';
+        }
+      });
+
+      buttonsNext[0].addEventListener("click", function() {
+        if ( parseInt(sliders[0].style.width) > Math.abs(parseInt(sliders[0].style.left) - wSliderWrap) ) {
+          sliders[0].style.left = parseInt(sliders[0].style.left) - wLi + 'px';
+        }
+      });
+
+    }
+
+    window.addEventListener('load', afterLoaded);
+
+  </script>
+
+
+  <br> <br>
+  <hr>
+  <br>
+
+
+  <h3>Task 3.4.3: Расставить супергероев по полю </h3>
+  <pre>
+    В этой задаче вы можете проверить своё понимание сразу нескольких аспектов Drag’n’Drop.
+
+    Сделайте так, чтобы элементы с классом draggable можно было переносить мышкой.
+    По окончании переноса элемент остаётся на том месте в документе, где его положили.
+
+    Требования к реализации:
+
+        Должен быть 1 обработчик на document, использующий делегирование.
+        Если элементы подносят к вертикальным краям окна – оно должно прокручиваться вниз/вверх.
+        Горизонтальной прокрутки в этой задаче не существует.
+        Элемент при переносе, даже при резких движениях мышкой, не должен попасть вне окна.
+
+    Футбольное поле в этой задаче слишком большое, чтобы показывать его здесь,
+    поэтому откройте его, кликнув по ссылке ниже. Там же и подробное описание задачи
+    (осторожно, винни-пух и супергерои!).
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Практически аналогично
+    <b>My solution</b>
+    document.onmousedown = function(e) {
+      //элемент над которым непосредственно произошло событие (до всплытия)
+      // всплывает до document
+      var target = e.target;
+      // если объект DOM содержит класс draggable, то идем дальше
+      if ( !target.classList.contains("draggable") ) return;
+
+      //находим координаты объекта в документе абсолютные
+      var targetCoords = getCoords(target);
+      target.style.position = "absolute";
+      document.body.appendChild(target);
+
+      var shiftX = e.pageX - targetCoords.left;
+      var shiftY = e.pageY - targetCoords.top;
+
+      var pageSize = getPageSize();
+
+      var availableCoords = {
+        left: 0,
+        right: pageSize.width - target.offsetWidth,
+        top: 0,
+        bottom: pageSize.height - target.offsetHeight
+      };
+
+      moveAt(e);
+
+      function moveAt(e) {
+        var newCoordX = e.pageX - shiftX;
+        var newCoordY = e.pageY - shiftY;
+
+        // Прокрутка страницы, если есть
+        var scrollY;
+        if ( target.getBoundingClientRect().top < 0 ) {
+          scrollY = Math.max(target.getBoundingClientRect().top, -10);
+          window.scrollBy(0, scrollY);
+        }
+
+        if ( target.getBoundingClientRect().bottom > document.documentElement.clientHeight ) {
+          scrollY = Math.min(target.getBoundingClientRect().bottom, 10);
+          window.scrollBy(0, scrollY);
+        }
+
+        // Проверка чтобы элемент не вылез за страницу
+        if ( newCoordX < (availableCoords.left) ) newCoordX = availableCoords.left;
+        else if (newCoordX > availableCoords.right) newCoordX = availableCoords.right;
+
+        if (newCoordY < availableCoords.top) newCoordY = availableCoords.top;
+        else if (newCoordY > availableCoords.bottom) newCoordY = availableCoords.bottom;
+
+        target.style.left = newCoordX + "px";
+        target.style.top = newCoordY + "px";
+      }
+
+      document.onmousemove = function(e) {
+        moveAt(e);
+      }
+
+      document.onmouseup = function() {
+        document.onmousemove = null;
+        document.onmouseup = null;
+      }
+
+      // чтобы не срабатывало встроенное событие "начало перетаскивания"
+      target.ondragstart = function() {
+        return false;
+      }
+
+      return false; // отключаем выделение, которое по умолчанию
+    }
+
+
+    // функция для нахождения координат элемента DOM (для absolute)
+    function getCoords(elem) {
+      var box = elem.getBoundingClientRect();
+      return {
+        top: box.top + window.pageYOffset,
+        left: box.left + window.pageXOffset,
+        width: box.width,
+        height: box.height
+      };
+    }
+
+    //функция для нахождения максимальной высоты страницы и максимальной ширины страницы
+    function getPageSize() {
+      return {
+        width: Math.max(
+          document.body.scrollWidth, document.documentElement.scrollWidth,
+          document.body.offsetWidth, document.documentElement.offsetWidth,
+          document.body.clientWidth, document.documentElement.clientWidth
+        ),
+        height: Math.max(
+          document.body.scrollHeight, document.documentElement.scrollHeight,
+          document.body.offsetHeight, document.documentElement.offsetHeight,
+          document.body.clientHeight, document.documentElement.clientHeight
+        )
+      }
+    }
+
+
+    <b>Not my solution</b>
+    document.onmousedown = function(e) {
+
+      var dragElement = e.target;
+
+      if (!dragElement.classList.contains('draggable')) return;
+
+      var coords, shiftX, shiftY;
+
+      startDrag(e.clientX, e.clientY);
+
+      document.onmousemove = function(e) {
+        moveAt(e.clientX, e.clientY);
+      };
+
+      dragElement.onmouseup = function() {
+        finishDrag();
+      };
+
+
+      // -------------------------
+
+      function startDrag(clientX, clientY) {
+
+        shiftX = clientX - dragElement.getBoundingClientRect().left;
+        shiftY = clientY - dragElement.getBoundingClientRect().top;
+
+        dragElement.style.position = 'fixed';
+
+        document.body.appendChild(dragElement);
+
+        moveAt(clientX, clientY);
+      };
+
+      function finishDrag() {
+        // конец переноса, перейти от fixed к absolute-координатам
+        dragElement.style.top = parseInt(dragElement.style.top) + pageYOffset + 'px';
+        dragElement.style.position = 'absolute';
+
+        document.onmousemove = null;
+        dragElement.onmouseup = null;
+      }
+
+      function moveAt(clientX, clientY) {
+        // новые координаты
+        var newX = clientX - shiftX;
+        var newY = clientY - shiftY;
+
+        // ------- обработаем вынос за нижнюю границу окна ------
+        // новая нижняя граница элемента
+        var newBottom = newY + dragElement.offsetHeight;
+
+        // если новая нижняя граница вылезает вовне окна - проскроллим его
+        if (newBottom > document.documentElement.clientHeight) {
+          // координата нижней границы документа относительно окна
+          var docBottom = document.documentElement.getBoundingClientRect().bottom;
+
+          // scrollBy, если его не ограничить - может заскроллить за текущую границу документа
+          // обычно скроллим на 10px
+          // но если расстояние от newBottom до docBottom меньше, то меньше
+          var scrollY = Math.min(docBottom - newBottom, 10);
+
+          // ошибки округления при полностью прокрученной странице
+          // могут привести к отрицательному scrollY, что будет означать прокрутку вверх
+          // поправим эту ошибку
+          if (scrollY < 0) scrollY = 0;
+
+          window.scrollBy(0, scrollY);
+
+          // резким движением мыши элемент можно сдвинуть сильно вниз
+          // если он вышел за нижнюю границу документа -
+          // передвигаем на максимально возможную нижнюю позицию внутри документа
+          newY = Math.min(newY, document.documentElement.clientHeight - dragElement.offsetHeight);
+        }
+
+
+        // ------- обработаем вынос за верхнюю границу окна ------
+        if (newY < 0) {
+          // проскроллим вверх на 10px, либо меньше, если мы и так в самом верху
+          var scrollY = Math.min(-newY, 10);
+          if (scrollY < 0) scrollY = 0; // поправим ошибку округления
+
+          window.scrollBy(0, -scrollY);
+          // при резком движении мыши элемент мог "вылететь" сильно вверх, поправим его
+          newY = Math.max(newY, 0);
+        }
+
+
+        // зажать в границах экрана по горизонтали
+        // здесь прокрутки нет, всё просто
+        if (newX < 0) newX = 0;
+        if (newX > document.documentElement.clientWidth - dragElement.offsetWidth) {
+          newX = document.documentElement.clientWidth - dragElement.offsetWidth;
+        }
+
+        dragElement.style.left = newX + 'px';
+        dragElement.style.top = newY + 'px';
+      }
+
+      // отменим действие по умолчанию на mousedown (выделение текста, оно лишнее)
+      return false;
+    }
+  </pre>
+
+  <style>
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #field {
+      background: url(https://js.cx/drag-heroes/field.png);
+      width: 800px;
+      height: 600px;
+      float: left;
+    }
+    /* герои и мяч (переносимые элементы) */
+
+    .hero {
+      background: url(https://js.cx/drag-heroes/heroes.png);
+      width: 130px;
+      height: 128px;
+      float: left;
+    }
+
+    #hero1 {
+      background-position: 0 0;
+    }
+
+    #hero2 {
+      background-position: 0 -128px;
+    }
+
+    #hero3 {
+      background-position: -120px 0;
+    }
+
+    #hero4 {
+      background-position: -125px -128px;
+    }
+
+    #hero5 {
+      background-position: -248px -128px;
+    }
+
+    #hero6 {
+      background-position: -244px 0;
+    }
+
+    .draggable {
+      cursor: pointer;
+    }
+
+  </style>
+
+  <h2>Расставьте супергероев по полю.</h2>
+
+  <p>Супергерои и мяч -- это элементы с классом "draggable". Сделайте так, чтобы их можно было переносить.</p>
+
+  <p>Важно: если супергероя подносят к низу или верху страницы, она должна автоматически прокручиваться.
+    Если страница помещается на вашем экране целиком и не имеет вертикальной прокрутки --
+    сделайте окно браузера меньше, чтобы протестировать эту возможность.
+  </p>
+
+  <p>Да, и ещё: супергерои ни при каких условиях не должны попасть за край экрана.</p>
+
+  <div id="field" >
+
+  </div>
+
+  <div class="hero draggable" id="hero1" style="touch-action:none"></div>
+  <div class="hero draggable" id="hero2" style="touch-action:none"></div>
+  <div class="hero draggable" id="hero3" style="touch-action:none"></div>
+  <div class="hero draggable" id="hero4" style="touch-action:none"></div>
+  <div class="hero draggable" id="hero5" style="touch-action:none"></div>
+  <div class="hero draggable" id="hero6" style="touch-action:none"></div>
+
+
+  <img src="https://js.cx/drag-heroes/ball.png" class="draggable" style="touch-action:none">
+
+  <div style="clear:both"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function startDragAndDrop(e) {
+      //элемент над которым непосредственно произошло событие (до всплытия)
+      // всплывает до document
+      var target = e.target;
+      // если объект DOM содержит класс draggable, то идем дальше
+      if ( !target.classList.contains("draggable") ) return;
+
+      //находим координаты объекта в документе абсолютные
+      var targetCoords = getCoords(target);
+      target.style.position = "absolute";
+      document.body.appendChild(target);
+
+      var shiftX = e.pageX - targetCoords.left;
+      var shiftY = e.pageY - targetCoords.top;
+
+      var pageSize = getPageSize();
+
+      var availableCoords = {
+        left: 0,
+        right: pageSize.width - target.offsetWidth,
+        top: 0,
+        bottom: pageSize.height - target.offsetHeight
+      };
+
+      moveAt(e);
+
+      function moveAt(e) {
+        var newCoordX = e.pageX - shiftX;
+        var newCoordY = e.pageY - shiftY;
+
+        // Прокрутка страницы, если есть
+        var scrollY;
+        if ( target.getBoundingClientRect().top < 0 ) {
+          scrollY = Math.max(target.getBoundingClientRect().top, -10);
+          window.scrollBy(0, scrollY);
+        }
+
+        if ( target.getBoundingClientRect().bottom > document.documentElement.clientHeight ) {
+          scrollY = Math.min(target.getBoundingClientRect().bottom, 10);
+          window.scrollBy(0, scrollY);
+        }
+
+        // Проверка чтобы элемент не вылез за страницу
+        if ( newCoordX < (availableCoords.left) ) newCoordX = availableCoords.left;
+        else if (newCoordX > availableCoords.right) newCoordX = availableCoords.right;
+
+        if (newCoordY < availableCoords.top) newCoordY = availableCoords.top;
+        else if (newCoordY > availableCoords.bottom) newCoordY = availableCoords.bottom;
+
+        target.style.left = newCoordX + "px";
+        target.style.top = newCoordY + "px";
+      }
+
+      // Для компов
+      document.addEventListener("mousemove", moveAt);
+
+      function mouseUp() {
+        document.removeEventListener("mousemove", moveAt);
+        document.removeEventListener("mouseup", mouseUp);
+      }
+
+      document.addEventListener("mouseup", mouseUp);
+
+      // Для гаджетов
+      // document.addEventListener("touchmove", moveAt, true);
+      //
+      // function touchEnd() {
+      //   document.removeEventListener("touchmove", moveAt, true);
+      //   document.removeEventListener("touchend", touchEnd, true);
+      // }
+      //
+      // document.addEventListener("touchend", touchEnd, true);
+
+      // Для гаджетов 2
+      document.addEventListener("pointermove", moveAt, true);
+
+      function touchEnd() {
+        document.removeEventListener("pointermove", moveAt, true);
+        document.removeEventListener("pointerup", touchEnd, true);
+      }
+
+      document.addEventListener("pointerup", touchEnd, true);
+
+      // чтобы не срабатывало встроенное событие "начало перетаскивания"
+      target.ondragstart = function() {
+        return false;
+      }
+
+      e.preventDefault(); // отключаем выделение, которое по умолчанию
+      return false; // отключаем выделение, которое по умолчанию
+    }
+
+
+
+    // функция для нахождения координат элемента DOM (для absolute)
+    function getCoords(elem) {
+      var box = elem.getBoundingClientRect();
+      return {
+        top: box.top + window.pageYOffset,
+        left: box.left + window.pageXOffset,
+        width: box.width,
+        height: box.height
+      };
+    }
+
+    //функция для нахождения максимальной высоты страницы и максимальной ширины страницы
+    function getPageSize() {
+      return {
+        width: Math.max(
+          document.body.scrollWidth, document.documentElement.scrollWidth,
+          document.body.offsetWidth, document.documentElement.offsetWidth,
+          document.body.clientWidth, document.documentElement.clientWidth
+        ),
+        height: Math.max(
+          document.body.scrollHeight, document.documentElement.scrollHeight,
+          document.body.offsetHeight, document.documentElement.offsetHeight,
+          document.body.clientHeight, document.documentElement.clientHeight
+        )
+      }
+    }
+
+
+    document.addEventListener("mousedown", startDragAndDrop);
+    // Для гаджета
+    // document.addEventListener("touchstart", startDragAndDrop, true);
+
+    // Для гаджета2
+    // если устройство с маленьким экраном, то установить события
+    if (getPageSize().width < 988) document.addEventListener("pointerdown", startDragAndDrop);
+
+
+    // function touchHandler(event) {
+    //     var touches = event.changedTouches,
+    //         first = touches[0],
+    //         type = "";
+    //     switch(event.type) {
+    //
+    //       case "touchstart": type = "mousedown"; break;
+    //       case "touchmove":  type = "mousemove"; break;
+    //       case "touchend":   type = "mouseup"; break;
+    //       default: return;
+    //     }
+    //
+    //     var simulatedEvent = document.createEvent("MouseEvent");
+    //     simulatedEvent.initMouseEvent(type, true, true, window, 1/*count*/,
+    //                               first.screenX, first.screenY,
+    //                               first.clientX, first.clientY, false,
+    //                               false, false, false, 0/*left click*/, null);
+    //     first.target.dispatchEvent(simulatedEvent);
+    //     event.preventDefault();
+    // }
+    //
+    // // Подсказка
+    // // event.initMouseEvent(type, canBubble, cancelable, view,
+    // //                  detail, screenX, screenY, clientX, clientY,
+    // //                  ctrlKey, altKey, shiftKey, metaKey,
+    // //                  button, relatedTarget);
+    //
+    // function init() {
+    //     document.addEventListener("touchstart", touchHandler, true);
+    //     document.addEventListener("touchmove", touchHandler, true);
+    //     document.addEventListener("touchend", touchHandler, true);
+    //     document.addEventListener("touchcancel", touchHandler, true);
+    // }
+
+    // если устройство с маленьким экраном, то установить события
+    //if (getPageSize().width < 988) init();
+
+
+    // field.addEventListener('touchstart', function(e) {
+    //    // Iterate through the list of touch points that changed
+    //    // since the last event and print each touch point's identifier.
+    //    var arr = [];
+    //    for (var i=0; i < e.changedTouches.length; i++) {
+    //      arr.push("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+    //    }
+    //
+    //    alert(arr.length);
+    // }, false);
+
+  </script>
+
+
+
+  <br>
+  <hr>
+  <br>
+
+
+
+
+  <br> <br> <br>
+</body>
+</html>

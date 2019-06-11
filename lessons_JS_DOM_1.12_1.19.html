@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>learn JS 1.12</title>
+</head>
+<body>
+
+  <!--**********
+  * Мультивставка: insertAdjacentHTML и DocumentFragment
+  ************-->
+
+  <h1>1.12. Мультивставка: insertAdjacentHTML и DocumentFragment  </h1>
+  <h3>Task 1.12.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+
+
+  <script type="text/javascript">
+    'use strict';
+
+
+    // добавим элемент в конец <body>
+    var p = document.createElement('p');
+    document.body.append(p);
+
+    var em = document.createElement('em');
+    em.append('Мир!');
+
+    // вставить в параграф текстовый и обычный узлы
+    p.append("<b> Привет </b>, ", em);
+
+    // добавить элемент после <p>
+    p.after(document.createElement('hr'));
+
+    p.insertAdjacentHTML("afterEnd", "<p> Hello </p>");
+
+  </script>
+
+
+
+  <hr>
+  <br>
+
+
+
+  <h3>Task 1.12.2: Вставьте элементы в конец списка </h3>
+  <pre>
+    Напишите код для вставки текста html в конец списка ul с использованием метода insertAdjacentHTML.
+    Такая вставка, в отличие от присвоения innerHTML+=, не будет перезаписывать текущее содержимое.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var div = document.getElementById('insert');
+    var ul = div.children[0];
+
+    ul.insertAdjacentHTML("beforeEnd", "< li>3</ li>< li>4</ li>< li>5</ li>");
+  </pre>
+
+  <div id="insert">
+    <ul>
+      <li>1</li>
+      <li>2</li>
+    </ul>
+  </div>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    var div = document.getElementById('insert');
+    var ul = div.children[0];
+
+    ul.insertAdjacentHTML("beforeEnd", "<li>3</li><li>4</li><li>5</li>");
+
+  </script>
+
+
+
+
+  <h3>Task 1.12.3:  </h3>
+  <pre>
+    Отсортировать таблицу
+    Строк в таблице много: может быть 20, 50, 100… Есть и другие элементы в документе.
+    Как бы вы предложили отсортировать содержимое таблицы по полю Возраст?
+    Обдумайте алгоритм, реализуйте его.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // Так нельзя, т.к. при for..in теряются значения с одинаковым ключом + медленнее
+    <b>My solution</b>
+    function createTable() {
+      var div = document.getElementById('forTable');
+      var table = document.createElement('table');
+      var tbody = document.createElement('tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML = '< th>Имя</ th> < th>Фамилия</ th> < th>Отчество</ th> < th>Возраст</ th>';
+
+      div.appendChild(table);
+      table.appendChild(tbody);
+      tbody.appendChild(tr);
+
+      for (var i = 0; i < 100; i++) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = "< td>Вася</ td>< td>Петров</ td>< td>Александрович</ td>< td>" + Math.round( Math.random()*10000 ) + "</ td>";
+        tbody.appendChild(tr);
+      }
+
+    }
+
+    function sortAge() {
+      var div = document.getElementById('forTable');
+      var table = div.children[0];
+      var tbody = table.children[0];
+      var trs = tbody.children;
+
+      var obj = {};
+
+      for (var i = 1; i < trs.length; i++) {
+        obj[+(trs[i].lastElementChild.textContent)] = trs[i];
+      }
+
+      var fragment = document.createDocumentFragment();
+
+      for (var key in obj) {
+        fragment.appendChild(obj[key]);
+      }
+      tbody.innerHTML = '';
+      tbody.appendChild(fragment);
+    }
+
+
+    createTable();
+
+
+    //Бенчмаркинг
+    var date = Date.now();
+
+    sortAge();
+
+    // for (var i = 0; i < 100; i++) {
+    //
+    //   sortAge();
+    // }
+    var dateDif = Date.now() - date;
+
+    document.write('< br>');
+    document.write(dateDif + ' ms');
+
+
+    // Самый лучший - function sortOpt(doRemove) со значением true, doRemove = true
+    <b>Not my solution</b>makeTable()
+    function makeTable() {
+      var tableHolder = document.getElementById('table-holder');
+
+      var contents = '< thead>< th>Имя</ th>< th>Фамилия</ th>< th>Отчество</ th>< th>Возраст</ th></ thead>';
+      contents += '< tbody>';
+      for (var i = 0; i < 100; i++) {
+        contents += "< tr>< td> ... </ td>< td>Разные</ td>< td>Данные</ td>< td>" + ((i + 50) % 30) + "</ td></ tr>";
+      }
+      contents += '</ tbody>';
+
+      tableHolder.innerHTML = '< table>' + contents + '</ table>';
+    }
+
+    /* перенести элементы в массив, отсортировать его и перевставить */
+    function sort1() {
+      var tbody = document.getElementsByTagName('tbody')[0];
+      var rows = [];
+
+      for (var i = tbody.children.length - 1; i >= 0; i--) {
+        var child = tbody.removeChild(tbody.children[i]);
+        rows.push(child);
+      }
+
+      rows.sort(function(a, b) {
+        return a.lastChild.innerHTML - b.lastChild.innerHTML;
+      })
+
+      for (var i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+      }
+
+    }
+
+    /* скопировать ссылки в массив, отсортировать его и перевставить */
+    function sort2() {
+      var tbody = document.getElementsByTagName('tbody')[0];
+      var rows = [];
+
+      for (var i = 0; i < tbody.children.length; i++) {
+        rows.push(tbody.children[i]);
+      }
+
+      rows.sort(function(a, b) {
+        return a.lastChild.innerHTML - b.lastChild.innerHTML;
+      })
+
+      for (var i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+      }
+
+    }
+
+
+    /* создать массив из значений и ссылок, отсортировать, перевставить
+      doRemove = предварительно вынуть из документа
+    */
+    function sortOpt(doRemove) {
+      var tbody = document.getElementsByTagName('tbody')[0];
+      var table = tbody.parentNode;
+      if (doRemove) table.removeChild(tbody);
+
+      var rows = [];
+      for (var i = 0; i < tbody.children.length; i++) {
+        var elem = tbody.children[i];
+        rows.push({
+          value: elem.lastChild.innerHTML,
+          elem: elem
+        });
+      }
+
+      rows.sort(function(a, b) {
+        return a.value - b.value;
+      });
+
+      for (var i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i].elem);
+      }
+
+      if (doRemove) table.appendChild(tbody);
+    }
+
+
+    function bench(f, elem) {
+      var sum = 0;
+      for (var i = 0; i < 100; i++) {
+        makeTable();
+        var d = new Date;
+        f();
+        sum += new Date - d;
+      }
+      elem.innerHTML = sum + 'мс';
+    }
+
+
+    function benchMake(elem) {
+      var sum = 0;
+      for (var i = 0; i < 100; i++) {
+        var d = new Date;
+        makeTable();
+        sum += new Date - d;
+      }
+      elem.innerHTML = sum + 'мс';
+    }
+  </pre>
+
+  <style>
+
+    .wrapper {
+      display: flex;
+    }
+
+    #forTable {
+      text-align: right;
+      flex-basis: auto;
+    }
+
+    #forTable button {
+      padding: 0 30px;
+      margin: 0;
+
+    }
+
+    table {
+      text-align: center;
+      border-spacing: 0;
+    }
+
+    table td, table th {
+      border: 1px solid #000;
+      padding: 3px;
+    }
+
+  </style>
+
+  <div class="wrapper">
+    <div id="forTable">
+      <button type="button" name="button" onclick="sortAge()"> ^ </button>
+    </div>
+  </div>
+
+  <div id="table-holder"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function createTable() {
+      var div = document.getElementById('forTable');
+
+      //Если уже была создана таблица, то удаляем
+      if(div.children.length) {
+        for (var i = 0; i < div.children.length; i++) {
+          div.innerHTML = "";
+        }
+      }
+
+      var table = document.createElement('table');
+      var tbody = document.createElement('tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<th>Имя</th> <th>Фамилия</th> <th>Отчество</th> <th>Возраст</th>';
+
+      div.appendChild(table);
+      table.appendChild(tbody);
+      tbody.appendChild(tr);
+
+      for (var i = 0; i < 100; i++) {
+        var trNew = tr.cloneNode(false);
+        //tr.innerHTML = "<td>Вася</td><td>Петров</td><td>Александрович</td><td>" + Math.round( Math.random()*100 ) + "</td>";
+        trNew.innerHTML = "<td>Вася</td><td>Петров</td><td>Александрович</td><td>" + ((i + 50) % 30) + "</td>";
+        tbody.appendChild(trNew);
+      }
+
+    }
+
+    function sortAge() {
+      var div = document.getElementById('forTable');
+      var table = div.querySelector('table');
+      var tbody = table.querySelector('tbody');
+      var trs = tbody.children;
+
+      var obj = {};
+
+      for (var i = 1; i < trs.length; i++) {
+        obj[+(trs[i].lastElementChild.textContent)] = trs[i];
+      }
+
+      var fragment = document.createDocumentFragment();
+
+      for (var key in obj) {
+        fragment.appendChild(obj[key]);
+      }
+      tbody.innerHTML = '';
+      tbody.innerHTML = '<th>Имя</th> <th>Фамилия</th> <th>Отчество</th> <th>Возраст</th>';
+      tbody.appendChild(fragment);
+    }
+
+
+    //createTable();
+
+
+    //Бенчмаркинг
+    //var date = Date.now();
+    // for (var i = 0; i < 100; i++) {
+    //
+    //   sortAge();
+    // }
+    // var dateDif = Date.now() - date;
+    // document.write('<br>');
+    // document.write(dateDif + ' ms');
+
+    //Не мой код
+    function makeTable() {
+      var tableHolder = document.getElementById('table-holder');
+
+      var contents = '<thead><th>Имя</th><th>Фамилия</th><th>Отчество</th><th>Возраст</th></thead>';
+      contents += '<tbody>';
+      for (var i = 0; i < 100; i++) {
+        contents += "<tr><td> ... </td><td>Разные</td><td>Данные</td><td>" + ((i + 50) % 30) + "</td></tr>";
+      }
+      contents += '</tbody>';
+
+      tableHolder.innerHTML = '<table>' + contents + '</table>';
+    }
+
+    // не мой бенчмаркинг
+    function benchMake() {
+      var sum = 0;
+      for (var i = 0; i < 100; i++) {
+        var d = new Date;
+        createTable();
+        //makeTable();
+        sum += new Date - d;
+      }
+      document.write(sum + 'мс');
+    }
+
+    benchMake();
+
+  </script>
+
+
+  <br><br>
+  <hr>
+
+
+  <script>
+    'use strict';
+
+    var div = document.createElement('div');
+    var div2 = document.createElement('div');
+
+    // appendChild
+    var divs = document.body.appendChild(div);
+
+    // append
+    var divs2 = document.body.append(div2);
+
+    console.log(divs); // вернет div
+    console.log(divs2); // undefined
+
+  </script>
+
+
+
+  <hr>
+
+
+
+  <!--**********
+  * Стили, getComputedStyle
+  ************-->
+
+  <h1>1.14. Стили, getComputedStyle  </h1>
+  <h3>Task 1.14.1: Скругленая кнопка со стилями из JavaScript </h3>
+  <pre>
+    Создайте кнопку в виде элемента < a> с заданным стилем, используя JavaScript.
+
+    В примере ниже такая кнопка создана при помощи HTML/CSS.
+    В вашем решении кнопка должна создаваться, настраиваться и
+    добавляться в документ при помощи только JavaScript, без тегов < style> и < a>.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div id="button_1"></div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var div = document.getElementById('button_1');
+    var a1 = document.createElement('a');
+    a1.className = 'button';
+    a1.setAttribute('href', '/');
+    a1.style.cssText = " \
+      -moz-border-radius: 8px; \
+      -webkit-border-radius: 8px; \
+      border-radius: 8px; \
+      border: 2px groove green; \
+      display: block; \
+      height: 30px; \
+      line-height: 30px; \
+      width: 100px; \
+      text-decoration: none; \
+      text-align: center; \
+      color: red; \
+      font-weight: bold; \
+    ";
+
+    a1.innerHTML = 'Нажми';
+    div.append(a1);
+
+    // 2 method
+    var a2 = document.createElement('a');
+    a2.className = 'button';
+    a2.href = '/';
+
+    var s = a2.style
+    s.MozBorderRadius = s.WebkitBorderRadius = s.borderRadius = '8px';
+    s.border = '2px groove green';
+    s.display = 'block';
+    s.height = '30px';
+    s.lineHeight = '30px';
+    s.width = '100px';
+    s.textDecoration = 'none';
+    s.textAlign = 'center';
+    s.color = 'red';
+    s.fontWeight = 'bold';
+
+    a2.textContent = 'Нажми меня';
+    div.append(a2);
+
+  </script>
+
+
+  <h3>Task 1.14.2: Создать уведомление </h3>
+  <pre>
+    Напишите функцию showNotification(options),
+    которая показывает уведомление, пропадающее через 1.5 сек.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    // Similar solution, но у автора лучше код
+    <b>My solution</b>
+    function showNotification(options) {
+
+      var count = 0;
+
+      setTimeout(function f() {
+        count++;
+
+        var div = document.createElement('div');
+        div.className = 'notification';
+
+        var s = div.style;
+        s.top = options.top + 'px';
+        s.right = options.right + 'px';
+        if (options.cssText) s.cssText = div.style + options.cssText;
+        div.classList.add(options.className);
+        div.textContent = options.html + ' ' + count;
+
+        var elem = document.body.appendChild(div);
+
+        setTimeout(function(){
+          document.body.removeChild(elem);
+          setTimeout(f,300);
+        }, 1500);
+      }, 1500);
+
+    }
+
+    showNotification({
+      top: 10,
+      right: 10,
+      html: "Привет",
+      className: "welcome"
+    });
+
+    <b>Not my solution</b>
+    function showNotification(options) {
+
+     var notification = document.createElement('div');
+     notification.className = "notification";
+     if (options.cssText) {
+       notification.style.cssText = options.cssText;
+     }
+     notification.style.top = (options.top || 0) + 'px'; // can use cssText
+     notification.style.right = (options.right || 0) + 'px'; // can use cssText
+     if (options.className) {
+       notification.classList.add(options.className);
+     }
+
+     notification.innerHTML = options.html;
+     document.body.appendChild(notification); // over cover
+
+     setTimeout(function() {
+       document.body.removeChild(notification);
+     }, 1500);
+   }
+
+   // тест работоспособности
+   var i = 0;
+   setInterval(function() {
+     showNotification({
+       top: 10,
+       right: 10,
+       html: 'Привет ' + ++i,
+       className: "welcome"
+     });
+   }, 2000);
+
+  </pre>
+
+  <style>
+
+    .notification {
+      position: fixed;
+      z-index: 1000;
+      padding: 5px;
+      border: 1px solid black;
+      font: normal 20px Georgia;
+      background: white;
+      text-align: center;
+    }
+
+    .welcome {
+      background: red;
+      color: yellow;
+    }
+
+  </style>
+
+  <div id="notif">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      Repellat, similique enim. Facilis ad omnis dolorem, nam, laboriosam eum libero officiis?
+    </p>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    /**
+     * Показывает уведомление, пропадающее через 1.5 сек
+     *
+     * @param options.top {number} вертикальный отступ, в px
+     * @param options.right {number} правый отступ, в px
+     * @param options.cssText {string} строка стиля
+     * @param options.className {string} CSS-класс
+     * @param options.html {string} HTML-текст для показа
+     */
+    function showNotification(options) {
+
+      var count = 0;
+
+      setTimeout(function f() {
+        count++;
+
+        var div = document.createElement('div');
+        div.className = 'notification';
+
+        var s = div.style;
+        s.top = options.top + 'px';
+        s.right = options.right + 'px';
+        if (options.cssText) s.cssText = div.style + options.cssText;
+        div.classList.add(options.className);
+        div.textContent = options.html + ' ' + count;
+
+        var elem = document.body.appendChild(div);
+
+        setTimeout(function(){
+          document.body.removeChild(elem);
+          setTimeout(f,300);
+        }, 1500);
+      }, 1500);
+
+    }
+
+    showNotification({
+      top: 10,
+      right: 10,
+      html: "Привет",
+      className: "welcome"
+    });
+
+  </script>
+
+  <button onclick="console.log(this)">Померять время</button>
+
+
+  <script type="text/javascript">
+
+    var Fun =
+      function() {
+        var a = 25;
+
+        function Fun(a, b) {
+          console.log('a + b = ' + (a + b));
+        }
+
+        return Fun;
+      }();
+
+
+    Fun(2,3);
+    //console.log('a=',a); // a is not defined
+
+  </script>
+
+
+
+
+  <!--**********
+  *  Размеры и прокрутка элементов
+  ************-->
+
+  <h1>1.15.  </h1>
+  <h3>Task 1.15.1: Найти размер прокрутки снизу </h3>
+  <pre>
+    Свойство elem.scrollTop содержит размер прокрученной области при отсчете сверху.
+    А как подсчитать размер прокрутки снизу?
+    Напишите соответствующее выражение для произвольного элемента elem.
+    Проверьте: если прокрутки нет вообще или элемент полностью
+    прокручен – оно должно давать ноль.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // The best solution
+    <b>My solution</b>
+    var scrollD =
+      function() {
+
+        Object.defineProperty(Element.prototype,"scrollDown", {
+
+          get: function() {
+            return (this.scrollHeight - this.scrollTop - this.clientHeight);
+          }
+
+        });
+
+      }();
+
+    var div = document.getElementById('scrollTop');
+
+    var lastP = div.nextElementSibling;
+    lastP.innerHTML = div.scrollDown;
+  </pre>
+
+  <style>
+    #scrollTop {
+      width: 200px;
+      height: 100px;
+      overflow: auto;
+      border: 5px solid rgb(134, 216, 251);
+      background-color: rgb(238, 238, 238);
+      position: relative;
+    }
+  </style>
+
+  <div id="scrollTop" onclick="this.scrollTop += 10">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, facere.
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, facere.
+
+  </div>
+  <p></p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var scrollDown =
+      function() {
+
+        Object.defineProperty(Element.prototype,"scrollDown", {
+
+          get: function() {
+            return (this.scrollHeight - this.scrollTop - this.clientHeight);
+          }
+
+        });
+
+      }();
+
+    var div = document.getElementById('scrollTop');
+
+    var lastP = div.nextElementSibling;
+    lastP.innerHTML = div.scrollDown;
+
+    console.log('text', div);
+    console.log('lastP', lastP);
+
+  </script>
+
+
+
+  <h3>Task 1.15.2: Узнать ширину полосы прокрутки </h3>
+  <pre>
+    Напишите код, который возвращает ширину стандартной полосы прокрутки. Именно самой полосы, где ползунок.
+    Обычно она равна 16px, в редких и мобильных браузерах может колебаться от 14px до 18px, а кое-где даже равна 0px.
+    P.S. Ваш код должен работать на любом HTML-документе, независимо от его содержимого.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У меня лучше
+    <b>My solution</b>
+    var scrollBarWidth =
+      function() {
+        Object.defineProperty(Element.prototype,"scrollBarWidth", {
+
+          get: function() {
+            var self = this;
+            return ( this.offsetWidth - this.clientWidth - parseFloat(getComputedStyle.call(window,this).borderLeftWidth) -
+              parseFloat(getComputedStyle.call(window,this).borderRightWidth) );
+          }
+
+        });
+      }();
+
+    var div = document.getElementById('scrollWidth');
+
+    document.write(div.scrollBarWidth);
+
+    <b>Not my solution</b>
+    // создадим элемент с прокруткой
+    var div = document.createElement('div');
+
+    div.style.overflowY = 'scroll';
+    div.style.width = '50px';
+    div.style.height = '50px';
+
+    // при display:none размеры нельзя узнать
+    // нужно, чтобы элемент был видим,
+    // visibility:hidden - можно, т.к. сохраняет геометрию
+    div.style.visibility = 'hidden';
+
+    document.body.appendChild(div);
+    var scrollWidth = div.offsetWidth - div.clientWidth;
+    document.body.removeChild(div);
+
+    alert( scrollWidth );
+
+  </pre>
+
+  <style>
+    #scrollWidth {
+      width: 200px;
+      height: 100px;
+      overflow: auto;
+      border: 5px solid rgb(134, 216, 251);*
+      background-color: rgb(238, 238, 238);
+      position: relative;
+    }
+  </style>
+
+  <div id="scrollWidth">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, facere.
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, facere.
+  </div>
+  <p></p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var scrollBarWidth =
+      function() {
+        Object.defineProperty(Element.prototype,"scrollBarWidth", {
+
+          get: function() {
+            var self = this;
+            return ( this.offsetWidth - this.clientWidth - parseFloat(getComputedStyle.call(window,this).borderLeftWidth) - parseFloat(getComputedStyle.call(window,this).borderRightWidth) );
+          }
+
+        });
+      }();
+
+    var div = document.getElementById('scrollWidth');
+
+    document.write(div.scrollBarWidth);
+
+  </script>
+
+
+
+  <h3>Task 1.15.3: Подменить div на другой с таким же размером </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    // У автора лучше
+    <b>My solution</b>
+    var div = document.getElementById('moving-div');
+    div.style.position = 'fixed';
+    div.style.right = div.style.top = 0;
+
+    var div2 = div.cloneNode(true);
+    div2.style.position = 'static';
+    div2.style.visibility = 'hidden';
+    div.after(div2);
+
+    <b>Not my solution</b>
+    var div = document.getElementById('moving-div');
+
+    var placeHolder = document.createElement('div');
+    placeHolder.style.height = div.offsetHeight + 'px';
+    // можно и width, но в этом примере это не обязательно
+    // из условия: Сделайте это путем создания вспомогательного DIV с теми же width...
+
+    // IE || другой браузер
+    var computedStyle = div.currentStyle || getComputedStyle(div, '');
+
+    placeHolder.style.marginTop = computedStyle.marginTop; // (1)
+    placeHolder.style.marginBottom = computedStyle.marginBottom;
+  </pre>
+
+  <style>
+    #moving-div {
+      border: 5px groove green;
+      padding: 5px;
+      margin: 10px;
+      background-color: yellow;
+    }
+
+  </style>
+
+  Before Before Before
+
+  <div id="moving-div">
+  Text Text Text<br>
+  Text Text Text<br>
+  </div>
+
+  After After After
+
+  <script type="text/javascript">
+    'use strict';
+
+    var div = document.getElementById('moving-div');
+    div.style.position = 'fixed';
+    div.style.right = div.style.top = 0;
+
+    var div2 = div.cloneNode(true);
+    div2.style.position = 'static';
+    div2.style.visibility = 'hidden';
+    div.after(div2);
+
+  </script>
+
+
+
+
+  <h3>Task 1.15.4: Поместите мяч в центр поля </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Similar solution
+    <b>My solution</b>
+    var field = document.getElementById('field');
+    var ball = document.getElementById('ball');
+
+    ball.style.width = '40px';
+    ball.style.height = '40px';
+
+    ball.style.top = Math.round(field.clientHeight / 2) - Math.round(ball.offsetHeight / 2) + 'px';
+    ball.style.left = Math.round(field.clientWidth / 2) - Math.round(ball.offsetWidth / 2) + 'px';
+
+    var timerId = setInterval(function() {
+      if ( ( parseInt(ball.style.top) < (Math.round(field.clientHeight) - Math.round(ball.offsetHeight))) &&
+          ( parseInt(ball.style.left) < Math.round(field.clientWidth) - Math.round(ball.offsetWidth) ) ) {
+        ball.style.top = parseInt(ball.style.top) + 2 + 'px';
+        ball.style.left = parseInt(ball.style.left) + 2 + 'px';
+      } else if( (parseInt(ball.style.left) < Math.round(field.clientWidth) - Math.round(ball.offsetWidth)) ) {
+          ball.style.top = parseInt(ball.style.top) - 2 + 'px';
+      }
+      else clearInterval(timerId);
+    },100);
+  </pre>
+
+  <style>
+    #field {
+      width: 200px;
+      border: 10px groove black;
+      background-color: #00FF00;
+      position: relative;
+    }
+
+    #ball {
+      position: absolute;
+    }
+  </style>
+
+  <div id="field">
+  <img src="https://js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var field = document.getElementById('field');
+    var ball = document.getElementById('ball');
+
+    ball.style.width = '40px';
+    ball.style.height = '40px';
+
+    ball.style.top = Math.round(field.clientHeight / 2) - Math.round(ball.offsetHeight / 2) + 'px';
+    ball.style.left = Math.round(field.clientWidth / 2) - Math.round(ball.offsetWidth / 2) + 'px';
+
+    var timerId = setInterval(function() {
+      if ( ( parseInt(ball.style.top) < (Math.round(field.clientHeight) - Math.round(ball.offsetHeight))) && ( parseInt(ball.style.left) < Math.round(field.clientWidth) - Math.round(ball.offsetWidth) ) ) {
+        ball.style.top = parseInt(ball.style.top) + 2 + 'px';
+        ball.style.left = parseInt(ball.style.left) + 2 + 'px';
+      } else if( (parseInt(ball.style.left) < Math.round(field.clientWidth) - Math.round(ball.offsetWidth)) ) {
+          ball.style.top = parseInt(ball.style.top) - 2 + 'px';
+      }
+      else clearInterval(timerId);
+    },100);
+
+  </script>
+
+
+
+
+  <h3>Task 1.15.5: Расширить элемент </h3>
+  <pre>
+    В < body> есть элемент < div> с заданной шириной width.
+    Задача – написать код, который «распахнет» < div> по ширине на всю страницу.
+    Исходный документ (< div> содержит текст и прокрутку):
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    var elem = document.getElementById("elem");
+    var body = document.body;
+
+    // 1 решение
+    //elem.style.width = 'auto';
+
+    // 2 Решение
+    //elem.style.width = body.clientWidth - parseFloat(getComputedStyle(elem).paddingLeft) -
+        parseFloat(getComputedStyle(elem).paddingRight) + 'px';
+
+    //3 Решение
+    elem.style.boxSizing = 'border-box';
+    elem.style.width = body.clientWidth + 'px';
+
+  </pre>
+
+  <style>
+    #elem {
+      width: 200px;
+      height: 150px;
+      background-color: red;
+      padding: 20px;
+      overflow: auto;
+    }
+
+    body {
+      border: 1px solid black;
+
+    }
+
+  </style>
+
+  <div id="elem">
+    текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
+    текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
+    текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
+    текст текст
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var elem = document.getElementById("elem");
+    var body = document.body;
+
+    // 1 решение
+    elem.style.width = 'auto';
+
+    //2 Решение
+    //elem.style.width = body.clientWidth - parseFloat(getComputedStyle(elem).paddingLeft) - parseFloat(getComputedStyle(elem).paddingRight) + 'px';
+
+    //3 Решение
+    // elem.style.boxSizing = 'border-box';
+    // elem.style.width = body.clientWidth + 'px';
+
+  </script>
+
+
+
+
+  <h3>Task 1.15.6: В чём отличие "width" и "clientWidth" ? </h3>
+  <pre>
+    В чём отличия между getComputedStyle(elem).width и elem.clientWidth?
+    Укажите хотя бы три отличия, лучше – больше.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+
+
+  </pre>
+
+  <style>
+
+    #width {
+      padding: 20px;
+      background-color: rgb(149, 194, 213);
+      border: 5px solid rgb(207, 189, 77);
+      width: 100px;
+      height: 100px;
+      overflow: scroll;
+      /* box-sizing: border-box; */
+    }
+
+  </style>
+
+  <div id="width">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, libero.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, libero
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var width = document.getElementById('width');
+
+    document.write('getComputedStyle(width).width = ', getComputedStyle(width).width);
+    document.write('<br>');
+    document.write('getComputedStyle(width).padding = ', getComputedStyle(width).padding);
+    document.write('<br>');
+    document.write('width.clientWidth = ', width.clientWidth);
+    document.write('<br>');
+    document.write('width.offsetWidth = ', width.offsetWidth);
+
+    console.log(width);
+
+  </script>
+
+
+
+
+
+  <!--**********
+  * Размеры и прокрутка страницы
+  ************-->
+
+  <h1>1.16. Размеры и прокрутка страницы  </h1>
+  <h3>Task 1.16.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+    #buttonTop {
+      display: block;
+      position: fixed;
+      right: 50px;
+      bottom: 50px;
+      width: 40px;
+      height: 40px;
+      background-color: rgb(200, 200, 200);
+      border: 2px groove rgb(153, 153, 153);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #buttonTop::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      content: '^';
+      font-size: 48px;
+    }
+
+    #buttonTop:hover {
+      background-color: rgb(227, 227, 227);
+    }
+
+  </style>
+
+  <script type="text/javascript">
+    'use strict';
+
+    document.write('window.innerWidth = ', window.innerWidth);
+    document.write('<br />');
+    document.write('document.documentElement.clientWidth = ', document.documentElement.clientWidth);
+    document.write('<br />');
+    document.write('document.documentElement.clientHeight = ', document.documentElement.clientHeight);
+
+    var scrollHeight = Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    );
+
+    document.write('<br />');
+    document.write(scrollHeight);
+
+    document.write('<br />');
+    document.write('Текущая прокрутка сверху: ' + window.pageYOffset);
+    document.write('<br />');
+    document.write('Текущая прокрутка слева: ' + window.pageXOffset);
+
+    //****
+
+    function windowTop() {
+      var positionNow = window.pageYOffset;
+      var scrollY = positionNow - 50;
+
+      // document.documentElement.style.transitionDuration = "2s";
+      // window.scrollTo(0, 0);
+
+      var timerId_2 = setInterval(function() {
+        if (scrollY > 0) {
+          scrollY -= 300;
+        } else clearInterval(timerId_2);
+        window.scrollTo(0, scrollY);
+      },5);
+
+      if (window.pageYOffset > window.pageXOffset) {
+        this.style.visibility = 'hidden';
+        console.log(buttonTop);
+      }
+
+    }
+
+    var buttonTop = document.createElement('a');
+
+    buttonTop.setAttribute('id','buttonTop');
+    buttonTop.setAttribute('onclick','windowTop.call(this)');
+    document.body.appendChild(buttonTop);
+
+  </script>
+
+
+
+  <h3>Task 1.16.2: Полифилл для pageYOffset в IE8  </h3>
+  <pre>
+    Обычно в IE8 не поддерживается свойство pageYOffset. Напишите полифилл для него.
+    При подключённом полифилле такой код должен работать в IE8:
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+    //Same solution
+    <b>My solution</b>
+    // полифилл
+    if (!window.pageYOffset_1) {
+      Object.defineProperty(window, 'pageYOffset_1', {
+        get: function() {
+          return document.documentElement.scrollTop;
+        }
+      });
+    }
+
+    // текущая прокрутка страницы в IE8
+    document.write( window.pageYOffset_1 );
+    document.write('< br />');
+    document.write(window.pageYOffset);
+
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+    // полифилл
+    if (!window.pageYOffset_1) {
+      Object.defineProperty(window, 'pageYOffset_1', {
+        get: function() {
+          return document.documentElement.scrollTop;
+        }
+      });
+    }
+
+    // текущая прокрутка страницы в IE8
+    document.write( window.pageYOffset_1 );
+    document.write('<br />');
+    document.write(window.pageYOffset);
+
+  </script>
+
+
+
+
+  <!--**********
+  * Координаты в окне
+  ************-->
+
+  <h1>1.17. Координаты в окне </h1>
+  <h3>Task 1.17.1: е  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <p><button id="coords-show-mark">кнопка с id=«coords-show-mark»</button></p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    var elem = document.getElementById("coords-show-mark");
+
+    function createMessageUnder(elem, text) {
+      // получить координаты
+      var coords = elem.getBoundingClientRect();
+
+      // создать элемент для сообщения
+      var message = document.createElement('div');
+      // стиль лучше задавать классом
+      message.style.cssText = "position:fixed; color: red";
+
+      // к координатам обязательно добавляем "px"!
+      message.style.left = coords.left + "px";
+      message.style.top = coords.bottom + "px";
+
+      message.innerHTML = text;
+
+      return message;
+    }
+
+    // Использование
+    // добавить на 5 сек в документ
+    var message = createMessageUnder(elem, 'Привет, мир!');
+    document.body.appendChild(message);
+    setTimeout(function() {
+      document.body.removeChild(message);
+    }, 5000);
+
+  </script>
+
+
+  <hr>
+  <br>
+
+
+
+  <h3>Task 1.17.2: Найдите координаты точки в документе  </h3>
+  <pre>
+
+    Левый-верхний угол снаружи, это просто.
+    Правый-нижний угол снаружи, это тоже просто.
+    Левый-верхний угол внутри, это чуть сложнее.
+    Правый-нижний угол внутри, это ещё сложнее, но можно сделать даже несколькими способами.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <style>
+
+    body {
+      padding: 20px 0 0 20px;
+      /* cursor: pointer; */
+    }
+
+    #field_5 {
+      overflow: hidden;
+      width: 200px;
+      height: 150px;
+      /* padding: 10px; */
+      border-top: 10px solid black;
+      border-right: 10px solid gray;
+      border-bottom: 10px solid gray;
+      border-left: 10px solid black;
+      background-color: #00FF00;
+      font: 10px/1.2 monospace;
+      /* position: relative; */
+    }
+
+    .triangle-right {
+      position: fixed;
+      /* position: relative; */
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 20px solid red;
+      border-right: 0;
+      text-indent: -20px;
+      font: 12px/1 monospace;
+      z-index: 999;
+    }
+  </style>
+
+  <div id="field_5" onclick='showRect(this)'>
+    <!-- <div class="triangle-right"></div> -->
+  </div>
+
+  <!-- <input id="brTest" type="button" value="Показать button.getBoundingClientRect() для этой кнопки" onclick='showRect(this)'/>
+  <div id="field_5" onclick='showRect(this)'></div> -->
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    function showRect(elem) {
+      var r = elem.getBoundingClientRect();
+      // console.log("{top:"+r.top+", left:"+r.left+", right:"+r.right+", bottom:"+ r.bottom + "}");
+
+      // 1
+      var leftTopCornerOut = [r.left, r.top];
+      console.log('leftTopCornerOut = ', leftTopCornerOut);
+
+      //2
+      var rightBottomCornerOut = [r.right, r.bottom];
+      console.log('rightBottomCornerOut = ', rightBottomCornerOut);
+
+      //3
+      //var leftTopCornerInside = [( r.left + parseFloat(getComputedStyle(elem).borderLeftWidth) ), ( r.top + parseFloat(getComputedStyle(elem).borderTopWidth) )];
+      var leftTopCornerInside = [ r.left + elem.clientLeft,  r.top + elem.clientTop ];
+      // console.log( getComputedStyle(elem).borderLeftWidth );
+      console.log('leftTopCornerInside = ', leftTopCornerInside);
+
+      //4
+      //var rightBottomCornerInside = [( r.right - parseFloat(getComputedStyle(elem).borderRightWidth) ), ( r.bottom - parseFloat(getComputedStyle(elem).borderBottomWidth) )];
+      //var rightBottomCornerInside = [r.right - (elem.offsetWidth - elem.clientWidth - elem.clientLeft) , r.bottom - (elem.offsetHeight - elem.clientHeight - elem.clientTop) ];
+      var rightBottomCornerInside = [r.left + elem.clientLeft + elem.clientWidth , r.top + elem.clientTop + elem.clientHeight ];
+      console.log('rightBottomCornerInside = ', rightBottomCornerInside);
+
+
+      var triangle = document.createElement('div');
+      triangle.className = 'triangle-right';
+
+      var triangle_1 = triangle.cloneNode(true);
+      triangle_1.innerHTML = '1';
+      elem.appendChild(triangle_1);
+      var r2 = [triangle_1.offsetWidth, triangle_1.offsetHeight];
+      triangle_1.style.left = leftTopCornerOut[0] - r2[0] + 'px';
+      triangle_1.style.top = leftTopCornerOut[1] - r2[1] / 2 + 'px';
+
+      var triangle_2 = triangle.cloneNode(true);
+      triangle_2.innerHTML = '2';
+      elem.appendChild(triangle_2);
+      var r2 = [triangle_2.offsetWidth, triangle_2.offsetHeight];
+      triangle_2.style.left = rightBottomCornerOut[0] - r2[0] + 'px';
+      triangle_2.style.top = rightBottomCornerOut[1] - r2[1] / 2 + 'px';
+
+      var triangle_3 = triangle.cloneNode(true);
+      triangle_3.innerHTML = '3';
+      elem.appendChild(triangle_3);
+      var r2 = [triangle_3.offsetWidth, triangle_3.offsetHeight];
+      triangle_3.style.left = leftTopCornerInside[0] - r2[0] + 'px';
+      triangle_3.style.top = leftTopCornerInside[1] - r2[1] / 2 + 'px';
+
+      var triangle_4 = triangle.cloneNode(true);
+      triangle_4.innerHTML = '4';
+      elem.appendChild(triangle_4);
+      var r2 = [triangle_4.offsetWidth, triangle_4.offsetHeight];
+      triangle_4.style.left = rightBottomCornerInside[0] - r2[0] + 'px';
+      triangle_4.style.top = rightBottomCornerInside[1] - r2[1] / 2 + 'px';
+
+    }
+
+
+  </script>
+
+
+
+
+  <h3>Task 1.17.3: Разместить заметку рядом с элементом </h3>
+  <pre>
+
+    Создайте функцию positionAt(anchor, position, elem), которая позиционирует элемент elem,
+    в зависимости от position, сверху ("top"), справа ("right") или снизу ("bottom") от элемента anchor.
+
+    Используйте её, чтобы сделать функцию showNote(anchor, position, html), которая
+    показывает элемент с классом note и текстом html на позиции position рядом с элементом anchor.
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+    <b>My solution</b>
+
+    /**
+     * Позиционирует элемент elem относительно элемента anchor, как указано в
+     * в position.
+     *
+     * @param {Node} anchor     Элемент-якорь, относительно которого задана позиция
+     * @param {string} position Позиция: одно из top/right/bottom
+     * @param {Node} elem       Элемент, который будет позиционирован
+     */
+
+    function positionAt(anchor, position, elem) {
+      var coords = anchor.getBoundingClientRect();
+      console.log('elem = ', elem);
+      console.log('position = ', position);
+      console.log('coords = ', coords);
+
+      switch (position) {
+        case 'top':
+          elem.style.top = coords.top - elem.offsetHeight + 'px';
+          elem.style.left = coords.left + 'px';
+          break;
+        case 'right':
+          elem.style.top = coords.top + 'px';
+          elem.style.left = coords.right + 'px';
+          break;
+        case 'bottom':
+          elem.style.top = coords.bottom + 'px';
+          elem.style.left = coords.left + 'px';
+          break;
+      }
+    }
+
+    /**
+     * Показывает заметку с текстом html на позиции position
+     * относительно элемента anchor
+     */
+    function showNote(anchor, position, html) {
+      if (typeof html === 'string') {
+        var elem = document.createElement('div');
+        elem.innerHTML = html;
+        elem.className = 'note';
+        anchor.appendChild(elem);
+      } else {
+        elem = html;
+      }
+
+      positionAt(anchor,position,elem);
+    }
+
+    // проверка работоспособности
+    var blockquote = document.querySelector('blockquote');
+
+    showNote(blockquote, "top", "заметка сверху");
+    showNote(blockquote, "right", "заметка справа");
+    showNote(blockquote, "bottom", "заметка снизу");
+  </pre>
+
+  <style>
+    .note {
+      position: fixed;
+      z-index: 1000;
+      padding: 5px;
+      border: 1px solid black;
+      background: white;
+      text-align: center;
+      font: italic 14px serif;
+    }
+
+    blockquote {
+      background: #f9f9f9;
+      border-left: 10px solid #ccc;
+      margin: 0 0 0 100px;
+      padding: .5em 10px;
+      quotes: "\201C""\201D""\2018""\2019";
+      display: inline-block;
+      white-space: pre;
+    }
+
+    blockquote:before {
+      color: #ccc;
+      content: open-quote;
+      font-size: 4em;
+      line-height: .1em;
+      margin-right: .25em;
+      vertical-align: -.4em;
+    }
+  </style>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+  </p>
+  <blockquote cite="http://">
+
+      - Что на завтрак, Бэрримор?
+      - Овсянка, сэр.
+      - А на обед?
+      - Овсянка, сэр.
+      - Ну а на ужин?
+      - Котлеты, сэр.
+      - Уррра!!!
+      - Из овсянки, сэр!!!
+
+  </blockquote>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+  </p>
+
+
+  <script type="text/javascript">
+    'use strict';
+
+    /**
+     * Позиционирует элемент elem относительно элемента anchor, как указано в
+     * в position.
+     *
+     * @param {Node} anchor     Элемент-якорь, относительно которого задана позиция
+     * @param {string} position Позиция: одно из top/right/bottom
+     * @param {Node} elem       Элемент, который будет позиционирован
+     */
+
+    function positionAt(anchor, position, elem) {
+      var coords = anchor.getBoundingClientRect();
+      console.log('elem = ', elem);
+      console.log('position = ', position);
+      console.log('coords = ', coords);
+
+      switch (position) {
+        case 'top':
+          elem.style.top = coords.top - elem.offsetHeight + 'px';
+          elem.style.left = coords.left + 'px';
+          break;
+        case 'right':
+          elem.style.top = coords.top + 'px';
+          elem.style.left = coords.right + 'px';
+          break;
+        case 'bottom':
+          elem.style.top = coords.bottom + 'px';
+          elem.style.left = coords.left + 'px';
+          break;
+      }
+    }
+
+    /**
+     * Показывает заметку с текстом html на позиции position
+     * относительно элемента anchor
+     */
+    function showNote(anchor, position, html) {
+      if (typeof html === 'string') {
+        var elem = document.createElement('div');
+        elem.innerHTML = html;
+        elem.className = 'note';
+        anchor.appendChild(elem);
+      } else {
+        elem = html;
+      }
+
+      positionAt(anchor,position,elem);
+    }
+
+    // проверка работоспособности
+    var blockquote = document.querySelector('blockquote');
+
+    // showNote(blockquote, "top", "заметка сверху");
+    // showNote(blockquote, "right", "заметка справа");
+    // showNote(blockquote, "bottom", "заметка снизу");
+
+
+  </script>
+
+
+
+
+  <!--**********
+  * Координаты в документе
+  ************-->
+
+  <h1>1.18. Координаты в документе </h1>
+  <h3>Task 1.18.1:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div style="position:relative;padding:10px;height:80px;width:380px;border:7px red solid">
+    <div style="border:10px blue solid;padding:2px;position:absolute;left:20%;top:20%">
+    <div id="getBoundingClientRectEx" style="background-color:yellow;font-size:14px;border:4px solid black;margin:2px;cursor:pointer" onclick="console.log('click getCoords(elem) = ', getCoords(this))">Кликните, чтобы получить координаты getOffsetSum и getCoords</div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function getOffsetSum(elem) {
+      var top = 0,
+        left = 0;
+
+      while (elem) {
+        top = top + parseInt(elem.offsetTop);
+        left = left + parseInt(elem.offsetLeft);
+        elem = elem.offsetParent;
+      }
+
+      return {
+        top: top,
+        left: left
+      };
+    }
+
+
+    function getCoords(elem) { // кроме IE8-
+      var box = elem.getBoundingClientRect();
+
+      return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset,
+        pageYOffset1: pageYOffset,
+        pageXOffset1: pageXOffset,
+        boxtop: box.top,
+        boxleft: box.left
+      };
+
+    }
+
+    var elem = document.getElementById('getBoundingClientRectEx');
+
+    console.log('getOffsetSum(elem)', getOffsetSum(elem));
+    console.log('getCoords(elem) = ', getCoords(elem));
+    //console.log('getOffsetSum(elem)', getOffsetSum(elem));
+
+  </script>
+
+
+
+  <h3>Task 1.18.2:  </h3>
+  <pre>
+
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <script type="text/javascript">
+    'use strict';
+
+
+    // var screenX = window.screenX;
+    document.write(screenX);
+    document.write('<br>');
+    document.write('Размеры Вашего экрана. Ширина = ' + screen.width + "; Высота = " + screen.height);
+    document.write('<br>');
+    document.write('Если Вы сдвините экран влево или вниз, система выведет сообщение (обновите браузер)');
+    document.write('<br>');
+
+    if (screenX < 0) {
+      alert('Ваше окно браузер слева вылезает за экран. Часть изображения обрезано');
+    }
+    if ( (outerHeight + screenTop) > screen.availHeight && (outerHeight + screenTop) != screen.height ) {
+      alert('Ваше окно браузер снизу вылезает за экран. Часть изображения обрезано');
+    }
+    if ( ( outerWidth + screenLeft) > screen.width ) {
+      alert('Ваше окно браузера справо вылезает за экран на ' + ( (outerWidth + screenLeft) - screen.width ) + 'px \n Передвиньте экран влево!');
+    }
+
+    document.write('<br>');
+    // доступная ширина/высота (за вычетом таскбара и т.п.)
+    document.write('доступная ширина/высота (за вычетом таскбара и т.п.): ' + screen.availWidth + ' x ' + screen.availHeight );
+
+    document.write('<br>');
+    var panelHeight = screen.height - document.documentElement.clientHeight;
+    document.write('Высота панелей браузера (если во весь экран): ' + panelHeight);
+
+    document.write('<br>');
+    document.write('outerHeight = ' + outerHeight);
+
+    document.write('<br>');
+    document.write('screenTop = ' + screenTop);
+
+    document.write('<br>');
+    document.write('innerHeight = ' + innerHeight);
+
+    document.write('<br>');
+    document.write('document.documentElement.clientHeight = ' + document.documentElement.clientHeight);
+
+    document.write('<br>');
+    document.write('screenTop = ' + screenTop);
+
+    document.write('<br>');
+    document.write('screenY = ' + screenY);
+
+    document.write('<br>');
+    document.write('screen.height = ' + screen.height);
+
+    document.write('<br>');
+    document.write('screen.availHeight = ' + screen.availHeight);
+
+    document.write('<br>');
+    document.write('outerHeight + screenTop = ' + (outerHeight + screenTop));
+
+    //* Width
+    document.write('<br>');
+    document.write('<hr>');
+    document.write('innerWidth = ' + innerWidth);
+
+    document.write('<br>');
+    document.write('document.documentElement.clientWidth = ' + document.documentElement.clientWidth);
+
+    document.write('<br>');
+    document.write('outerWidth = ' + outerWidth);
+
+    document.write('<br>');
+    document.write('screenLeft = ' + screenLeft);
+
+    document.write('<br>');
+    document.write('screenX = ' + screenX);
+
+    document.write('<br>');
+    document.write('screen.width = ' + screen.width);
+
+    document.write('<br>');
+    document.write('screen.availWidth = ' + screen.availWidth);
+
+    document.write('<br>');
+    document.write('outerWidth + screenLeft = ' + (outerWidth + screenLeft));
+
+  </script>
+
+
+
+
+  <br>
+  <hr>
+
+
+  <h3>Task 1.18.3: Область видимости для документа </h3>
+  <pre>
+    Напишите функцию getDocumentScroll(), которая возвращает объект с информацией о текущей прокрутке и области видимости.
+
+    Свойства объекта-результата:
+
+    top – координата верхней границы видимой части (относительно документа).
+    bottom – координата нижней границы видимой части (относительно документа).
+    height – полная высота документа, включая прокрутку.
+
+    В этой задаче учитываем только вертикальную прокрутку: горизонтальная делается аналогично, а нужна сильно реже.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <div id="docScroll">
+    Text
+  </div>
+
+  <script type="text/javascript">
+    'use strict';
+
+    function getDocumentScroll() {
+      var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+      return {
+        top: pageYOffset,
+        bottom: (pageYOffset + clientHeight),
+        height: Math.max(
+          document.body.scrollHeight, document.documentElement.scrollHeight,
+          document.body.offsetHeight, document.documentElement.offsetHeight,
+          document.body.clientHeight, document.documentElement.clientHeight
+        )
+      }
+    }
+
+    document.write( 'top = ', getDocumentScroll().top );
+    document.write( '<br>' );
+    document.write( 'bottom = ', getDocumentScroll().bottom );
+    document.write( '<br>' );
+    document.write( 'height = ', getDocumentScroll().height );
+
+  </script>
+
+
+
+
+  <h3>Task 1.18.4: Разместить заметку рядом с элементом (absolute) </h3>
+  <pre>
+    Модифицируйте решение задачи Разместить заметку рядом с элементом, чтобы при прокрутке страницы заметка не убегала от элемента.
+  </pre>
+  <h3>Решение</h3>
+  <pre>
+
+  </pre>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+  </p>
+  <br>
+  <blockquote>
+
+      - Что на завтрак, Бэрримор?
+      - Овсянка, сэр.
+      - А на обед?
+      - Овсянка, сэр.
+      - Ну а на ужин?
+      - Котлеты, сэр.
+      - Уррра!!!
+      - Из овсянки, сэр!!!
+
+  </blockquote>
+  <br>
+  <br>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum eaque soluta nisi repellat tempore, magni ipsum.
+    Accusamus rem dolores consequuntur illum, autem delectus, odio, optio laborum sapiente, sit laudantium deleniti sint magnam.
+    Accusamus, corporis cupiditate reiciendis quam! Quia, non, sit?
+  </p>
+
+  <script type="text/javascript">
+    'use strict';
+
+    /**
+     * Позиционирует элемент elem относительно элемента anchor, как указано в
+     * в position.
+     *
+     * @param {Node} anchor     Элемент-якорь, относительно которого задана позиция
+     * @param {string} position Позиция: одно из top/right/bottom
+     * @param {Node} elem       Элемент, который будет позиционирован
+     */
+
+    // function positionAt2(anchor, position, elem) {
+    //   var coords = anchor.getBoundingClientRect();
+    //
+    //   switch (position) {
+    //     case 'top':
+    //       elem.style.top = coords.top - elem.offsetHeight + pageYOffset + 'px';
+    //       elem.style.left = coords.left + 'px';
+    //       break;
+    //     case 'right':
+    //       elem.style.top = coords.top + pageYOffset + 'px';
+    //       elem.style.left = coords.right + 'px';
+    //       break;
+    //     case 'bottom':
+    //       elem.style.top = coords.bottom + pageYOffset + 'px';
+    //       elem.style.left = coords.left + 'px';
+    //       break;
+    //   }
+    //
+    //   elem.style.position = 'absolute';
+    // }
+    //
+    // /**
+    //  * Показывает заметку с текстом html на позиции position
+    //  * относительно элемента anchor
+    //  */
+    // function showNote2(anchor, position, html) {
+    //   if (typeof html === 'string') {
+    //     var elem = document.createElement('div');
+    //     elem.innerHTML = html;
+    //     elem.className = 'note';
+    //     anchor.appendChild(elem);
+    //   } else {
+    //     elem = html;
+    //   }
+    //
+    //   positionAt2(anchor,position,elem);
+    // }
+    //
+    // // проверка работоспособности
+    // var blockquote = document.querySelectorAll('blockquote')[1];
+    //
+    // showNote2(blockquote, "top", "заметка сверху");
+    // showNote2(blockquote, "right", "заметка справа");
+    // showNote2(blockquote, "bottom", "заметка снизу");
+
+
+    // Not my solution + my solution
+    /**
+     * Вспомогательная функция для координат относительно документа
+     */
+
+    function getCoords3(elem) {
+      var box = elem.getBoundingClientRect();
+
+      var body = document.body;
+      var docEl = document.documentElement;
+
+      var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+      var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+      var clientTop = docEl.clientTop || body.clientTop || 0;
+      var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+      var top = box.top + scrollTop - clientTop;
+      var left = box.left + scrollLeft - clientLeft;
+
+      return {
+        top: top,
+        left: left
+      };
+    }
+
+
+    function positionAt3(anchor, position, elem) {
+
+      var anchorCoords = getCoords3(anchor);
+
+      switch (position) {
+        case "top-out":
+          elem.style.left = anchorCoords.left + "px";
+          elem.style.top = anchorCoords.top - elem.offsetHeight + "px";
+          break;
+
+        case "right-out":
+          elem.style.left = anchorCoords.left + anchor.offsetWidth + "px";
+          elem.style.top = anchorCoords.top + "px";
+          break;
+
+        case "bottom-in":
+          elem.style.left = anchorCoords.left + "px";
+          elem.style.top = anchorCoords.top + anchor.offsetHeight + "px";
+          break;
+
+        case "top-in":
+          elem.style.left = anchorCoords.left + "px";
+          elem.style.top = anchorCoords.top + "px";
+          break;
+
+        case "bottom-out":
+          elem.style.left = anchorCoords.left + "px";
+          elem.style.top = anchorCoords.top + anchor.offsetHeight + elem.offsetHeight  + "px";
+          break;
+
+        case "right-in":
+          elem.style.left = anchorCoords.left + anchor.offsetWidth - elem.offsetWidth + "px";
+          elem.style.top = anchorCoords.top + "px";
+          break;
+      }
+
+      elem.style.position = 'absolute';
+
+    }
+
+    /**
+     * Показывает заметку с текстом html на позиции position
+     * относительно элемента anchor
+     */
+    function showNote3(anchor, position, html) {
+
+      var note = document.createElement('div');
+      note.className = "note";
+      note.innerHTML = html;
+      document.body.appendChild(note);
+      positionAt3(anchor, position, note);
+    }
+
+    // проверка работоспособности
+    var blockquote = document.querySelectorAll('blockquote')[1];
+
+    showNote3(blockquote, "top-out", "заметка top-out");
+    showNote3(blockquote, "right-out", "заметка right-out");
+    showNote3(blockquote, "bottom-out", "заметка bottom-out");
+    showNote3(blockquote, "top-in", "заметка top-in");
+    showNote3(blockquote, "bottom-in", "заметка bottom-in");
+    showNote3(blockquote, "right-in", "заметка right-in");
+
+  </script>
+
+
+  <br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br>
+
+  <br><br><br><br>
+
+</body>
+</html>
